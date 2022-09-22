@@ -1,10 +1,10 @@
 # SGI 2022/2023
 
 ## Group T0xG0y
-| Name             | Number    | E-Mail             |
-| ---------------- | --------- | ------------------ |
-| John Doe         | 201801010 | ...                |
-| Jane Doe         | 201801011 | ...                |
+| Name             | Number    | E-Mail                              |
+| ---------------- | --------- | ----------------------------------- |
+| Rui Alves        | 201905853 | up201905853@fe.up.pt                |
+| Henrique Nunes   | 201906852 | up201906852@fe.up.pt                |
 
 ----
 
@@ -14,8 +14,8 @@
 
 - (items briefly describing main strong points)
 - Scene
-  - (Brief description of the created scene)
-  - (relative link to the scene)
+  - Campus of Feup, with some trees and buildings (Brief description of the created scene)
+  - [Scene Image](images/feupScene.jpg) (relative link to the scene)
 
 -----
 
