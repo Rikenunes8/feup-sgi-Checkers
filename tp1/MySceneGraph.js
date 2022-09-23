@@ -1,5 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
+import { Views } from './Views/Views.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -46,6 +47,9 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
+
+        // initialize views class
+        this.views = new Views();
     }
 
     /*
@@ -231,6 +235,23 @@ export class MySceneGraph {
      */
     parseView(viewsNode) {
         this.onXMLMinorError("To do: Parse views and create cameras.");
+        
+        // set the default camera of views
+        const defaultCam = this.reader.getString(viewsNode, 'default');
+
+        // to do show error with missing attribute 
+        if (!defaultCam) {
+
+        } else {
+            this.views.setDefaultCam(defaultCam);
+        }
+
+        var children = viewsNode.children;
+        
+
+        for (var i = 0; i < children.length; i++) {
+            console.log("CHILD: " + children[i].nodeName);  // TO DO get properties of the views and create Prespective and Ortho classes
+        }
 
         return null;
     }
