@@ -430,6 +430,8 @@ export class MySceneGraph {
 
         // For each texture in textures block, check ID and file URL
         this.onXMLMinorError("To do: Parse textures. Should we verify the file existence?");
+        this.onXMLMinorError("To do: Test textures parse when Components parse is done.");
+
         return null;
     }
 
@@ -440,13 +442,17 @@ export class MySceneGraph {
     parseMaterials(materialsNode) {
         var children = materialsNode.children;
 
-        this.materials = [];
+        this.materials = {};
 
         var grandChildren = [];
         var nodeNames = [];
 
+        const attributeNames = ["emission", "ambient", "diffuse", "specular"];
+
         // Any number of materials.
         for (var i = 0; i < children.length; i++) {
+
+            let acc = [] // at the end will be [shininess, [r,g,b,a], [r,g,b,a], [r,g,b,a], [r,g,b,a]] in attributeNames order
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -454,7 +460,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], 'id');
+            var materialID = this.reader.getString(children[i], 'id', false);
             if (materialID == null)
                 return "no ID defined for material";
 
@@ -462,11 +468,46 @@ export class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each light (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // Material shininess
+            let shininess = this.reader.getFloat(children[i], 'shininess', false);
+            if (shininess == null || shininess < 0) { // TODO: what are the bounds of shininess
+                this.onXMLMinorError("unable to parse value component of the 'shininess' field for ID = " + materialID + "; assuming 'value = 0.5'");
+                shininess = 0.5; // TODO: is this default value ok?
+            }
+            acc.push(shininess);
+
+            grandChildren = children[i].children;
+            
+            // Get grandChildren tag names
+            nodeNames = [];
+            for (let j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            for (let j = 0; j < attributeNames.length; j++) {
+                let attributeIndex = nodeNames.indexOf(attributeNames[j])
+                
+                if (attributeIndex === -1) // attribute name not found in grandChildrens
+                    return "material component " + attributeNames[j] + " undefined for ID = " + materialID;
+                
+                let color = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " material component for ID" + materialID);
+                if (!Array.isArray(color))
+                    return color; // Error message from parseColor
+                acc.push(color)
+            }
+
+            // Verify duplicates
+            if (nodeNames.length != attributeNames.length)
+                this.onXMLMinorError("material component is duplicated for ID = " + materialID);
+
+            this.materials[materialID] = acc;
         }
 
-        //this.log("Parsed materials");
+        if (Object.keys(this.materials).length === 0)
+            return "at least one material must be defined";
+
+        this.onXMLMinorError("To do: Test materials parse when Components parse is done.");
+        this.log("Parsed materials");
         return null;
     }
 
