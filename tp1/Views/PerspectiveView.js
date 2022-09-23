@@ -1,6 +1,6 @@
-import { View } from "./View";
+import { View } from "./View.js";
 
-export class PerspsectiveView extends View {
+export class PerspectiveView extends View {
 
   constructor(id, near, far, from, to, angle) {
     super(id, near, far, from, to);

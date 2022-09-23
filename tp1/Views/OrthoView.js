@@ -1,4 +1,4 @@
-import { View } from "./View";
+import { View } from "./View.js";
 
 export class OrthoView extends View {
   constructor(id, near, far, from, to, left, right, top, bottom) {

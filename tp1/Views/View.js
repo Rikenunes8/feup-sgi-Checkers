@@ -7,4 +7,5 @@ export class View {
     this.from = from;  // array with [x, y, z]
     this.to = to;   // array with [x, y, z]
   }
+  
 }
