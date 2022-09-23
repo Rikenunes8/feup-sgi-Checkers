@@ -394,9 +394,28 @@ export class MySceneGraph {
      * @param {textures block element} texturesNode
      */
     parseTextures(texturesNode) {
+        var children = texturesNode.children;
 
-        //For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures.");
+        this.textures = []
+
+        for (let i = 0 ; i < children.length; i++) {
+            const textureId = this.reader.getString(children[i], 'id');
+            if (textureId == null) 
+                return "no ID defined for texture " + (i+1);
+
+            const textureFile = this.reader.getString(children[i], 'file');
+            if (textureFile == null) 
+                return "no File defined for texture " + textureId;
+            if (textureFile.match(/.*\.(png|jpg)/) == null)
+                return "File defined for texture " + textureId + "must be in .png or .jpg format";
+
+            this.textures.push(textureId, textureFile);
+        }
+
+        this.log("Parsed textures");
+
+        // For each texture in textures block, check ID and file URL
+        this.onXMLMinorError("To do: Parse textures. Should we verify the file existence?");
         return null;
     }
 
