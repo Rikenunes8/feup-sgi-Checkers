@@ -399,15 +399,24 @@ export class MySceneGraph {
         this.textures = {}
 
         for (let i = 0 ; i < children.length; i++) {
+            if (children[i].nodeName != "texture") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
             const textureId = this.reader.getString(children[i], 'id', false);
             if (textureId == null) 
                 return "no ID defined for texture " + (i+1);
+            // Checks for repeated IDs.
             if (this.textures[textureId] != null)
                 return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
-
+            
+            // Get file path of the current texture.
             const textureFile = this.reader.getString(children[i], 'file', false);
             if (textureFile == null) 
                 return "no File defined for texture " + textureId;
+            // Checks for file extension
             if (textureFile.match(/.*\.(png|jpg)/) == null)
                 return "File defined for texture " + textureId + " must be in .png or .jpg format";
 
