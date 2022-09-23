@@ -399,11 +399,11 @@ export class MySceneGraph {
         this.textures = []
 
         for (let i = 0 ; i < children.length; i++) {
-            const textureId = this.reader.getString(children[i], 'id');
+            const textureId = this.reader.getString(children[i], 'id', false);
             if (textureId == null) 
                 return "no ID defined for texture " + (i+1);
 
-            const textureFile = this.reader.getString(children[i], 'file');
+            const textureFile = this.reader.getString(children[i], 'file', false);
             if (textureFile == null) 
                 return "no File defined for texture " + textureId;
             if (textureFile.match(/.*\.(png|jpg)/) == null)
