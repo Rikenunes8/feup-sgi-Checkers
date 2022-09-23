@@ -1,8 +1,7 @@
-import { CGFcamera, CGFXMLreader } from '../lib/CGF.js';
+import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
 
 import { Views } from './Views/Views.js';
-import { View } from './Views/View.js';
 import { PerspectiveView } from './Views/PerspectiveView.js';
 import { OrthoView } from './Views/OrthoView.js';
 
@@ -273,9 +272,10 @@ export class MySceneGraph {
                 
                 if (!angle)
                     return "perspective view must have angle attribute";
-                
-                this.views.addView(new PerspectiveView(id, near, far, from, to, angle));
 
+                // TO DO which is the camera that uses this perspective? CGFCamera? Do I need to
+                // calculate the fov?
+                this.views.addView(new PerspectiveView(id, near, far, from, to, angle));
             } else if (children[i].nodeName === 'ortho') {
 
                 const left = this.reader.getString(children[i], 'left', false);
@@ -292,7 +292,8 @@ export class MySceneGraph {
                     return "you didn't specify some Ortho View properties";
                 }
 
-                this.views.addView(new OrthoView(id, near, far, from, to, left, right, top, bottom));
+                const orthoView = new OrthoView(id, near, far, from, to, left, right, top, bottom, upValues);
+                this.views.addView(orthoView);
             } else {
                 return "invalid view tag";
             }
