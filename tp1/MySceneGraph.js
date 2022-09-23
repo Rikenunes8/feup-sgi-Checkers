@@ -1,5 +1,6 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFcamera, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
+import { OrthoView } from './Views/OrthoView.js';
 import { Views } from './Views/Views.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -239,18 +240,61 @@ export class MySceneGraph {
         // set the default camera of views
         const defaultCam = this.reader.getString(viewsNode, 'default');
 
-        // to do show error with missing attribute 
+        // to do return check this error message 
         if (!defaultCam) {
-
+            return "you must specify a default camera on views";
         } else {
             this.views.setDefaultCam(defaultCam);
         }
 
         var children = viewsNode.children;
-        
 
         for (var i = 0; i < children.length; i++) {
-            console.log("CHILD: " + children[i].nodeName);  // TO DO get properties of the views and create Prespective and Ortho classes
+            const firstChild = children[i].children[0]; // from
+            const secondChild = children[i].children[1]; // to 
+
+            const id = this.reader.getString(children[i], 'id', false);
+            const near = this.reader.getString(children[i], 'near', false);
+            const far = this.reader.getString(children[i], 'far', false);
+            const from = [this.reader.getString(firstChild, 'x', false), this.reader.getString(firstChild, 'y', false), this.reader.getString(firstChild, 'z', false)];
+            const to = [this.reader.getString(secondChild, 'x', false), this.reader.getString(secondChild, 'y', false), this.reader.getString(secondChild, 'z', false)];
+
+            if (!id || !near || !far || !from[0] || !from[1] || !from[2] || !to[0] || !to[1] || !to[2]) {
+                return "you didn't specify some View properties";
+            }
+
+            if (children[i].nodeName === 'perspective') {    // means its perpsective view 
+
+                const angle = this.reader.getFloat(children[i], 'angle');
+                
+                if (!angle)
+                    return "perspective view must have angle attribute";
+                
+                // to do check why perpsective view is not working
+                //this.views.addView(new PerspectiveView(id, near, far, from, to, angle));
+
+            } else if (children[i].nodeName === 'ortho') {
+
+                const left = this.reader.getString(children[i], 'left', false);
+                const right = this.reader.getString(children[i], 'right', false);
+                const top = this.reader.getString(children[i], 'top', false);
+                const bottom = this.reader.getString(children[i], 'bottom', false);
+                
+                const upChild = children[i].children[2];
+
+                const upValues = [this.reader.getString(upChild, 'x', false), this.reader.getString(upChild, 'y', false), this.reader.getString(upChild, 'z', false)];
+
+                if (!left || !right || !top || !bottom || !upValues[0] || !upValues[1] || !upValues[2]) {
+                    // to do return error message
+                    return "you didn't specify some Ortho View properties";
+                }
+
+                // TO DO WHere should we store this attributes (maybe assign to node) or why this Ortho View doesn't work
+                //this.views.addView(new OrthoView(id, near, far, from, to, left, right, top, bottom));
+            } else {
+                return "invalid view tag";
+            }
+
         }
 
         return null;
@@ -839,5 +883,8 @@ export class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
+
+        //To do: change between cameras 
+        //this.scene.camera = new CGFcamera(0.9, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
 }

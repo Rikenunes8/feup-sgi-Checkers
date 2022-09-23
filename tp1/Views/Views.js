@@ -1,9 +1,8 @@
 export class Views {
-  views = [];
-  defaultCam = null;
-
-  constructor(defaultCam) {
-    this.defaultCam = defaultCam;
+  
+  constructor() {
+    this.views = [];
+    this.defaultCam = null;
   }
 
   setDefaultCam(defaultCam) { this.defaultCam = defaultCam; }
