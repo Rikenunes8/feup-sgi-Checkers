@@ -560,7 +560,7 @@ export class MySceneGraph {
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates); // TODO: is this the right sintax?
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                         atLeastOne = true;
                         break;
                     case 'rotate':
@@ -582,7 +582,7 @@ export class MySceneGraph {
                             return "unable to parse axis of the rotate transformation for ID " + transformationID + "; the axis should belong to {x,y,z} instead of " + axis;
 
 
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr); // TODO: is this the right sintax?
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
                         atLeastOne = true;
                         break;
                     default:
@@ -597,7 +597,7 @@ export class MySceneGraph {
         if (Object.keys(this.transformations).length === 0)
             return "at least one transformation must be defined";
 
-        this.onXMLMinorError("To do: Test scale and rotate transformations.");
+        this.onXMLMinorError("To do: Test scale and rotate transformations in practice.");
         this.log("Parsed transformations");
         return null;
     }
