@@ -1,10 +1,5 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFcamera, CGFcameraOrtho, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
-
-import { Views } from './Views/Views.js';
-import { PerspectiveView } from './Views/PerspectiveView.js';
-import { OrthoView } from './Views/OrthoView.js';
-
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -52,8 +47,6 @@ export class MySceneGraph {
          */
         this.reader.open('scenes/' + filename, this);
 
-        // initialize views class
-        this.views = new Views();
     }
 
     /*
@@ -238,16 +231,20 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
+
+        this.views = {};
+        this.defaultCam = null;
+
         this.onXMLMinorError("To do: Parse views and create cameras.");
         
-        // set the default camera of views
+        // get the default camera id 
         const defaultCam = this.reader.getString(viewsNode, 'default', false);
 
         // to do return check this error message 
         if (!defaultCam) {
-            return "you must specify a default camera on views";
+            return "you must specify a default prop on views";
         } else {
-            this.views.setDefaultCam(defaultCam);
+            this.defaultCam = defaultCam;
         }
 
         var children = viewsNode.children;
@@ -265,6 +262,10 @@ export class MySceneGraph {
             if (!id || !near || !far || !from[0] || !from[1] || !from[2] || !to[0] || !to[1] || !to[2]) {
                 return "you didn't specify some View properties";
             }
+            
+            // Checks for repeated IDs.
+            if (this.views[id] != null)
+                return "ID must be unique for each View (conflict: ID = " + id + ")";
 
             if (children[i].nodeName === 'perspective') {
 
@@ -275,7 +276,8 @@ export class MySceneGraph {
 
                 // TO DO which is the camera that uses this perspective? CGFCamera? Do I need to
                 // calculate the fov?
-                this.views.addView(new PerspectiveView(id, near, far, from, to, angle));
+                this.views[id] = new CGFcamera(0, near, far, from, to);
+
             } else if (children[i].nodeName === 'ortho') {
 
                 const left = this.reader.getString(children[i], 'left', false);
@@ -283,8 +285,8 @@ export class MySceneGraph {
                 const top = this.reader.getString(children[i], 'top', false);
                 const bottom = this.reader.getString(children[i], 'bottom', false);
                 
+                // the up values are in the third child of node 'ortho' 
                 const upChild = children[i].children[2];
-
                 const upValues = [this.reader.getString(upChild, 'x', false), this.reader.getString(upChild, 'y', false), this.reader.getString(upChild, 'z', false)];
 
                 if (!left || !right || !top || !bottom || !upValues[0] || !upValues[1] || !upValues[2]) {
@@ -292,13 +294,17 @@ export class MySceneGraph {
                     return "you didn't specify some Ortho View properties";
                 }
 
-                const orthoView = new OrthoView(id, near, far, from, to, left, right, top, bottom, upValues);
-                this.views.addView(orthoView);
+                this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
+
             } else {
-                return "invalid view tag";
+                return "Invalid view tag";
             }
 
         }
+
+        // check if the defaultCamera is defined
+        if (!Object.keys(this.views).includes(this.defaultCam)) 
+            return 'The default View specified it is not defined';
 
         return null;
     }
@@ -464,7 +470,7 @@ export class MySceneGraph {
     parseTextures(texturesNode) {
         var children = texturesNode.children;
 
-        this.textures = {}
+        this.textures = {};
 
         for (let i = 0 ; i < children.length; i++) {
             if (children[i].nodeName != "texture") {
