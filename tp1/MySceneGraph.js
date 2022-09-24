@@ -1,5 +1,6 @@
 import { CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
+import { MyComponent } from './MyComponent.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -687,6 +688,12 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            let componentTransfMatrix = undefined;
+            let componentMaterials = [];
+            let componentTexture = undefined;
+            let componentChildren = [];
+
+
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
             if (materialsIndex == -1) return "missing materials definition in component " + componentID;
             if (textureIndex == -1) return "missing texture definition in component " + componentID;
@@ -705,7 +712,10 @@ export class MySceneGraph {
                     const transformationrefId = this.reader.getString(transformations[0], 'id', false);
                     if (transformationrefId == null)
                         return "no ID defined for transformationref defined in component " + componentID;
-                    // TODO: check if ref exists
+                    if (this.transformations[transformationrefId] == null) {
+                        return "no transformation defined with ID " + transformationrefId;
+                    }
+                    componentTransfMatrix = this.transformations[transformationrefId]
                 }
                 else 
                     return  "transformationref must be a single definition inside transformation block of component " + componentID; 
@@ -753,15 +763,82 @@ export class MySceneGraph {
                             this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
                             break;
                     }
+                    componentTransfMatrix = transfMatrix;
                 }
-            } // TODO: what to do with transfMatrix now?
+            } 
 
             // Materials
+            const materials = grandChildren[materialsIndex].children;
+            for (let j = 0; j < materials.length; j++) {
+                if (materials[j].nodeName != "material") {
+                    this.onXMLMinorError("unknown tag <" + materials[j].nodeName + ">");
+                    continue;
+                }
+                const materialId = this.reader.getString(materials[0], 'id', false);
+                if (materialId == null)
+                    return "no ID defined for material defined in component " + componentID;
+                if (materialId == 'inherit') {
+                    // TODO inherit; How to get material from parent?
+                } else {
+                    if (this.materials[materialId] == null) {
+                        return "no material defined with ID " + materialId;
+                    }
+                    componentMaterials.push(this.materials[materialId]);
+                }
+            }
+            if (componentMaterials.length === 0)
+                return "must exists at least one material declaration for component " + componentID;
 
             // Texture
+            const textureId = this.reader.getString(grandChildren[textureIndex], 'id', false);
+            if (textureId == null)
+                return "no ID defined for texture defined in component " + componentID;
+            if (textureId == 'none') {
+                componentTexture = null;
+            } else if (textureId == 'inherit') {
+                // TODO inherit; How to get material from parent?
+            } else {
+                if (this.textures[textureId] == null) {
+                    return "no texture defined with ID " + textureId;
+                }
+                const length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s', false);
+                const length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t', false);
+                //TODO: what to do with length_s/t?
+                componentTexture = this.textures[textureId];
+            }
 
             // Children
+            const compChildren = grandChildren[childrenIndex].children;
+            for (let j = 0; j < compChildren.length; j++) {
+                if (compChildren[j].nodeName == "primitiveref") {
+                    const childPrimitiveId = this.reader.getString(compChildren[j], 'id', false);
+                    if (childPrimitiveId == null)
+                        return "no ID defined for child primitive defined in component " + componentID;
+                    if (this.primitives[childPrimitiveId] == null) {
+                        return "no primitive defined with ID " + childPrimitiveId;
+                    }
+                    componentChildren.push(this.primitives[childPrimitiveId]);
+                } else if (compChildren[j].nodeName == "componentref") {
+                    const childComponentId = this.reader.getString(compChildren[j], 'id', false);
+                    if (childComponentId == null)
+                        return "no ID defined for child component defined in component " + componentID;
+                    if (this.components[childComponentId] == null) {
+                        return "no component defined with ID " + childComponentId + " yet";
+                    }
+                    componentChildren.push(this.components[childComponentId]);
+                } else {
+                    this.onXMLMinorError("unknown tag <" + compChildren[j].nodeName + ">");
+                    continue;
+                }
+            }
+            if (componentChildren.length === 0)
+                return "must exists at least one children declaration for component " + componentID;
+
+            this.components[componentID] = new MyComponent(this.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren);
         }
+
+        this.log("Parsed components");
+        return null;
     }
 
 
