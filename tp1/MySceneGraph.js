@@ -652,7 +652,7 @@ export class MySceneGraph {
     parseComponents(componentsNode) {
         var children = componentsNode.children;
 
-        this.components = [];
+        this.components = {};
 
         var grandChildren = [];
         var grandgrandChildren = [];
@@ -667,7 +667,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], 'id');
+            var componentID = this.reader.getString(children[i], 'id', false);
             if (componentID == null)
                 return "no ID defined for componentID";
 
@@ -687,8 +687,74 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
+            if (materialsIndex == -1) return "missing materials definition in component " + componentID;
+            if (textureIndex == -1) return "missing texture definition in component " + componentID;
+            if (childrenIndex == -1) return "missing children definition in component " + componentID;
+
             this.onXMLMinorError("To do: Parse components.");
+
             // Transformations
+            const transformations = grandChildren[transformationIndex].children;
+            let transformationNames = [];
+            for (let child of transformations) 
+                transformationNames.push(child.nodeName);
+
+            if (transformationNames.includes('transformationref')) {
+                if (transformations.length === 1) {
+                    const transformationrefId = this.reader.getString(transformations[0], 'id', false);
+                    if (transformationrefId == null)
+                        return "no ID defined for transformationref defined in component " + componentID;
+                    // TODO: check if ref exists
+                }
+                else 
+                    return  "transformationref must be a single definition inside transformation block of component " + componentID; 
+            } else {
+                var transfMatrix = mat4.create();
+
+                for (var j = 0; j < transformations.length; j++) {
+                    switch (transformations[j].nodeName) {
+                        case 'translate':
+                            var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation for component ID " + componentID);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+    
+                            transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                            break;
+                        case 'scale':
+                            var coordinates = this.parseCoordinates3D(transformations[j], "scale transformation for component ID " + componentID);
+                            if (!Array.isArray(coordinates))
+                                return coordinates;
+    
+                            transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+                            break;
+                        case 'rotate':
+                            // angle
+                            let angle = this.reader.getFloat(transformations[j], 'angle', false);
+                            if (!(angle != null && !isNaN(angle)))
+                                return "unable to parse angle of the rotate transformation for component ID " + componentID;
+    
+                            // axis
+                            const axisNames = ['x', 'y', 'z']
+                            let axisArr = [0, 0, 0];
+                            const axis = this.reader.getString(transformations[j], 'axis', false);
+                            if (axis == null)
+                                return "unable to parse axis of the rotate transformation for component ID " + componentID;
+                            const index = axisNames.indexOf(axis);
+                            if (index !== -1)
+                                axisArr[index] = 1;
+                            else
+                                return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
+    
+    
+                            transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
+                            break;
+                        default:
+                            this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
+                            break;
+                    }
+                }
+            } // TODO: what to do with transfMatrix now?
 
             // Materials
 
