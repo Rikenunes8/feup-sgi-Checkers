@@ -731,7 +731,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current primitive.
-            var primitiveId = this.reader.getString(children[i], 'id');
+            var primitiveId = this.reader.getString(children[i], 'id', false);
             if (primitiveId == null)
                 return "no ID defined for texture";
 
@@ -760,7 +760,45 @@ export class MySceneGraph {
             } else if (primitiveType == "sphere") {
                 this.parsePrimitiveSphere(grandChildren[0], primitiveId);
             } else if (primitiveType == "torus") {
-                this.parsePrimitiveTorus(grandChildren[0], primitiveId)
+                this.parsePrimitiveTorus(grandChildren[0], primitiveId);
+            } else if (primitiveType == 'triangle') {
+
+                const point1 = [
+                    this.reader.getString(grandChildren[0], 'x1', false),
+                    this.reader.getString(grandChildren[0], 'y1', false),
+                    this.reader.getString(grandChildren[0], 'z1', false)
+                ];
+                const point2 = [
+                    this.reader.getString(grandChildren[0], 'x2', false),
+                    this.reader.getString(grandChildren[0], 'y2', false),
+                    this.reader.getString(grandChildren[0], 'z2', false)
+                ];
+                const point3 = [
+                    this.reader.getString(grandChildren[0], 'x3', false),
+                    this.reader.getString(grandChildren[0], 'y3', false),
+                    this.reader.getString(grandChildren[0], 'z3', false)
+                ];
+
+                if (!point1[0]) {
+                    return "You must specify x1 position on Triangle primitive " + primitiveId;
+                } else if (!point1[1]) {
+                    return "You must specify y1 position on Triangle primitive " + primitiveId;
+                } else if (!point1[2]) {
+                    return "You must specify z1 position on Triangle primitive " + primitiveId;
+                } else if (!point2[0]) {
+                    return "You must specify x2 position on Triangle primitive " + primitiveId;
+                } else if (!point2[1]) {
+                    return "You must specify y2 position on Triangle primitive " + primitiveId;
+                } else if (!point2[2]) {
+                    return "You must specify z2 position on Triangle primitive " + primitiveId;
+                } else if (!point3[0]) {
+                    return "You must specify x3 position on Triangle primitive " + primitiveId;
+                } else if (!point3[1]) {
+                    return "You must specify y3 position on Triangle primitive " + primitiveId;
+                } else if (!point3[2]) {
+                    return "You must specify z3 position on Triangle primitive " + primitiveId;
+                }
+                
             } else {
                 console.warn("To do: Parse other primitives.");
             }
