@@ -1,4 +1,5 @@
 import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { MyCylinder } from './MyCylinder.js';
 import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 
@@ -711,7 +712,7 @@ export class MySceneGraph {
     parsePrimitives(primitivesNode) {
         var children = primitivesNode.children;
 
-        this.primitives = [];
+        this.primitives = {};
 
         var grandChildren = [];
 
@@ -771,8 +772,19 @@ export class MySceneGraph {
 
                 this.primitives[primitiveId] = rect;
             }
-            else {
+            else if (primitiveType == "cylinder") {
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+
+                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
+                this.primitives[primitiveId] = cylinder;
+
+            } else {
                 console.warn("To do: Parse other primitives.");
+
             }
         }
 
@@ -1088,10 +1100,15 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
+<<<<<<< HEAD
         this.primitives['demoRectangle'].display();
 
         // To do: change between cameras. Probably have an array on this class with
         // the cameras and switch between them with the interface. 
         //this.scene.camera = new CGFcamera(0.9, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+=======
+        //this.primitives['demoRectangle'].display();
+        this.primitives['demoCylinder'].display();
+>>>>>>> fb55646 (Cylinder with base ant top radius modifiable)
     }
 }
