@@ -22,7 +22,7 @@ export class MyCylinder extends CGFobject {
         let heightIncrement = this.height / this.stacks;
         let cosines = [];
         let sines = [];
-        for (let i = 0; i <= this.slices; i++) {
+        for (let i = 0; i < this.slices; i++) {
             cosines.push(Math.cos(theta));
             sines.push(Math.sin(theta));
             theta += thetaIncrement;
@@ -32,7 +32,7 @@ export class MyCylinder extends CGFobject {
         for (let i = 0; i <= this.stacks; i++) {
             const currHeight = i*heightIncrement;
             const currRadius = this.base + c*currHeight;
-            for (let j = 0; j <= this.slices; j++) {
+            for (let j = 0; j < this.slices; j++) {
                 // Vertices coordinates
                 const x = currRadius*cosines[j];
                 const y = currRadius*sines[j];
@@ -41,12 +41,17 @@ export class MyCylinder extends CGFobject {
                 this.vertices.push(x, y, z);
 
                 // Indices
-                if (i < this.stacks && j < this.slices) {
-                    const curr = i * (this.slices+1) + j;
-                    const next = curr + (this.slices+1); // (i+1) * (this.slices+1) + j
-
-                    this.indices.push(curr, curr + 1, next + 1);
-                    this.indices.push(curr, next + 1, next);
+                if (i < this.stacks) {
+                    const curr = i * this.slices + j;
+                    const next = curr + this.slices; // (i+1) * (this.slices) + j
+                    
+                    if (j == this.slices-1) {
+                        this.indices.push(curr, curr - (this.slices-1), curr + 1);
+                        this.indices.push(curr, curr + 1, next);
+                    } else {
+                        this.indices.push(curr, curr + 1, next + 1);
+                        this.indices.push(curr, next + 1, next);
+                    }
                 }
                 this.normals.push(x, y, 0);
             }
@@ -56,7 +61,7 @@ export class MyCylinder extends CGFobject {
         this.initGLBuffers();
     }
 
-    updateBuffers(complexity) {
+    updateBuffers(complexity) { // TODO what is this?
         this.slices = Math.round(complexity);
 
         this.initBuffers();
