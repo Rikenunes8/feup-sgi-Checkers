@@ -656,7 +656,6 @@ export class MySceneGraph {
         this.components = {};
 
         var grandChildren = [];
-        var grandgrandChildren = [];
         var nodeNames = [];
 
         // Any number of components.
@@ -710,11 +709,10 @@ export class MySceneGraph {
             if (transformationNames.includes('transformationref')) {
                 if (transformations.length === 1) {
                     const transformationrefId = this.reader.getString(transformations[0], 'id', false);
-                    if (transformationrefId == null)
-                        return "no ID defined for transformationref defined in component " + componentID;
-                    if (this.transformations[transformationrefId] == null) {
-                        return "no transformation defined with ID " + transformationrefId;
-                    }
+                    if (transformationrefId == null) return "no ID defined for transformationref defined in component " + componentID;
+
+                    if (this.transformations[transformationrefId] == null) return "no transformation defined with ID " + transformationrefId;
+
                     componentTransfMatrix = this.transformations[transformationrefId]
                 }
                 else 
@@ -726,35 +724,31 @@ export class MySceneGraph {
                     switch (transformations[j].nodeName) {
                         case 'translate':
                             var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation for component ID " + componentID);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
+                            if (!Array.isArray(coordinates)) return coordinates;
     
                             transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                             break;
                         case 'scale':
                             var coordinates = this.parseCoordinates3D(transformations[j], "scale transformation for component ID " + componentID);
-                            if (!Array.isArray(coordinates))
-                                return coordinates;
+                            if (!Array.isArray(coordinates)) return coordinates;
     
                             transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
                             break;
                         case 'rotate':
                             // angle
                             let angle = this.reader.getFloat(transformations[j], 'angle', false);
-                            if (!(angle != null && !isNaN(angle)))
-                                return "unable to parse angle of the rotate transformation for component ID " + componentID;
+                            if (!(angle != null && !isNaN(angle))) return "unable to parse angle of the rotate transformation for component ID " + componentID;
     
                             // axis
                             const axisNames = ['x', 'y', 'z']
                             let axisArr = [0, 0, 0];
+                            
                             const axis = this.reader.getString(transformations[j], 'axis', false);
-                            if (axis == null)
-                                return "unable to parse axis of the rotate transformation for component ID " + componentID;
+                            if (axis == null)return "unable to parse axis of the rotate transformation for component ID " + componentID;
+
                             const index = axisNames.indexOf(axis);
-                            if (index !== -1)
-                                axisArr[index] = 1;
-                            else
-                                return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
+                            if (index !== -1) axisArr[index] = 1;
+                            else return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
     
     
                             transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
@@ -774,15 +768,14 @@ export class MySceneGraph {
                     this.onXMLMinorError("unknown tag <" + materials[j].nodeName + ">");
                     continue;
                 }
+
                 const materialId = this.reader.getString(materials[0], 'id', false);
-                if (materialId == null)
-                    return "no ID defined for material defined in component " + componentID;
+                if (materialId == null) return "no ID defined for material defined in component " + componentID;
+
                 if (materialId == 'inherit') {
-                    // TODO inherit; How to get material from parent?
+                    // TODO inherit; How to get material from parent? Just do nothing?
                 } else {
-                    if (this.materials[materialId] == null) {
-                        return "no material defined with ID " + materialId;
-                    }
+                    if (this.materials[materialId] == null) return "no material defined with ID " + materialId;
                     componentMaterials.push(this.materials[materialId]);
                 }
             }
@@ -791,20 +784,21 @@ export class MySceneGraph {
 
             // Texture
             const textureId = this.reader.getString(grandChildren[textureIndex], 'id', false);
-            if (textureId == null)
-                return "no ID defined for texture defined in component " + componentID;
+            if (textureId == null) return "no ID defined for texture defined in component " + componentID;
+
             if (textureId == 'none') {
                 componentTexture = null;
             } else if (textureId == 'inherit') {
-                // TODO inherit; How to get material from parent?
+                // TODO inherit; How to get material from parent? Just do nothing?
             } else {
-                if (this.textures[textureId] == null) {
-                    return "no texture defined with ID " + textureId;
-                }
+                if (this.textures[textureId] == null) return "no texture defined with ID " + textureId;
+
                 const length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s', false);
                 const length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t', false);
-                //TODO: what to do with length_s/t?
-                componentTexture = this.textures[textureId];
+                if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
+                if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
+
+                componentTexture = (this.textures[textureId], length_s, length_t);
             }
 
             // Children
