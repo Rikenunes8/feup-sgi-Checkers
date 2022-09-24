@@ -773,18 +773,27 @@ export class MySceneGraph {
                 this.primitives[primitiveId] = rect;
             }
             else if (primitiveType == "cylinder") {
-                var base = this.reader.getFloat(grandChildren[0], 'base');
-                var top = this.reader.getFloat(grandChildren[0], 'top');
-                var height = this.reader.getFloat(grandChildren[0], 'height');
-                var slices = this.reader.getFloat(grandChildren[0], 'slices');
-                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                var base = this.reader.getFloat(grandChildren[0], 'base', false);
+                if (base == null || isNaN(base) || base < 0)
+                    return "unable to parse base radius of the cyliinder for ID = " + primitiveId;
+                var top = this.reader.getFloat(grandChildren[0], 'top', false);
+                if (top == null || isNaN(top) || top < 0)
+                    return "unable to parse top radius of the cyliinder for ID = " + primitiveId;
+                var height = this.reader.getFloat(grandChildren[0], 'height', false);
+                if (height == null || isNaN(height) || height < 0)
+                    return "unable to parse height of the cyliinder for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the cyliinder for ID = " + primitiveId;
+                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
+                if (stacks == null || isNaN(stacks) || stacks < 1)
+                    return "unable to parse stacks of the cyliinder for ID = " + primitiveId;
 
                 var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
                 this.primitives[primitiveId] = cylinder;
 
             } else {
                 console.warn("To do: Parse other primitives.");
-
             }
         }
 
