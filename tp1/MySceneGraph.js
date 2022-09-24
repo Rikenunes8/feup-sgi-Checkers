@@ -524,6 +524,7 @@ export class MySceneGraph {
 
         // Any number of transformations.
         for (var i = 0; i < children.length; i++) {
+            let atLeastOne = false;
 
             if (children[i].nodeName != "transformation") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -531,7 +532,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current transformation.
-            var transformationID = this.reader.getString(children[i], 'id');
+            var transformationID = this.reader.getString(children[i], 'id', false);
             if (transformationID == null)
                 return "no ID defined for transformation";
 
@@ -552,19 +553,51 @@ export class MySceneGraph {
                             return coordinates;
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        atLeastOne = true;
                         break;
-                    case 'scale':                        
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    case 'scale':
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "scale transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates); // TODO: is this the right sintax?
+                        atLeastOne = true;
                         break;
                     case 'rotate':
                         // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        let angle = this.reader.getFloat(grandChildren[j], 'angle', false);
+                        if (!(angle != null && !isNaN(angle)))
+                            return "unable to parse angle of the rotate transformation for ID " + transformationID;
+
+                        // axis
+                        const axisNames = ['x', 'y', 'z']
+                        let axisArr = [0, 0, 0];
+                        const axis = this.reader.getString(grandChildren[j], 'axis', false);
+                        if (axis == null)
+                            return "unable to parse axis of the rotate transformation for ID " + transformationID;
+                        const index = axisNames.indexOf(axis);
+                        if (index !== -1)
+                            axisArr[index] = 1;
+                        else
+                            return "unable to parse axis of the rotate transformation for ID " + transformationID + "; the axis should belong to {x,y,z} instead of " + axis;
+
+
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr); // TODO: is this the right sintax?
+                        atLeastOne = true;
+                        break;
+                    default:
+                        this.onXMLMinorError("unknown tag <" + grandChildren[j].nodeName + ">");
                         break;
                 }
             }
+            if (!atLeastOne)
+                return "at least one transfomation must be defined for ID " + transformationID;
             this.transformations[transformationID] = transfMatrix;
         }
+        if (Object.keys(this.transformations).length === 0)
+            return "at least one transformation must be defined";
 
+        this.onXMLMinorError("To do: Test scale and rotate transformations.");
         this.log("Parsed transformations");
         return null;
     }
