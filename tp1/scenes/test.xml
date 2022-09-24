@@ -6,6 +6,16 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+        
+        <ortho id="cam2" near="0.2" far="500" left="21" right="7" top="19" bottom="219" >
+
+            <from x="30" y="15" z="30" />
+
+            <to x="0" y="-2" z="0" />
+
+            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
+
+        </ortho>
     </views>
 
     <ambient>
