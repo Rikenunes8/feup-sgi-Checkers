@@ -2,6 +2,7 @@ import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } fr
 import { MyCylinder } from './MyCylinder.js';
 import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
+import { MySphere } from './MySphere.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -773,8 +774,7 @@ export class MySceneGraph {
                 var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
 
                 this.primitives[primitiveId] = rect;
-            }
-            else if (primitiveType == "cylinder") {
+            } else if (primitiveType == "cylinder") {
                 var base = this.reader.getFloat(grandChildren[0], 'base', false);
                 if (base == null || isNaN(base) || base < 0)
                     return "unable to parse base radius of the cyliinder for ID = " + primitiveId;
@@ -793,6 +793,20 @@ export class MySceneGraph {
 
                 var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
                 this.primitives[primitiveId] = cylinder;
+
+            } else if (primitiveType == "sphere") {
+                var radius = this.reader.getFloat(grandChildren[0], 'radius', false);
+                if (radius == null || isNaN(radius) || radius < 0)
+                    return "unable to parse radius of the sphere for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the sphere for ID = " + primitiveId;
+                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
+                if (stacks == null || isNaN(stacks) || stacks < 1)
+                    return "unable to parse stacks of the sphere for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
+                this.primitives[primitiveId] = sphere;
 
             } else {
                 console.warn("To do: Parse other primitives.");
@@ -1118,7 +1132,8 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        //this.primitives['demoRectangle'].display();
-        this.primitives['demoCylinder'].display();
+        // this.primitives['demoRectangle'].display();
+        // this.primitives['demoCylinder'].display();
+        this.primitives['demoSphere'].display();
     }
 }
