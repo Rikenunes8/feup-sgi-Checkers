@@ -617,7 +617,6 @@ export class MySceneGraph {
         if (Object.keys(this.materials).length === 0)
             return "at least one material must be defined";
 
-        this.onXMLMinorError("To do: Test materials parse when Components parse is done.");
         this.log("Parsed materials");
         return null;
     }
@@ -708,7 +707,6 @@ export class MySceneGraph {
         if (Object.keys(this.transformations).length === 0)
             return "at least one transformation must be defined";
 
-        this.onXMLMinorError("To do: Test scale and rotate transformations in practice.");
         this.log("Parsed transformations");
         return null;
     }
