@@ -251,7 +251,13 @@ export class MySceneGraph {
 
         for (var i = 0; i < children.length; i++) {
             const fromChild = children[i].children[0]; // from
-            const toChild = children[i].children[1]; // to 
+            const toChild = children[i].children[1]; // to
+            
+            if (fromChild.nodeName != "from") {
+                return "Missing tag <from> on View";
+            } else if (toChild.nodeName != "to") {
+                return "Missing tag <to> on View";
+            }
 
             const id = this.reader.getString(children[i], 'id', false);
             const near = this.reader.getString(children[i], 'near', false);
@@ -259,8 +265,24 @@ export class MySceneGraph {
             const from = [this.reader.getString(fromChild, 'x', false), this.reader.getString(fromChild, 'y', false), this.reader.getString(fromChild, 'z', false)];
             const to = [this.reader.getString(toChild, 'x', false), this.reader.getString(toChild, 'y', false), this.reader.getString(toChild, 'z', false)];
 
-            if (!id || !near || !far || !from[0] || !from[1] || !from[2] || !to[0] || !to[1] || !to[2]) {
-                return "you didn't specify some View properties";
+            if (!id) {
+                return "Missing property id on " + children[i].nodeName + " View";
+            } else if (!near) {
+                return "Missing property near on View with id " + id;
+            } else if (!far) {
+                return "Missing property far on View with id " + id;
+            } else if (!from[0]) {
+                return "Missing property x on tag <from> on View with id " + id;
+            } else if (!from[1]) {
+                return "Missing property y on tag <from> on View with id " + id;
+            } else if (!from[2]) {
+                return "Missing property z on tag <from> on View with id " + id;
+            } else if (!to[0]) {
+                return "Missing property x on tag <to> of View with id " + id;
+            } else if (!to[1]) {
+                return "Missing property y on tag <to> of View with id " + id;
+            } else if (!to[2]) {
+                return "Missing property z on tag <to> of View with id " + id;
             }
             
             // Checks for repeated IDs.
@@ -269,8 +291,7 @@ export class MySceneGraph {
 
             if (children[i].nodeName === 'perspective') {
 
-                const angle = this.reader.getFloat(children[i], 'angle');
-                
+                const angle = this.reader.getFloat(children[i], 'angle', false);
                 if (!angle)
                     return "perspective view must have angle attribute";
 
@@ -297,7 +318,7 @@ export class MySceneGraph {
                 this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
 
             } else {
-                return "Invalid view tag";
+                this.onXMLMinorError("unknown view tag <" + children[i].nodeName + ">");
             }
 
         }
