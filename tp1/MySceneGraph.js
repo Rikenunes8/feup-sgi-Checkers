@@ -262,8 +262,13 @@ export class MySceneGraph {
             const id = this.reader.getString(children[i], 'id', false);
             const near = this.reader.getString(children[i], 'near', false);
             const far = this.reader.getString(children[i], 'far', false);
-            const from = [this.reader.getString(fromChild, 'x', false), this.reader.getString(fromChild, 'y', false), this.reader.getString(fromChild, 'z', false)];
-            const to = [this.reader.getString(toChild, 'x', false), this.reader.getString(toChild, 'y', false), this.reader.getString(toChild, 'z', false)];
+            const from = this.parseCoordinates3D(fromChild, "'from' property for ID " + id);
+            const to = this.parseCoordinates3D(toChild, "'to' property for ID " + id);
+
+            if (!Array.isArray(from))
+                return from;
+            else if (!Array.isArray(to))
+                return to;
 
             if (!id) {
                 return "Missing property id on " + children[i].nodeName + " View";
@@ -271,20 +276,8 @@ export class MySceneGraph {
                 return "Missing property near on View with id " + id;
             } else if (!far) {
                 return "Missing property far on View with id " + id;
-            } else if (!from[0]) {
-                return "Missing property x on tag <from> on View with id " + id;
-            } else if (!from[1]) {
-                return "Missing property y on tag <from> on View with id " + id;
-            } else if (!from[2]) {
-                return "Missing property z on tag <from> on View with id " + id;
-            } else if (!to[0]) {
-                return "Missing property x on tag <to> of View with id " + id;
-            } else if (!to[1]) {
-                return "Missing property y on tag <to> of View with id " + id;
-            } else if (!to[2]) {
-                return "Missing property z on tag <to> of View with id " + id;
             }
-            
+
             // Checks for repeated IDs.
             if (this.views[id] != null)
                 return "ID must be unique for each View (conflict: ID = " + id + ")";
@@ -803,17 +796,17 @@ export class MySceneGraph {
         var position = [];
 
         // x
-        var x = this.reader.getFloat(node, 'x');
+        var x = this.reader.getFloat(node, 'x', false);
         if (!(x != null && !isNaN(x)))
             return "unable to parse x-coordinate of the " + messageError;
 
         // y
-        var y = this.reader.getFloat(node, 'y');
+        var y = this.reader.getFloat(node, 'y', false);
         if (!(y != null && !isNaN(y)))
             return "unable to parse y-coordinate of the " + messageError;
 
         // z
-        var z = this.reader.getFloat(node, 'z');
+        var z = this.reader.getFloat(node, 'z', false);
         if (!(z != null && !isNaN(z)))
             return "unable to parse z-coordinate of the " + messageError;
 
