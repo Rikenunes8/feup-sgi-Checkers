@@ -4,6 +4,7 @@ import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 import { MySphere } from './MySphere.js';
 import { MyTorus } from './MyTorus.js';
+import { MyPrimitive } from './MyPrimitive.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -205,6 +206,8 @@ export class MySceneGraph {
                 return error;
         }
         this.log("all parsed");
+
+        this.buildGraph(this.idRoot);
     }
 
     /**
@@ -1003,7 +1006,7 @@ export class MySceneGraph {
                     if (this.primitives[childPrimitiveId] == null) {
                         return "no primitive defined with ID " + childPrimitiveId;
                     }
-                    componentChildren.push(this.primitives[childPrimitiveId]);
+                    componentChildren.push([true, childPrimitiveId]);
                 } else if (compChildren[j].nodeName == "componentref") {
                     const childComponentId = this.reader.getString(compChildren[j], 'id', false);
                     if (childComponentId == null)
@@ -1011,7 +1014,7 @@ export class MySceneGraph {
                     if (this.components[childComponentId] == null) {
                         return "no component defined with ID " + childComponentId + " yet";
                     }
-                    componentChildren.push(this.components[childComponentId]);
+                    componentChildren.push([false, childComponentId]);
                 } else {
                     this.onXMLMinorError("unknown tag <" + compChildren[j].nodeName + ">");
                     continue;
@@ -1151,11 +1154,33 @@ export class MySceneGraph {
         }
         
         //To do: Create display loop for transversing the scene graph
-
+        
+        // this.displayNode([false, this.idRoot]);
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
         // this.primitives['demoCylinder'].display();
         // this.primitives['demoSphere'].display();
         this.primitives['demoTorus'].display();
+    }
+
+    displayNode(node) {
+        console.log(node);
+
+        const isPrimitive = node[0];
+        const nodeId = node[1] 
+        if (isPrimitive) {
+            this.primitives[nodeId].display();
+        }
+        else {
+            const component = this.components[nodeId];
+            console.log(component)
+
+            this.scene.multMatrix(component.transfMatrix);
+            for (let child of component.children) {
+                this.scene.pushMatrix();
+                this.displayNode(child);
+                this.scene.popMatrix();
+            }
+        }
     }
 }
