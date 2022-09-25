@@ -6,16 +6,6 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
-        
-        <ortho id="cam2" near="0.2" far="500" left="21" right="7" top="19" bottom="219" >
-
-            <from x="30" y="15" z="30" />
-
-            <to x="0" y="-2" z="0" />
-
-            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
-
-        </ortho>
     </views>
 
     <ambient>
@@ -43,6 +33,18 @@
             <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="vermelho" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="gold" shininess="100">
+            <emission r="0.85" g="0.64" b="0.125" a="1.0" />
+            <ambient r="0.85" g="0.64" b="0.125" a="1.0" />
+            <diffuse r="0.6" g="0.4" b="0.1" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -57,20 +59,56 @@
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
+        <primitive id="demoCylinder">
+            <cylinder base="1" top="1" height="2" slices="16" stacks="8" />
+        </primitive>
+        <primitive id="demoSphere">
+            <sphere radius="2" slices="32" stacks="32" />
+        </primitive>
+        <primitive id="demoTorus">
+            <torus inner="0.25" outter="1.5" slices="16" loops="20" />
+        </primitive>
     </primitives>
 
     <components>
-        <component id="demoRoot">
+        <component id="trunk">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="vermelho" />
+            </materials>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+        <component id="ring">
+            <transformation>
+                <translate x="0" y="0.5" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="gold" />
+            </materials>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="mesh_game">
+            <transformation>
+                <translate x="0" y="0" z="5" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="none"/>
             <children>
-                <primitiveref id="demoRectangle" />
+                <componentref id="trunk" />
+                <componentref id="ring" />
             </children>
         </component>
     </components>
