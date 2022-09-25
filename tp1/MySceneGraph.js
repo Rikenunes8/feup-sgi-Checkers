@@ -965,7 +965,7 @@ export class MySceneGraph {
                 if (materialId == null) return "no ID defined for material defined in component " + componentID;
 
                 if (materialId == 'inherit') {
-                    // TODO inherit; How to get material from parent? Just do nothing?
+                    componentMaterials.push('inherit');
                 } else {
                     if (this.materials[materialId] == null) return "no material defined with ID " + materialId;
                     componentMaterials.push(this.materials[materialId]);
@@ -1152,7 +1152,7 @@ export class MySceneGraph {
         
         //To do: Create display loop for transversing the scene graph
         this.displayNode([false, this.idRoot]);
-        // this.displayNode([false, this.idRoot]);
+
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
         // this.primitives['demoCylinder'].display();
@@ -1168,9 +1168,11 @@ export class MySceneGraph {
         }
         else {
             const component = this.components[nodeId];
-            console.log(nodeId, component.transfMatrix)
+            const material = component.getMaterial()
+            
             this.scene.multMatrix(component.transfMatrix);
             for (let child of component.children) {
+                if (material !== 'inherit') material.apply();
                 this.scene.pushMatrix();
                 this.displayNode(child);
                 this.scene.popMatrix();

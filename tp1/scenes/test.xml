@@ -109,7 +109,7 @@
                 <translate x="0" y="3.75" z="0"/>
             </transformation>
             <materials>
-                <material id="vermelho" />
+                <material id="inherit" />
             </materials>
             <texture id="demoTexture" length_s="1" length_t="1"/>
             <children>
