@@ -39,6 +39,8 @@ export class MySceneGraph {
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
 
+        this.displayNormals = false; // TODO testing
+
         // File reading 
         this.reader = new CGFXMLreader();
 
@@ -1106,6 +1108,13 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
+        for (let id in this.primitives) {
+            if (this.displayNormals)
+                this.primitives[id].enableNormalViz();
+            else
+                this.primitives[id].disableNormalViz();
+        }
+        
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
