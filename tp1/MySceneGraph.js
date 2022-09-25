@@ -1,5 +1,6 @@
 import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
+import { MyComponent } from './MyComponent.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -690,10 +691,9 @@ export class MySceneGraph {
     parseComponents(componentsNode) {
         var children = componentsNode.children;
 
-        this.components = [];
+        this.components = {};
 
         var grandChildren = [];
-        var grandgrandChildren = [];
         var nodeNames = [];
 
         // Any number of components.
@@ -705,7 +705,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current component.
-            var componentID = this.reader.getString(children[i], 'id');
+            var componentID = this.reader.getString(children[i], 'id', false);
             if (componentID == null)
                 return "no ID defined for componentID";
 
@@ -725,15 +725,152 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            let componentTransfMatrix = undefined;
+            let componentMaterials = [];
+            let componentTexture = undefined;
+            let componentChildren = [];
+
+
+            if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
+            if (materialsIndex == -1) return "missing materials definition in component " + componentID;
+            if (textureIndex == -1) return "missing texture definition in component " + componentID;
+            if (childrenIndex == -1) return "missing children definition in component " + componentID;
+
             this.onXMLMinorError("To do: Parse components.");
+
             // Transformations
+            const transformations = grandChildren[transformationIndex].children;
+            let transformationNames = [];
+            for (let child of transformations) 
+                transformationNames.push(child.nodeName);
+
+            if (transformationNames.includes('transformationref')) {
+                if (transformations.length === 1) {
+                    const transformationrefId = this.reader.getString(transformations[0], 'id', false);
+                    if (transformationrefId == null) return "no ID defined for transformationref defined in component " + componentID;
+
+                    if (this.transformations[transformationrefId] == null) return "no transformation defined with ID " + transformationrefId;
+
+                    componentTransfMatrix = this.transformations[transformationrefId]
+                }
+                else 
+                    return  "transformationref must be a single definition inside transformation block of component " + componentID; 
+            } else {
+                var transfMatrix = mat4.create();
+
+                for (var j = 0; j < transformations.length; j++) {
+                    switch (transformations[j].nodeName) {
+                        case 'translate':
+                            var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation for component ID " + componentID);
+                            if (!Array.isArray(coordinates)) return coordinates;
+    
+                            transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                            break;
+                        case 'scale':
+                            var coordinates = this.parseCoordinates3D(transformations[j], "scale transformation for component ID " + componentID);
+                            if (!Array.isArray(coordinates)) return coordinates;
+    
+                            transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+                            break;
+                        case 'rotate':
+                            // angle
+                            let angle = this.reader.getFloat(transformations[j], 'angle', false);
+                            if (!(angle != null && !isNaN(angle))) return "unable to parse angle of the rotate transformation for component ID " + componentID;
+    
+                            // axis
+                            const axisNames = ['x', 'y', 'z']
+                            let axisArr = [0, 0, 0];
+                            
+                            const axis = this.reader.getString(transformations[j], 'axis', false);
+                            if (axis == null)return "unable to parse axis of the rotate transformation for component ID " + componentID;
+
+                            const index = axisNames.indexOf(axis);
+                            if (index !== -1) axisArr[index] = 1;
+                            else return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
+    
+    
+                            transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
+                            break;
+                        default:
+                            this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
+                            break;
+                    }
+                    componentTransfMatrix = transfMatrix;
+                }
+            } 
 
             // Materials
+            const materials = grandChildren[materialsIndex].children;
+            for (let j = 0; j < materials.length; j++) {
+                if (materials[j].nodeName != "material") {
+                    this.onXMLMinorError("unknown tag <" + materials[j].nodeName + ">");
+                    continue;
+                }
+
+                const materialId = this.reader.getString(materials[0], 'id', false);
+                if (materialId == null) return "no ID defined for material defined in component " + componentID;
+
+                if (materialId == 'inherit') {
+                    // TODO inherit; How to get material from parent? Just do nothing?
+                } else {
+                    if (this.materials[materialId] == null) return "no material defined with ID " + materialId;
+                    componentMaterials.push(this.materials[materialId]);
+                }
+            }
+            if (componentMaterials.length === 0)
+                return "must exists at least one material declaration for component " + componentID;
 
             // Texture
+            const textureId = this.reader.getString(grandChildren[textureIndex], 'id', false);
+            if (textureId == null) return "no ID defined for texture defined in component " + componentID;
+
+            if (textureId == 'none') {
+                componentTexture = null;
+            } else if (textureId == 'inherit') {
+                // TODO inherit; How to get material from parent? Just do nothing?
+            } else {
+                if (this.textures[textureId] == null) return "no texture defined with ID " + textureId;
+
+                const length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s', false);
+                const length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t', false);
+                if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
+                if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
+
+                componentTexture = (this.textures[textureId], length_s, length_t);
+            }
 
             // Children
+            const compChildren = grandChildren[childrenIndex].children;
+            for (let j = 0; j < compChildren.length; j++) {
+                if (compChildren[j].nodeName == "primitiveref") {
+                    const childPrimitiveId = this.reader.getString(compChildren[j], 'id', false);
+                    if (childPrimitiveId == null)
+                        return "no ID defined for child primitive defined in component " + componentID;
+                    if (this.primitives[childPrimitiveId] == null) {
+                        return "no primitive defined with ID " + childPrimitiveId;
+                    }
+                    componentChildren.push(this.primitives[childPrimitiveId]);
+                } else if (compChildren[j].nodeName == "componentref") {
+                    const childComponentId = this.reader.getString(compChildren[j], 'id', false);
+                    if (childComponentId == null)
+                        return "no ID defined for child component defined in component " + componentID;
+                    if (this.components[childComponentId] == null) {
+                        return "no component defined with ID " + childComponentId + " yet";
+                    }
+                    componentChildren.push(this.components[childComponentId]);
+                } else {
+                    this.onXMLMinorError("unknown tag <" + compChildren[j].nodeName + ">");
+                    continue;
+                }
+            }
+            if (componentChildren.length === 0)
+                return "must exists at least one children declaration for component " + componentID;
+
+            this.components[componentID] = new MyComponent(this.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren);
         }
+
+        this.log("Parsed components");
+        return null;
     }
 
 
