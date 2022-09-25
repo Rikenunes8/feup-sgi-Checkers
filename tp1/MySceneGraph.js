@@ -1109,15 +1109,7 @@ export class MySceneGraph {
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-<<<<<<< HEAD
-        this.primitives['demoRectangle'].display();
-
-        // To do: change between cameras. Probably have an array on this class with
-        // the cameras and switch between them with the interface. 
-        //this.scene.camera = new CGFcamera(0.9, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-=======
         //this.primitives['demoRectangle'].display();
         this.primitives['demoCylinder'].display();
->>>>>>> fb55646 (Cylinder with base ant top radius modifiable)
     }
 }
