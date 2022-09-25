@@ -266,11 +266,6 @@ export class MySceneGraph {
             const from = this.parseCoordinates3D(fromChild, "'from' property for ID " + id);
             const to = this.parseCoordinates3D(toChild, "'to' property for ID " + id);
 
-            if (!Array.isArray(from))
-                return from;
-            else if (!Array.isArray(to))
-                return to;
-
             if (!id) {
                 return "Missing property id on " + children[i].nodeName + " View";
             } else if (!near) {
@@ -278,6 +273,12 @@ export class MySceneGraph {
             } else if (!far) {
                 return "Missing property far on View with id " + id;
             }
+
+            if (!Array.isArray(from))
+                return from;
+            else if (!Array.isArray(to))
+                return to;
+
 
             // Checks for repeated IDs.
             if (this.views[id] != null)
@@ -302,12 +303,19 @@ export class MySceneGraph {
                 
                 // the up values are in the third child of node 'ortho' 
                 const upChild = children[i].children[2];
-                const upValues = [this.reader.getString(upChild, 'x', false), this.reader.getString(upChild, 'y', false), this.reader.getString(upChild, 'z', false)];
+                const upValues = this.parseCoordinates3D(upChild, "'up' property for ID " + id);
 
-                if (!left || !right || !top || !bottom || !upValues[0] || !upValues[1] || !upValues[2]) {
-                    // to do return error message
-                    return "you didn't specify some Ortho View properties";
+                if (!left) {
+                    return "Missing property left on Ortho View with id " + id;
+                } else if (!right) {
+                    return "Missing property right on Ortho View with id " + id;
+                } else if (!top) {
+                    return "Missing property top on Ortho View with id " + id;
+                } else if (!bottom) {
+                    return "Missing property bottom on Ortho View with id " + id;
                 }
+                if (!Array.isArray(upValues))
+                    return upValues;
 
                 this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
 
@@ -1006,7 +1014,7 @@ export class MySceneGraph {
 
 
         // w
-        var w = this.reader.getFloat(node, 'w');
+        var w = this.reader.getFloat(node, 'w', false);
         if (!(w != null && !isNaN(w)))
             return "unable to parse w-coordinate of the " + messageError;
 
