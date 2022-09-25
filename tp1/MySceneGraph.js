@@ -1,4 +1,4 @@
-import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 
@@ -47,6 +47,7 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
+
     }
 
     /*
@@ -231,7 +232,94 @@ export class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
+
+        this.views = {};
+        this.defaultCam = null;
+
         this.onXMLMinorError("To do: Parse views and create cameras.");
+        
+        // get the default camera id 
+        const defaultCam = this.reader.getString(viewsNode, 'default', false);
+
+        // to do return check this error message 
+        if (!defaultCam) {
+            return "you must specify a default prop on views";
+        } else {
+            this.defaultCam = defaultCam;
+        }
+
+        var children = viewsNode.children;
+
+        for (var i = 0; i < children.length; i++) {
+            const fromChild = children[i].children[0]; // from
+            const toChild = children[i].children[1]; // to
+            
+            if (fromChild.nodeName != "from") {
+                return "Missing tag <from> on View";
+            } else if (toChild.nodeName != "to") {
+                return "Missing tag <to> on View";
+            }
+
+            const id = this.reader.getString(children[i], 'id', false);
+            const near = this.reader.getString(children[i], 'near', false);
+            const far = this.reader.getString(children[i], 'far', false);
+            const from = this.parseCoordinates3D(fromChild, "'from' property for ID " + id);
+            const to = this.parseCoordinates3D(toChild, "'to' property for ID " + id);
+
+            if (!Array.isArray(from))
+                return from;
+            else if (!Array.isArray(to))
+                return to;
+
+            if (!id) {
+                return "Missing property id on " + children[i].nodeName + " View";
+            } else if (!near) {
+                return "Missing property near on View with id " + id;
+            } else if (!far) {
+                return "Missing property far on View with id " + id;
+            }
+
+            // Checks for repeated IDs.
+            if (this.views[id] != null)
+                return "ID must be unique for each View (conflict: ID = " + id + ")";
+
+            if (children[i].nodeName === 'perspective') {
+
+                const angle = this.reader.getFloat(children[i], 'angle', false);
+                if (!angle)
+                    return "perspective view must have angle attribute";
+
+                // TO DO which is the camera that uses this perspective? CGFCamera? Do I need to
+                // calculate the fov?
+                this.views[id] = new CGFcamera(0, near, far, from, to);
+
+            } else if (children[i].nodeName === 'ortho') {
+
+                const left = this.reader.getString(children[i], 'left', false);
+                const right = this.reader.getString(children[i], 'right', false);
+                const top = this.reader.getString(children[i], 'top', false);
+                const bottom = this.reader.getString(children[i], 'bottom', false);
+                
+                // the up values are in the third child of node 'ortho' 
+                const upChild = children[i].children[2];
+                const upValues = [this.reader.getString(upChild, 'x', false), this.reader.getString(upChild, 'y', false), this.reader.getString(upChild, 'z', false)];
+
+                if (!left || !right || !top || !bottom || !upValues[0] || !upValues[1] || !upValues[2]) {
+                    // to do return error message
+                    return "you didn't specify some Ortho View properties";
+                }
+
+                this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
+
+            } else {
+                this.onXMLMinorError("unknown view tag <" + children[i].nodeName + ">");
+            }
+
+        }
+
+        // check if the defaultCamera is defined
+        if (!Object.keys(this.views).includes(this.defaultCam)) 
+            return 'The default View specified it is not defined';
 
         return null;
     }
@@ -397,7 +485,7 @@ export class MySceneGraph {
     parseTextures(texturesNode) {
         var children = texturesNode.children;
 
-        this.textures = {}
+        this.textures = {};
 
         for (let i = 0 ; i < children.length; i++) {
             if (children[i].nodeName != "texture") {
@@ -883,17 +971,17 @@ export class MySceneGraph {
         var position = [];
 
         // x
-        var x = this.reader.getFloat(node, 'x');
+        var x = this.reader.getFloat(node, 'x', false);
         if (!(x != null && !isNaN(x)))
             return "unable to parse x-coordinate of the " + messageError;
 
         // y
-        var y = this.reader.getFloat(node, 'y');
+        var y = this.reader.getFloat(node, 'y', false);
         if (!(y != null && !isNaN(y)))
             return "unable to parse y-coordinate of the " + messageError;
 
         // z
-        var z = this.reader.getFloat(node, 'z');
+        var z = this.reader.getFloat(node, 'z', false);
         if (!(z != null && !isNaN(z)))
             return "unable to parse z-coordinate of the " + messageError;
 
@@ -993,5 +1081,9 @@ export class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoRectangle'].display();
+
+        // To do: change between cameras. Probably have an array on this class with
+        // the cameras and switch between them with the interface. 
+        //this.scene.camera = new CGFcamera(0.9, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
 }
