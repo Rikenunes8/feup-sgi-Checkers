@@ -205,7 +205,8 @@ export class MySceneGraph {
                 return error;
         }
 
-        this.verifyComponentsRefsExistence();
+        if ((error = this.verifyComponentsRefsExistence()) != null)
+            return error;
 
         this.log("all parsed");
     }
@@ -1047,7 +1048,20 @@ export class MySceneGraph {
     }
 
     verifyComponentsRefsExistence() {
-
+        return  this.verifyComponentsRefsExistenceRec([false, this.idRoot]);
+    }
+    verifyComponentsRefsExistenceRec(node) {
+        const isPrimitive = node[0];
+        const nodeId = node[1] 
+        if (!isPrimitive) {
+            const component = this.components[nodeId];
+            if (component == null) return "component " + nodeId + " is not defined";
+            for (let child of this.components[nodeId].children) {
+                const error = this.verifyComponentsRefsExistenceRec(child);
+                if (error != null) return error;
+            }
+        }
+        return null;
     }
 
 
