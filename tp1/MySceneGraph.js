@@ -3,6 +3,7 @@ import { MyCylinder } from './MyCylinder.js';
 import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 import { MySphere } from './MySphere.js';
+import { MyTorus } from './MyTorus.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -807,6 +808,22 @@ export class MySceneGraph {
 
                 var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
                 this.primitives[primitiveId] = sphere;
+            } else if (primitiveType == "torus") {
+                var inner = this.reader.getFloat(grandChildren[0], 'inner', false);
+                if (inner == null || isNaN(inner) || inner < 0)
+                    return "unable to parse inner radius of the torus for ID = " + primitiveId;
+                var outter = this.reader.getFloat(grandChildren[0], 'outter', false);
+                if (outter == null || isNaN(outter) || outter < 0)
+                    return "unable to parse outter radius of the torus for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the torus for ID = " + primitiveId;
+                var loops = this.reader.getInteger(grandChildren[0], 'loops', false);
+                if (loops == null || isNaN(loops) || loops < 1)
+                    return "unable to parse loops of the torus for ID = " + primitiveId;
+
+                var torus = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
+                this.primitives[primitiveId] = torus;
 
             } else {
                 console.warn("To do: Parse other primitives.");
@@ -1122,7 +1139,7 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        for (let id in this.primitives) {
+        for (let id in this.primitives) { // TODO testing
             if (this.displayNormals)
                 this.primitives[id].enableNormalViz();
             else
@@ -1134,6 +1151,7 @@ export class MySceneGraph {
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
         // this.primitives['demoCylinder'].display();
-        this.primitives['demoSphere'].display();
+        // this.primitives['demoSphere'].display();
+        this.primitives['demoTorus'].display();
     }
 }
