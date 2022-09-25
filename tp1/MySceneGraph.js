@@ -1,4 +1,4 @@
-import { CGFXMLreader } from '../lib/CGF.js';
+import { CGFappearance, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
 import { MyRectangle } from './MyRectangle.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -420,18 +420,17 @@ export class MySceneGraph {
             if (textureFile.match(/.*\.(png|jpg)/) == null)
                 return "File defined for texture " + textureId + " must be in .png or .jpg format";
 
-            this.textures[textureId] = textureFile
+            this.textures[textureId] = new CGFtexture(this.scene, textureFile);
         }
 
         if (Object.keys(this.textures).length === 0)
             return "at least one texture must be defined";
 
-        this.log("Parsed textures");
-
+            
         // For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Parse textures. Should we verify the file existence?");
         this.onXMLMinorError("To do: Test textures parse when Components parse is done.");
-
+            
+        this.log("Parsed textures");
         return null;
     }
 
@@ -485,7 +484,7 @@ export class MySceneGraph {
             }
 
             for (let j = 0; j < attributeNames.length; j++) {
-                let attributeIndex = nodeNames.indexOf(attributeNames[j])
+                let attributeIndex = nodeNames.indexOf(attributeNames[j]);
                 
                 if (attributeIndex === -1) // attribute name not found in grandChildrens
                     return "material component " + attributeNames[j] + " undefined for ID = " + materialID;
@@ -493,14 +492,20 @@ export class MySceneGraph {
                 let color = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " material component for ID" + materialID);
                 if (!Array.isArray(color))
                     return color; // Error message from parseColor
-                acc.push(color)
+                acc.push(color);
             }
 
             // Verify duplicates
             if (nodeNames.length != attributeNames.length)
                 this.onXMLMinorError("material component is duplicated for ID = " + materialID);
 
-            this.materials[materialID] = acc;
+            let material = new CGFappearance(this.scene);
+            material.setShininess(acc[0]);
+            material.setEmission(acc[1][0], acc[1][1], acc[1][2], acc[1][3]);
+            material.setAmbient(acc[2][0], acc[2][1], acc[2][2], acc[2][3]);
+            material.setDiffuse(acc[3][0], acc[3][1], acc[3][2], acc[3][3]);
+            material.setSpecular(acc[4][0], acc[4][1], acc[4][2], acc[4][3]);
+            this.materials[materialID] = material;
         }
 
         if (Object.keys(this.materials).length === 0)
