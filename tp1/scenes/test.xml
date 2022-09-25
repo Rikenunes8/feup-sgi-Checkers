@@ -6,6 +6,12 @@
             <from x="30" y="15" z="30" />
             <to x="0" y="-2" z="0" />
         </perspective>
+
+        <ortho id="cam2" near="0.2" far="500" left="21" right="7" top="19" bottom="219" >
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
+        </ortho>
     </views>
 
     <ambient>
@@ -60,7 +66,7 @@
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
         <primitive id="demoCylinder">
-            <cylinder base="1" top="1" height="2" slices="16" stacks="8" />
+            <cylinder base="1.5" top="1" height="2" slices="16" stacks="8" />
         </primitive>
         <primitive id="demoSphere">
             <sphere radius="2" slices="32" stacks="32" />
@@ -73,7 +79,7 @@
     <components>
         <component id="trunk">
             <transformation>
-                <rotate axis="x" angle="90" />
+                <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
                 <material id="vermelho" />
@@ -86,7 +92,7 @@
 
         <component id="ring">
             <transformation>
-                <translate x="0" y="0.5" z="0" />
+                <translate x="0" y="0.25" z="0" />
                 <rotate axis="x" angle="90" />
             </transformation>
             <materials>
@@ -98,9 +104,22 @@
             </children>
         </component>
 
+        <component id="head">
+            <transformation>
+                <translate x="0" y="3.75" z="0"/>
+            </transformation>
+            <materials>
+                <material id="vermelho" />
+            </materials>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
         <component id="mesh_game">
             <transformation>
-                <translate x="0" y="0" z="5" />
+                <translate x="0" y="0" z="3" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -109,6 +128,7 @@
             <children>
                 <componentref id="trunk" />
                 <componentref id="ring" />
+                <componentref id="head" />
             </children>
         </component>
     </components>

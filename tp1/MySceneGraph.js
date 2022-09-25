@@ -4,7 +4,6 @@ import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 import { MySphere } from './MySphere.js';
 import { MyTorus } from './MyTorus.js';
-import { MyPrimitive } from './MyPrimitive.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -206,8 +205,6 @@ export class MySceneGraph {
                 return error;
         }
         this.log("all parsed");
-
-        this.buildGraph(this.idRoot);
     }
 
     /**
@@ -946,14 +943,14 @@ export class MySceneGraph {
                             else return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
     
     
-                            transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
+                            transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD, axisArr);
                             break;
                         default:
                             this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
                             break;
                     }
-                    componentTransfMatrix = transfMatrix;
                 }
+                componentTransfMatrix = transfMatrix;
             } 
 
             // Materials
@@ -1154,18 +1151,16 @@ export class MySceneGraph {
         }
         
         //To do: Create display loop for transversing the scene graph
-        
+        this.displayNode([false, this.idRoot]);
         // this.displayNode([false, this.idRoot]);
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
         // this.primitives['demoCylinder'].display();
         // this.primitives['demoSphere'].display();
-        this.primitives['demoTorus'].display();
+        // this.primitives['demoTorus'].display();
     }
 
     displayNode(node) {
-        console.log(node);
-
         const isPrimitive = node[0];
         const nodeId = node[1] 
         if (isPrimitive) {
@@ -1173,8 +1168,7 @@ export class MySceneGraph {
         }
         else {
             const component = this.components[nodeId];
-            console.log(component)
-
+            console.log(nodeId, component.transfMatrix)
             this.scene.multMatrix(component.transfMatrix);
             for (let child of component.children) {
                 this.scene.pushMatrix();
