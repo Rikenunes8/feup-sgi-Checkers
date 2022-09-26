@@ -4,8 +4,9 @@ import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 import { MySphere } from './MySphere.js';
 import { MyTorus } from './MyTorus.js';
+import { MyTriangle } from './MyTriangle.js';
 
-var DEGREE_TO_RAD = Math.PI / 180;
+export var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -763,41 +764,44 @@ export class MySceneGraph {
                 this.parsePrimitiveTorus(grandChildren[0], primitiveId);
             } else if (primitiveType == 'triangle') {
 
-                const point1 = [
+                const pos1 = [
                     this.reader.getString(grandChildren[0], 'x1', false),
                     this.reader.getString(grandChildren[0], 'y1', false),
                     this.reader.getString(grandChildren[0], 'z1', false)
                 ];
-                const point2 = [
+                const pos2 = [
                     this.reader.getString(grandChildren[0], 'x2', false),
                     this.reader.getString(grandChildren[0], 'y2', false),
                     this.reader.getString(grandChildren[0], 'z2', false)
                 ];
-                const point3 = [
+                const pos3 = [
                     this.reader.getString(grandChildren[0], 'x3', false),
                     this.reader.getString(grandChildren[0], 'y3', false),
                     this.reader.getString(grandChildren[0], 'z3', false)
                 ];
 
-                if (!point1[0]) {
+                if (!pos1[0]) {
                     return "You must specify x1 position on Triangle primitive " + primitiveId;
-                } else if (!point1[1]) {
+                } else if (!pos1[1]) {
                     return "You must specify y1 position on Triangle primitive " + primitiveId;
-                } else if (!point1[2]) {
+                } else if (!pos1[2]) {
                     return "You must specify z1 position on Triangle primitive " + primitiveId;
-                } else if (!point2[0]) {
+                } else if (!pos2[0]) {
                     return "You must specify x2 position on Triangle primitive " + primitiveId;
-                } else if (!point2[1]) {
+                } else if (!pos2[1]) {
                     return "You must specify y2 position on Triangle primitive " + primitiveId;
-                } else if (!point2[2]) {
+                } else if (!pos2[2]) {
                     return "You must specify z2 position on Triangle primitive " + primitiveId;
-                } else if (!point3[0]) {
+                } else if (!pos3[0]) {
                     return "You must specify x3 position on Triangle primitive " + primitiveId;
-                } else if (!point3[1]) {
+                } else if (!pos3[1]) {
                     return "You must specify y3 position on Triangle primitive " + primitiveId;
-                } else if (!point3[2]) {
+                } else if (!pos3[2]) {
                     return "You must specify z3 position on Triangle primitive " + primitiveId;
                 }
+
+                var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3) //new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
+                this.primitives[primitiveId] = triangle;
                 
             } else {
                 console.warn("To do: Parse other primitives.");
