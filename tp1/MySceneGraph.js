@@ -1,6 +1,9 @@
 import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { MyCylinder } from './MyCylinder.js';
 import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
+import { MySphere } from './MySphere.js';
+import { MyTorus } from './MyTorus.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -37,6 +40,8 @@ export class MySceneGraph {
         this.axisCoords['x'] = [1, 0, 0];
         this.axisCoords['y'] = [0, 1, 0];
         this.axisCoords['z'] = [0, 0, 1];
+
+        this.displayNormals = false; // TODO testing
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -711,7 +716,7 @@ export class MySceneGraph {
     parsePrimitives(primitivesNode) {
         var children = primitivesNode.children;
 
-        this.primitives = [];
+        this.primitives = {};
 
         var grandChildren = [];
 
@@ -770,8 +775,57 @@ export class MySceneGraph {
                 var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
 
                 this.primitives[primitiveId] = rect;
-            }
-            else {
+            } else if (primitiveType == "cylinder") {
+                var base = this.reader.getFloat(grandChildren[0], 'base', false);
+                if (base == null || isNaN(base) || base < 0)
+                    return "unable to parse base radius of the cyliinder for ID = " + primitiveId;
+                var top = this.reader.getFloat(grandChildren[0], 'top', false);
+                if (top == null || isNaN(top) || top < 0)
+                    return "unable to parse top radius of the cyliinder for ID = " + primitiveId;
+                var height = this.reader.getFloat(grandChildren[0], 'height', false);
+                if (height == null || isNaN(height) || height < 0)
+                    return "unable to parse height of the cyliinder for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the cyliinder for ID = " + primitiveId;
+                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
+                if (stacks == null || isNaN(stacks) || stacks < 1)
+                    return "unable to parse stacks of the cyliinder for ID = " + primitiveId;
+
+                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
+                this.primitives[primitiveId] = cylinder;
+
+            } else if (primitiveType == "sphere") {
+                var radius = this.reader.getFloat(grandChildren[0], 'radius', false);
+                if (radius == null || isNaN(radius) || radius < 0)
+                    return "unable to parse radius of the sphere for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the sphere for ID = " + primitiveId;
+                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
+                if (stacks == null || isNaN(stacks) || stacks < 1)
+                    return "unable to parse stacks of the sphere for ID = " + primitiveId;
+
+                var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
+                this.primitives[primitiveId] = sphere;
+            } else if (primitiveType == "torus") {
+                var inner = this.reader.getFloat(grandChildren[0], 'inner', false);
+                if (inner == null || isNaN(inner) || inner < 0)
+                    return "unable to parse inner radius of the torus for ID = " + primitiveId;
+                var outter = this.reader.getFloat(grandChildren[0], 'outter', false);
+                if (outter == null || isNaN(outter) || outter < 0)
+                    return "unable to parse outter radius of the torus for ID = " + primitiveId;
+                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
+                if (slices == null || isNaN(slices) || slices < 3)
+                    return "unable to parse slices of the torus for ID = " + primitiveId;
+                var loops = this.reader.getInteger(grandChildren[0], 'loops', false);
+                if (loops == null || isNaN(loops) || loops < 1)
+                    return "unable to parse loops of the torus for ID = " + primitiveId;
+
+                var torus = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
+                this.primitives[primitiveId] = torus;
+
+            } else {
                 console.warn("To do: Parse other primitives.");
             }
         }
@@ -1085,13 +1139,19 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
+        for (let id in this.primitives) { // TODO testing
+            if (this.displayNormals)
+                this.primitives[id].enableNormalViz();
+            else
+                this.primitives[id].disableNormalViz();
+        }
+        
         //To do: Create display loop for transversing the scene graph
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoRectangle'].display();
-
-        // To do: change between cameras. Probably have an array on this class with
-        // the cameras and switch between them with the interface. 
-        //this.scene.camera = new CGFcamera(0.9, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        // this.primitives['demoRectangle'].display();
+        // this.primitives['demoCylinder'].display();
+        // this.primitives['demoSphere'].display();
+        this.primitives['demoTorus'].display();
     }
 }

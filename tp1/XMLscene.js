@@ -38,6 +38,10 @@ export class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(100);
+
+        this.displayNormals = false; // TODO testing
+
+
     }
 
     /**
@@ -138,6 +142,7 @@ export class XMLscene extends CGFscene {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
+            this.graph.displayNormals = this.displayNormals; // TODO testing
             this.graph.displayScene();
         }
 
