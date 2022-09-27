@@ -4,8 +4,9 @@ import { MyRectangle } from './MyRectangle.js';
 import { MyComponent } from './MyComponent.js';
 import { MySphere } from './MySphere.js';
 import { MyTorus } from './MyTorus.js';
+import { MyTriangle } from './MyTriangle.js';
 
-var DEGREE_TO_RAD = Math.PI / 180;
+export var DEGREE_TO_RAD = Math.PI / 180;
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -731,7 +732,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current primitive.
-            var primitiveId = this.reader.getString(children[i], 'id');
+            var primitiveId = this.reader.getString(children[i], 'id', false);
             if (primitiveId == null)
                 return "no ID defined for texture";
 
@@ -760,7 +761,47 @@ export class MySceneGraph {
             } else if (primitiveType == "sphere") {
                 this.parsePrimitiveSphere(grandChildren[0], primitiveId);
             } else if (primitiveType == "torus") {
-                this.parsePrimitiveTorus(grandChildren[0], primitiveId)
+                this.parsePrimitiveTorus(grandChildren[0], primitiveId);
+            } else if (primitiveType == 'triangle') {
+
+                const pos1 = [
+                    this.reader.getFloat(grandChildren[0], 'x1', false),
+                    this.reader.getFloat(grandChildren[0], 'y1', false),
+                    this.reader.getFloat(grandChildren[0], 'z1', false)
+                ];
+                const pos2 = [
+                    this.reader.getFloat(grandChildren[0], 'x2', false),
+                    this.reader.getFloat(grandChildren[0], 'y2', false),
+                    this.reader.getFloat(grandChildren[0], 'z2', false)
+                ];
+                const pos3 = [
+                    this.reader.getFloat(grandChildren[0], 'x3', false),
+                    this.reader.getFloat(grandChildren[0], 'y3', false),
+                    this.reader.getFloat(grandChildren[0], 'z3', false)
+                ];
+                
+                if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
+                    return "You must specify x1 position on Triangle primitive " + primitiveId;
+                else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
+                    return "You must specify y1 position on Triangle primitive " + primitiveId;
+                else if (pos1[2] == null || isNaN(pos1[2]) || pos1[2] < 0)
+                    return "You must specify z1 position on Triangle primitive " + primitiveId;
+                else if (pos2[0] == null || isNaN(pos2[0]) || pos2[0] < 0)
+                    return "You must specify x2 position on Triangle primitive " + primitiveId;
+                else if (pos2[1] == null || isNaN(pos2[1]) || pos2[1] < 0)
+                    return "You must specify y2 position on Triangle primitive " + primitiveId;
+                else if (pos2[2] == null || isNaN(pos2[2]) || pos2[2] < 0)
+                    return "You must specify z2 position on Triangle primitive " + primitiveId;
+                else if (pos3[0] == null || isNaN(pos3[0]) || pos3[0] < 0)
+                    return "You must specify x3 position on Triangle primitive " + primitiveId;
+                else if (pos3[1] == null || isNaN(pos3[1]) || pos3[1] < 0)
+                    return "You must specify y3 position on Triangle primitive " + primitiveId;
+                else if (pos3[2] == null || isNaN(pos3[2]) || pos3[2] < 0)
+                    return "You must specify z3 position on Triangle primitive " + primitiveId;
+
+                var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
+                this.primitives[primitiveId] = triangle;
+                
             } else {
                 console.warn("To do: Parse other primitives.");
             }

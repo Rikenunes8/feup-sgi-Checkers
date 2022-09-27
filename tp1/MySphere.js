@@ -23,8 +23,7 @@ export class MySphere extends CGFobject {
         let phiIncrement = Math.PI / this.stacks;
         let phiCosines = [];
         let phiSines = [];
-        
-    
+
         for (let i = 0; i < this.slices; i++) {
             thetaCosines.push(Math.cos(theta));
             thetaSines.push(Math.sin(theta));
@@ -49,7 +48,7 @@ export class MySphere extends CGFobject {
                 if (i < this.stacks) {
                     const curr = i * this.slices + j;
                     const next = curr + this.slices; // (i+1) * (this.slices) + j
-                    
+
                     if (j == this.slices-1) {
                         this.indices.push(curr, curr - (this.slices-1), curr + 1);
                         this.indices.push(curr, curr + 1, next);
