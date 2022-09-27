@@ -754,57 +754,22 @@ export class MySceneGraph {
             var primitiveType = grandChildren[0].nodeName;
 
             // Retrieves the primitive coordinates.
+            let error;
             if (primitiveType == 'rectangle') {
-                this.parsePrimitiveRectangle(grandChildren[0], primitiveId);
+                error = this.parsePrimitiveRectangle(grandChildren[0], primitiveId);
             } else if (primitiveType == "cylinder") {
-                this.parsePrimitiveCylinder(grandChildren[0], primitiveId);
+                error = this.parsePrimitiveCylinder(grandChildren[0], primitiveId);
             } else if (primitiveType == "sphere") {
-                this.parsePrimitiveSphere(grandChildren[0], primitiveId);
+                error = this.parsePrimitiveSphere(grandChildren[0], primitiveId);
             } else if (primitiveType == "torus") {
-                this.parsePrimitiveTorus(grandChildren[0], primitiveId);
+                error = this.parsePrimitiveTorus(grandChildren[0], primitiveId);
             } else if (primitiveType == 'triangle') {
-
-                const pos1 = [
-                    this.reader.getFloat(grandChildren[0], 'x1', false),
-                    this.reader.getFloat(grandChildren[0], 'y1', false),
-                    this.reader.getFloat(grandChildren[0], 'z1', false)
-                ];
-                const pos2 = [
-                    this.reader.getFloat(grandChildren[0], 'x2', false),
-                    this.reader.getFloat(grandChildren[0], 'y2', false),
-                    this.reader.getFloat(grandChildren[0], 'z2', false)
-                ];
-                const pos3 = [
-                    this.reader.getFloat(grandChildren[0], 'x3', false),
-                    this.reader.getFloat(grandChildren[0], 'y3', false),
-                    this.reader.getFloat(grandChildren[0], 'z3', false)
-                ];
-                
-                if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
-                    return "You must specify x1 position on Triangle primitive " + primitiveId;
-                else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
-                    return "You must specify y1 position on Triangle primitive " + primitiveId;
-                else if (pos1[2] == null || isNaN(pos1[2]) || pos1[2] < 0)
-                    return "You must specify z1 position on Triangle primitive " + primitiveId;
-                else if (pos2[0] == null || isNaN(pos2[0]) || pos2[0] < 0)
-                    return "You must specify x2 position on Triangle primitive " + primitiveId;
-                else if (pos2[1] == null || isNaN(pos2[1]) || pos2[1] < 0)
-                    return "You must specify y2 position on Triangle primitive " + primitiveId;
-                else if (pos2[2] == null || isNaN(pos2[2]) || pos2[2] < 0)
-                    return "You must specify z2 position on Triangle primitive " + primitiveId;
-                else if (pos3[0] == null || isNaN(pos3[0]) || pos3[0] < 0)
-                    return "You must specify x3 position on Triangle primitive " + primitiveId;
-                else if (pos3[1] == null || isNaN(pos3[1]) || pos3[1] < 0)
-                    return "You must specify y3 position on Triangle primitive " + primitiveId;
-                else if (pos3[2] == null || isNaN(pos3[2]) || pos3[2] < 0)
-                    return "You must specify z3 position on Triangle primitive " + primitiveId;
-
-                var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
-                this.primitives[primitiveId] = triangle;
-                
+                error = this.parsePrimitiveTriangle(grandChildren[0], primitiveId);
             } else {
                 console.warn("To do: Parse other primitives.");
+                continue;
             }
+            if (error != null) return error;
         }
 
         this.log("Parsed primitives");
@@ -870,9 +835,9 @@ export class MySceneGraph {
         var inner = this.reader.getFloat(node, 'inner', false);
         if (inner == null || isNaN(inner) || inner < 0)
             return "unable to parse inner radius of the torus for ID = " + primitiveId;
-        var outter = this.reader.getFloat(node, 'outter', false);
-        if (outter == null || isNaN(outter) || outter < 0)
-            return "unable to parse outter radius of the torus for ID = " + primitiveId;
+        var outer = this.reader.getFloat(node, 'outer', false);
+        if (outer == null || isNaN(outer) || outer < 0)
+            return "unable to parse outer radius of the torus for ID = " + primitiveId;
         var slices = this.reader.getInteger(node, 'slices', false);
         if (slices == null || isNaN(slices) || slices < 3)
             return "unable to parse slices of the torus for ID = " + primitiveId;
@@ -880,7 +845,45 @@ export class MySceneGraph {
         if (loops == null || isNaN(loops) || loops < 1)
             return "unable to parse loops of the torus for ID = " + primitiveId;
 
-        this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);;
+        this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);;
+    }
+    parsePrimitiveTriangle(node, primitiveId) {
+        const pos1 = [
+            this.reader.getFloat(node, 'x1', false),
+            this.reader.getFloat(node, 'y1', false),
+            this.reader.getFloat(node, 'z1', false)
+        ];
+        const pos2 = [
+            this.reader.getFloat(node, 'x2', false),
+            this.reader.getFloat(node, 'y2', false),
+            this.reader.getFloat(node, 'z2', false)
+        ];
+        const pos3 = [
+            this.reader.getFloat(node, 'x3', false),
+            this.reader.getFloat(node, 'y3', false),
+            this.reader.getFloat(node, 'z3', false)
+        ];
+        
+        if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
+            return "You must specify x1 position on Triangle primitive " + primitiveId;
+        else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
+            return "You must specify y1 position on Triangle primitive " + primitiveId;
+        else if (pos1[2] == null || isNaN(pos1[2]) || pos1[2] < 0)
+            return "You must specify z1 position on Triangle primitive " + primitiveId;
+        else if (pos2[0] == null || isNaN(pos2[0]) || pos2[0] < 0)
+            return "You must specify x2 position on Triangle primitive " + primitiveId;
+        else if (pos2[1] == null || isNaN(pos2[1]) || pos2[1] < 0)
+            return "You must specify y2 position on Triangle primitive " + primitiveId;
+        else if (pos2[2] == null || isNaN(pos2[2]) || pos2[2] < 0)
+            return "You must specify z2 position on Triangle primitive " + primitiveId;
+        else if (pos3[0] == null || isNaN(pos3[0]) || pos3[0] < 0)
+            return "You must specify x3 position on Triangle primitive " + primitiveId;
+        else if (pos3[1] == null || isNaN(pos3[1]) || pos3[1] < 0)
+            return "You must specify y3 position on Triangle primitive " + primitiveId;
+        else if (pos3[2] == null || isNaN(pos3[2]) || pos3[2] < 0)
+            return "You must specify z3 position on Triangle primitive " + primitiveId;
+
+        this.primitives[primitiveId] = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
     }
 
     /**
@@ -1070,10 +1073,6 @@ export class MySceneGraph {
                 const childComponentId = this.reader.getString(children[j], 'id', false);
                 if (childComponentId == null)
                     return "no ID defined for child component defined in component " + componentID;
-                /* TODO verifying here implies that a component have been defined earlier, should we do this?
-                if (this.components[childComponentId] == null) {
-                    return "no component defined with ID " + childComponentId + " yet";
-                }*/
                 componentChildren.push([false, childComponentId]);
             } else {
                 this.onXMLMinorError("unknown tag <" + children[j].nodeName + ">");
