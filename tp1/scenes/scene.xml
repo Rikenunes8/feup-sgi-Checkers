@@ -91,13 +91,187 @@
             </materials>
             <texture id="none"/>
             <children>
+                <componentref id="leftSide" />
+                <componentref id="stairsLeftWall" />
+                <componentref id="ground" />
+                <componentref id="bridge" />
+            </children>
+        </component>
+
+        <component id="bridge">
+            <transformation>
+                <translate x="7" y="2.5" z="30.2" />
+                <rotate axis="y" angle="-10"/>
+                <scale x="15" y="1" z="3" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="stairsLeftWall">
+            <transformation>
+                <translate x="0.5" y="0" z="20" />
+                <scale x="1" y="6" z="11" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+
+       <component id="leftSide">
+            <transformation>
+                <translate x="-0.5" y="4.5" z="22.5" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="block1" />
+                <componentref id="block2" />
+                <componentref id="block3" />
+                <componentref id="block4" />
+                <componentref id="block5" />
+                <componentref id="block6" />
+                <componentref id="block7" />
+                <componentref id="block8" />
+                <componentref id="block9" />
+                <componentref id="block10" />
+            </children>
+        </component>
+
+        <component id="block1">
+            <transformation>
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block2">
+            <transformation>
+                <translate x="0" y="0" z="-5" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block3">
+            <transformation>
+                <translate x="0" y="0" z="-10" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block4">
+            <transformation>
+                <translate x="0" y="0" z="-15" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block5">
+            <transformation>
+                <translate x="0" y="0" z="-20" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block6">
+            <transformation>
+                <translate x="0" y="0" z="-25" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block7">
+            <transformation>
+                <translate x="0" y="0" z="-30" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block8">
+            <transformation>
+                <translate x="0" y="0" z="-35" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block9">
+            <transformation>
+                <translate x="0" y="0" z="-40" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="block" />
+            </children>
+        </component>
+        <component id="block10">
+            <transformation>
+                <translate x="0" y="0" z="-45" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
                 <componentref id="block" />
             </children>
         </component>
 
         <component id="block">
             <transformation>
-                <translate x="0" y="0" z="0" />
             </transformation>
             <texture id="none"/>
             <materials>
@@ -109,11 +283,10 @@
                 <componentref id="leftBlockPilar" />
             </children>
         </component>
-
         <component id="blockHead">
             <transformation>
-                <translate x="-2" y="4" z="0" />
-                <scale x="5" y="5" z="5" />
+                <translate x="-1" y="3.5" z="0" />
+                <scale x="3" y="4" z="5" />
             </transformation>
             <texture id="none"/>
             <materials>
@@ -123,10 +296,9 @@
                 <componentref id="cube" />
             </children>
         </component>
-
         <component id="rightBlockPilar" >
             <transformation>
-                <translate x="0" y="0" z="-2" />
+                <translate x="0.25" y="0" z="-2.25" />
             </transformation>
             <texture id="inherit"/>
             <materials>
@@ -136,10 +308,9 @@
                 <componentref id="rectPilar" />
             </children>
         </component>
-        
         <component id="leftBlockPilar" >
             <transformation>
-                <translate x="0" y="0" z="2" />
+                <translate x="0.25" y="0" z="2.25" />
             </transformation>
             <texture id="inherit"/>
             <materials>
@@ -149,10 +320,9 @@
                 <componentref id="rectPilar" />
             </children>
         </component>
-
         <component id="rectPilar" >
             <transformation>
-                <scale x="1" y="3" z="1" />
+                <scale x="0.5" y="3" z="0.5" />
             </transformation>
             <texture id="inherit"/>
             <materials>
@@ -162,7 +332,6 @@
                 <componentref id="cube" />
             </children>
         </component>
-
 
         <component id="ground">
             <transformation>
