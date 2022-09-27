@@ -1,5 +1,4 @@
 import {CGFobject} from "../lib/CGF.js";
-import { DEGREE_TO_RAD } from "./MySceneGraph.js";
 
 export class MyTriangle extends CGFobject{
     constructor(scene, id, pos1, pos2, pos3, texCoords){
@@ -22,7 +21,6 @@ export class MyTriangle extends CGFobject{
         const cosY = (- distA * distA + distB * distB + distC * distC) / (2 * distB * distC);
 
         const sinA = Math.sqrt(1 - cosA * cosA);
-
 
         // TO DO: receive length_u and length_v from the scene in the place of textCoords
         // (or just get it from the scene that we pass in constructor), and calculate 

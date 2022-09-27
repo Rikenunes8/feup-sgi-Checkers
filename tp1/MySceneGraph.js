@@ -249,13 +249,13 @@ export class MySceneGraph {
         this.onXMLMinorError("To do: Parse views and create cameras.");
         
         // get the default camera id 
-        const defaultCam = this.reader.getString(viewsNode, 'default', false);
+        const defaultCamera = this.reader.getString(viewsNode, 'default', false);
 
-        // to do return check this error message 
-        if (!defaultCam) {
+        // TODO return check this error message 
+        if (!defaultCamera) {
             return "you must specify a default prop on views";
         } else {
-            this.defaultCam = defaultCam;
+            this.defaultCam = defaultCamera;
         }
 
         var children = viewsNode.children;
@@ -271,8 +271,8 @@ export class MySceneGraph {
             }
 
             const id = this.reader.getString(children[i], 'id', false);
-            const near = this.reader.getString(children[i], 'near', false);
-            const far = this.reader.getString(children[i], 'far', false);
+            const near = this.reader.getFloat(children[i], 'near', false);
+            const far = this.reader.getFloat(children[i], 'far', false);
             const from = this.parseCoordinates3D(fromChild, "'from' property for ID " + id);
             const to = this.parseCoordinates3D(toChild, "'to' property for ID " + id);
 
@@ -300,16 +300,16 @@ export class MySceneGraph {
                 if (!angle)
                     return "perspective view must have angle attribute";
 
-                // TO DO which is the camera that uses this perspective? CGFCamera? Do I need to
+                // TODO which is the camera that uses this perspective? CGFCamera? Do I need to
                 // calculate the fov?
-                this.views[id] = new CGFcamera(0, near, far, from, to);
+                this.views[id] = new CGFcamera(0.4, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
 
             } else if (children[i].nodeName === 'ortho') {
 
-                const left = this.reader.getString(children[i], 'left', false);
-                const right = this.reader.getString(children[i], 'right', false);
-                const top = this.reader.getString(children[i], 'top', false);
-                const bottom = this.reader.getString(children[i], 'bottom', false);
+                const left = this.reader.getFloat(children[i], 'left', false);
+                const right = this.reader.getFloat(children[i], 'right', false);
+                const top = this.reader.getFloat(children[i], 'top', false);
+                const bottom = this.reader.getFloat(children[i], 'bottom', false);
                 
                 // the up values are in the third child of node 'ortho' 
                 const upChild = children[i].children[2];
@@ -779,7 +779,7 @@ export class MySceneGraph {
                     this.reader.getFloat(grandChildren[0], 'y3', false),
                     this.reader.getFloat(grandChildren[0], 'z3', false)
                 ];
-                
+
                 if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
                     return "You must specify x1 position on Triangle primitive " + primitiveId;
                 else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
@@ -801,7 +801,7 @@ export class MySceneGraph {
 
                 var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
                 this.primitives[primitiveId] = triangle;
-                
+
             } else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -883,7 +883,7 @@ export class MySceneGraph {
         this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);;
     }
 
-    /**
+   /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
    */
@@ -1082,7 +1082,7 @@ export class MySceneGraph {
         }
         if (componentChildren.length === 0)
             return "must exists at least one children declaration for component " + componentID;
-        
+
         return [...componentChildren];
     }
 
@@ -1225,8 +1225,7 @@ export class MySceneGraph {
             else
                 this.primitives[id].disableNormalViz();
         }
-        
-        //To do: Create display loop for transversing the scene graph
+
         this.displayNode([false, this.idRoot]);
 
         //To test the parsing/creation of the primitives, call the display function directly
@@ -1245,7 +1244,7 @@ export class MySceneGraph {
         else {
             const component = this.components[nodeId];
             const material = component.getMaterial()
-            
+
             this.scene.multMatrix(component.transfMatrix);
             for (let child of component.children) {
                 if (material !== 'inherit') material.apply();

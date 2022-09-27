@@ -40,8 +40,6 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         this.displayNormals = false; // TODO testing
-
-
     }
 
     /**
@@ -55,6 +53,7 @@ export class XMLscene extends CGFscene {
      * Initializes the scene lights with the values read from the XML file.
      */
     initLights() {
+
         var i = 0;
         // Lights index.
 
@@ -107,6 +106,8 @@ export class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
+        this.camera = this.graph.views[this.graph.defaultCam];
+        
         this.initLights();
 
         this.sceneInited = true;
