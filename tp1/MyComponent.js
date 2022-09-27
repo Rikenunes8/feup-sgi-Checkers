@@ -8,5 +8,9 @@ export class MyComponent extends CGFobject {
         this.materials = [...materials];
         this.texture = texture;
         this.children = [...children];
+        this.material = 0;
+    }
+    getMaterial() {
+        return this.materials[this.material];
     }
 }

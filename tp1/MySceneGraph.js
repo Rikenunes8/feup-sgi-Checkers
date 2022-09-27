@@ -204,6 +204,10 @@ export class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
+
+        if ((error = this.verifyComponentsRefsExistence()) != null)
+            return error;
+
         this.log("all parsed");
     }
 
@@ -613,7 +617,6 @@ export class MySceneGraph {
         if (Object.keys(this.materials).length === 0)
             return "at least one material must be defined";
 
-        this.onXMLMinorError("To do: Test materials parse when Components parse is done.");
         this.log("Parsed materials");
         return null;
     }
@@ -704,7 +707,6 @@ export class MySceneGraph {
         if (Object.keys(this.transformations).length === 0)
             return "at least one transformation must be defined";
 
-        this.onXMLMinorError("To do: Test scale and rotate transformations in practice.");
         this.log("Parsed transformations");
         return null;
     }
@@ -752,79 +754,13 @@ export class MySceneGraph {
 
             // Retrieves the primitive coordinates.
             if (primitiveType == 'rectangle') {
-                // x1
-                var x1 = this.reader.getFloat(grandChildren[0], 'x1');
-                if (!(x1 != null && !isNaN(x1)))
-                    return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
-
-                // y1
-                var y1 = this.reader.getFloat(grandChildren[0], 'y1');
-                if (!(y1 != null && !isNaN(y1)))
-                    return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
-
-                // x2
-                var x2 = this.reader.getFloat(grandChildren[0], 'x2');
-                if (!(x2 != null && !isNaN(x2) && x2 > x1))
-                    return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
-
-                // y2
-                var y2 = this.reader.getFloat(grandChildren[0], 'y2');
-                if (!(y2 != null && !isNaN(y2) && y2 > y1))
-                    return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
-
-                var rect = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);
-
-                this.primitives[primitiveId] = rect;
+                this.parsePrimitiveRectangle(grandChildren[0], primitiveId);
             } else if (primitiveType == "cylinder") {
-                var base = this.reader.getFloat(grandChildren[0], 'base', false);
-                if (base == null || isNaN(base) || base < 0)
-                    return "unable to parse base radius of the cyliinder for ID = " + primitiveId;
-                var top = this.reader.getFloat(grandChildren[0], 'top', false);
-                if (top == null || isNaN(top) || top < 0)
-                    return "unable to parse top radius of the cyliinder for ID = " + primitiveId;
-                var height = this.reader.getFloat(grandChildren[0], 'height', false);
-                if (height == null || isNaN(height) || height < 0)
-                    return "unable to parse height of the cyliinder for ID = " + primitiveId;
-                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
-                if (slices == null || isNaN(slices) || slices < 3)
-                    return "unable to parse slices of the cyliinder for ID = " + primitiveId;
-                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
-                if (stacks == null || isNaN(stacks) || stacks < 1)
-                    return "unable to parse stacks of the cyliinder for ID = " + primitiveId;
-
-                var cylinder = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);
-                this.primitives[primitiveId] = cylinder;
-
+                this.parsePrimitiveCylinder(grandChildren[0], primitiveId);
             } else if (primitiveType == "sphere") {
-                var radius = this.reader.getFloat(grandChildren[0], 'radius', false);
-                if (radius == null || isNaN(radius) || radius < 0)
-                    return "unable to parse radius of the sphere for ID = " + primitiveId;
-                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
-                if (slices == null || isNaN(slices) || slices < 3)
-                    return "unable to parse slices of the sphere for ID = " + primitiveId;
-                var stacks = this.reader.getInteger(grandChildren[0], 'stacks', false);
-                if (stacks == null || isNaN(stacks) || stacks < 1)
-                    return "unable to parse stacks of the sphere for ID = " + primitiveId;
-
-                var sphere = new MySphere(this.scene, primitiveId, radius, slices, stacks);
-                this.primitives[primitiveId] = sphere;
+                this.parsePrimitiveSphere(grandChildren[0], primitiveId);
             } else if (primitiveType == "torus") {
-                var inner = this.reader.getFloat(grandChildren[0], 'inner', false);
-                if (inner == null || isNaN(inner) || inner < 0)
-                    return "unable to parse inner radius of the torus for ID = " + primitiveId;
-                var outter = this.reader.getFloat(grandChildren[0], 'outter', false);
-                if (outter == null || isNaN(outter) || outter < 0)
-                    return "unable to parse outter radius of the torus for ID = " + primitiveId;
-                var slices = this.reader.getInteger(grandChildren[0], 'slices', false);
-                if (slices == null || isNaN(slices) || slices < 3)
-                    return "unable to parse slices of the torus for ID = " + primitiveId;
-                var loops = this.reader.getInteger(grandChildren[0], 'loops', false);
-                if (loops == null || isNaN(loops) || loops < 1)
-                    return "unable to parse loops of the torus for ID = " + primitiveId;
-
-                var torus = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
-                this.primitives[primitiveId] = torus;
-
+                this.parsePrimitiveTorus(grandChildren[0], primitiveId)
             } else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -832,6 +768,78 @@ export class MySceneGraph {
 
         this.log("Parsed primitives");
         return null;
+    }
+
+    parsePrimitiveRectangle(node, primitiveId) {
+        // x1
+        var x1 = this.reader.getFloat(node, 'x1');
+        if (!(x1 != null && !isNaN(x1)))
+            return "unable to parse x1 of the primitive coordinates for ID = " + primitiveId;
+
+        // y1
+        var y1 = this.reader.getFloat(node, 'y1');
+        if (!(y1 != null && !isNaN(y1)))
+            return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
+
+        // x2
+        var x2 = this.reader.getFloat(node, 'x2');
+        if (!(x2 != null && !isNaN(x2) && x2 > x1))
+            return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
+
+        // y2
+        var y2 = this.reader.getFloat(node, 'y2');
+        if (!(y2 != null && !isNaN(y2) && y2 > y1))
+            return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);;
+    }
+    parsePrimitiveCylinder(node, primitiveId) {
+        var base = this.reader.getFloat(node, 'base', false);
+        if (base == null || isNaN(base) || base < 0)
+            return "unable to parse base radius of the cyliinder for ID = " + primitiveId;
+        var top = this.reader.getFloat(node, 'top', false);
+        if (top == null || isNaN(top) || top < 0)
+            return "unable to parse top radius of the cyliinder for ID = " + primitiveId;
+        var height = this.reader.getFloat(node, 'height', false);
+        if (height == null || isNaN(height) || height < 0)
+            return "unable to parse height of the cyliinder for ID = " + primitiveId;
+        var slices = this.reader.getInteger(node, 'slices', false);
+        if (slices == null || isNaN(slices) || slices < 3)
+            return "unable to parse slices of the cyliinder for ID = " + primitiveId;
+        var stacks = this.reader.getInteger(node, 'stacks', false);
+        if (stacks == null || isNaN(stacks) || stacks < 1)
+            return "unable to parse stacks of the cyliinder for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);;
+    }
+    parsePrimitiveSphere(node, primitiveId) {
+        var radius = this.reader.getFloat(node, 'radius', false);
+        if (radius == null || isNaN(radius) || radius < 0)
+            return "unable to parse radius of the sphere for ID = " + primitiveId;
+        var slices = this.reader.getInteger(node, 'slices', false);
+        if (slices == null || isNaN(slices) || slices < 3)
+            return "unable to parse slices of the sphere for ID = " + primitiveId;
+        var stacks = this.reader.getInteger(node, 'stacks', false);
+        if (stacks == null || isNaN(stacks) || stacks < 1)
+            return "unable to parse stacks of the sphere for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MySphere(this.scene, primitiveId, radius, slices, stacks);;
+    }
+    parsePrimitiveTorus(node, primitiveId) {
+        var inner = this.reader.getFloat(node, 'inner', false);
+        if (inner == null || isNaN(inner) || inner < 0)
+            return "unable to parse inner radius of the torus for ID = " + primitiveId;
+        var outter = this.reader.getFloat(node, 'outter', false);
+        if (outter == null || isNaN(outter) || outter < 0)
+            return "unable to parse outter radius of the torus for ID = " + primitiveId;
+        var slices = this.reader.getInteger(node, 'slices', false);
+        if (slices == null || isNaN(slices) || slices < 3)
+            return "unable to parse slices of the torus for ID = " + primitiveId;
+        var loops = this.reader.getInteger(node, 'loops', false);
+        if (loops == null || isNaN(loops) || loops < 1)
+            return "unable to parse loops of the torus for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);;
     }
 
     /**
@@ -875,151 +883,182 @@ export class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            let componentTransfMatrix = undefined;
-            let componentMaterials = [];
-            let componentTexture = undefined;
-            let componentChildren = [];
-
 
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
             if (materialsIndex == -1) return "missing materials definition in component " + componentID;
             if (textureIndex == -1) return "missing texture definition in component " + componentID;
             if (childrenIndex == -1) return "missing children definition in component " + componentID;
 
-            this.onXMLMinorError("To do: Parse components.");
+            let componentTransfMatrix = this.parseComponentTransformations(grandChildren[transformationIndex].children, componentID)
+            let componentMaterials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID);
+            let componentTexture = this.parseComponentTexture(grandChildren[textureIndex], componentID);
+            let componentChildren = this.parseComponentChildren(grandChildren[childrenIndex].children, componentID);
 
-            // Transformations
-            const transformations = grandChildren[transformationIndex].children;
-            let transformationNames = [];
-            for (let child of transformations) 
-                transformationNames.push(child.nodeName);
-
-            if (transformationNames.includes('transformationref')) {
-                if (transformations.length === 1) {
-                    const transformationrefId = this.reader.getString(transformations[0], 'id', false);
-                    if (transformationrefId == null) return "no ID defined for transformationref defined in component " + componentID;
-
-                    if (this.transformations[transformationrefId] == null) return "no transformation defined with ID " + transformationrefId;
-
-                    componentTransfMatrix = this.transformations[transformationrefId]
-                }
-                else 
-                    return  "transformationref must be a single definition inside transformation block of component " + componentID; 
-            } else {
-                var transfMatrix = mat4.create();
-
-                for (var j = 0; j < transformations.length; j++) {
-                    switch (transformations[j].nodeName) {
-                        case 'translate':
-                            var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation for component ID " + componentID);
-                            if (!Array.isArray(coordinates)) return coordinates;
-    
-                            transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                            break;
-                        case 'scale':
-                            var coordinates = this.parseCoordinates3D(transformations[j], "scale transformation for component ID " + componentID);
-                            if (!Array.isArray(coordinates)) return coordinates;
-    
-                            transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
-                            break;
-                        case 'rotate':
-                            // angle
-                            let angle = this.reader.getFloat(transformations[j], 'angle', false);
-                            if (!(angle != null && !isNaN(angle))) return "unable to parse angle of the rotate transformation for component ID " + componentID;
-    
-                            // axis
-                            const axisNames = ['x', 'y', 'z']
-                            let axisArr = [0, 0, 0];
-                            
-                            const axis = this.reader.getString(transformations[j], 'axis', false);
-                            if (axis == null)return "unable to parse axis of the rotate transformation for component ID " + componentID;
-
-                            const index = axisNames.indexOf(axis);
-                            if (index !== -1) axisArr[index] = 1;
-                            else return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
-    
-    
-                            transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
-                            break;
-                        default:
-                            this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
-                            break;
-                    }
-                    componentTransfMatrix = transfMatrix;
-                }
-            } 
-
-            // Materials
-            const materials = grandChildren[materialsIndex].children;
-            for (let j = 0; j < materials.length; j++) {
-                if (materials[j].nodeName != "material") {
-                    this.onXMLMinorError("unknown tag <" + materials[j].nodeName + ">");
-                    continue;
-                }
-
-                const materialId = this.reader.getString(materials[0], 'id', false);
-                if (materialId == null) return "no ID defined for material defined in component " + componentID;
-
-                if (materialId == 'inherit') {
-                    // TODO inherit; How to get material from parent? Just do nothing?
-                } else {
-                    if (this.materials[materialId] == null) return "no material defined with ID " + materialId;
-                    componentMaterials.push(this.materials[materialId]);
-                }
-            }
-            if (componentMaterials.length === 0)
-                return "must exists at least one material declaration for component " + componentID;
-
-            // Texture
-            const textureId = this.reader.getString(grandChildren[textureIndex], 'id', false);
-            if (textureId == null) return "no ID defined for texture defined in component " + componentID;
-
-            if (textureId == 'none') {
-                componentTexture = null;
-            } else if (textureId == 'inherit') {
-                // TODO inherit; How to get material from parent? Just do nothing?
-            } else {
-                if (this.textures[textureId] == null) return "no texture defined with ID " + textureId;
-
-                const length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s', false);
-                const length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t', false);
-                if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
-                if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
-
-                componentTexture = (this.textures[textureId], length_s, length_t);
-            }
-
-            // Children
-            const compChildren = grandChildren[childrenIndex].children;
-            for (let j = 0; j < compChildren.length; j++) {
-                if (compChildren[j].nodeName == "primitiveref") {
-                    const childPrimitiveId = this.reader.getString(compChildren[j], 'id', false);
-                    if (childPrimitiveId == null)
-                        return "no ID defined for child primitive defined in component " + componentID;
-                    if (this.primitives[childPrimitiveId] == null) {
-                        return "no primitive defined with ID " + childPrimitiveId;
-                    }
-                    componentChildren.push(this.primitives[childPrimitiveId]);
-                } else if (compChildren[j].nodeName == "componentref") {
-                    const childComponentId = this.reader.getString(compChildren[j], 'id', false);
-                    if (childComponentId == null)
-                        return "no ID defined for child component defined in component " + componentID;
-                    if (this.components[childComponentId] == null) {
-                        return "no component defined with ID " + childComponentId + " yet";
-                    }
-                    componentChildren.push(this.components[childComponentId]);
-                } else {
-                    this.onXMLMinorError("unknown tag <" + compChildren[j].nodeName + ">");
-                    continue;
-                }
-            }
-            if (componentChildren.length === 0)
-                return "must exists at least one children declaration for component " + componentID;
+            if (!Array.isArray(componentTransfMatrix)) return componentTransfMatrix;
+            if (!Array.isArray(componentMaterials)) return componentMaterials;
+            if (!Array.isArray(componentTexture) && componentTexture != 'none' && componentTexture != 'inherit') return componentTexture;
+            if (!Array.isArray(componentChildren)) return componentChildren;
+            
 
             this.components[componentID] = new MyComponent(this.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren);
         }
 
         this.log("Parsed components");
+        return null;
+    }
+
+    parseComponentTransformations(transformations, componentID) {
+        let transfMatrix = undefined;
+
+        let transformationNames = [];
+        for (let child of transformations) 
+            transformationNames.push(child.nodeName);
+
+        if (transformationNames.includes('transformationref')) {
+            if (transformations.length === 1) {
+                const transformationrefId = this.reader.getString(transformations[0], 'id', false);
+                if (transformationrefId == null) return "no ID defined for transformationref defined in component " + componentID;
+
+                if (this.transformations[transformationrefId] == null) return "no transformation defined with ID " + transformationrefId;
+
+                transfMatrix = this.transformations[transformationrefId]
+            }
+            else 
+                return  "transformationref must be a single definition inside transformation block of component " + componentID; 
+        } else {
+            transfMatrix = mat4.create();
+
+            for (var j = 0; j < transformations.length; j++) {
+                switch (transformations[j].nodeName) {
+                    case 'translate':
+                        var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation for component ID " + componentID);
+                        if (!Array.isArray(coordinates)) return coordinates;
+
+                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        break;
+                    case 'scale':
+                        var coordinates = this.parseCoordinates3D(transformations[j], "scale transformation for component ID " + componentID);
+                        if (!Array.isArray(coordinates)) return coordinates;
+
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+                        break;
+                    case 'rotate':
+                        // angle
+                        let angle = this.reader.getFloat(transformations[j], 'angle', false);
+                        if (!(angle != null && !isNaN(angle))) return "unable to parse angle of the rotate transformation for component ID " + componentID;
+
+                        // axis
+                        const axisNames = ['x', 'y', 'z']
+                        let axisArr = [0, 0, 0];
+                        
+                        const axis = this.reader.getString(transformations[j], 'axis', false);
+                        if (axis == null)return "unable to parse axis of the rotate transformation for component ID " + componentID;
+
+                        const index = axisNames.indexOf(axis);
+                        if (index !== -1) axisArr[index] = 1;
+                        else return "unable to parse axis of the rotate transformation for component ID " + componentID + "; the axis should belong to {x,y,z} instead of " + axis;
+
+
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD, axisArr);
+                        break;
+                    default:
+                        this.onXMLMinorError("unknown tag <" + transformations[j].nodeName + ">");
+                        break;
+                }
+            }
+        }
+        return [...transfMatrix];
+    }
+    parseComponentMaterials(materials, componentID) {
+        let componentMaterials = [];
+        for (let j = 0; j < materials.length; j++) {
+            if (materials[j].nodeName != "material") {
+                this.onXMLMinorError("unknown tag <" + materials[j].nodeName + ">");
+                continue;
+            }
+
+            const materialId = this.reader.getString(materials[0], 'id', false);
+            if (materialId == null) return "no ID defined for material defined in component " + componentID;
+
+            if (materialId == 'inherit') {
+                componentMaterials.push('inherit');
+            } else {
+                if (this.materials[materialId] == null) return "no material defined with ID " + materialId;
+                componentMaterials.push(this.materials[materialId]);
+            }
+        }
+        if (componentMaterials.length === 0)
+            return "must exists at least one material declaration for component " + componentID;
+
+        return [...componentMaterials];
+    }
+    parseComponentTexture(texture, componentID) {
+        let componentTexture = undefined;
+        const textureId = this.reader.getString(texture, 'id', false);
+        if (textureId == null) return "no ID defined for texture defined in component " + componentID;
+
+        if (textureId == 'none') {
+            componentTexture = 'none';
+        } else if (textureId == 'inherit') {
+            componentTexture = 'inherit';
+        } else {
+            if (this.textures[textureId] == null) return "no texture defined with ID " + textureId;
+
+            const length_s = this.reader.getFloat(texture, 'length_s', false);
+            const length_t = this.reader.getFloat(texture, 'length_t', false);
+            if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
+            if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
+
+            componentTexture = [this.textures[textureId], length_s, length_t];
+        }
+        return componentTexture;
+    }
+
+    parseComponentChildren(children, componentID) {
+        let componentChildren = [];
+        for (let j = 0; j < children.length; j++) {
+            if (children[j].nodeName == "primitiveref") {
+                const childPrimitiveId = this.reader.getString(children[j], 'id', false);
+                if (childPrimitiveId == null)
+                    return "no ID defined for child primitive defined in component " + componentID;
+                if (this.primitives[childPrimitiveId] == null) {
+                    return "no primitive defined with ID " + childPrimitiveId;
+                }
+                componentChildren.push([true, childPrimitiveId]);
+            } else if (children[j].nodeName == "componentref") {
+                const childComponentId = this.reader.getString(children[j], 'id', false);
+                if (childComponentId == null)
+                    return "no ID defined for child component defined in component " + componentID;
+                /* TODO verifying here implies that a component have been defined earlier, should we do this?
+                if (this.components[childComponentId] == null) {
+                    return "no component defined with ID " + childComponentId + " yet";
+                }*/
+                componentChildren.push([false, childComponentId]);
+            } else {
+                this.onXMLMinorError("unknown tag <" + children[j].nodeName + ">");
+                continue;
+            }
+        }
+        if (componentChildren.length === 0)
+            return "must exists at least one children declaration for component " + componentID;
+        
+        return [...componentChildren];
+    }
+
+    verifyComponentsRefsExistence() {
+        return  this.verifyComponentsRefsExistenceRec([false, this.idRoot]);
+    }
+    verifyComponentsRefsExistenceRec(node) {
+        const isPrimitive = node[0];
+        const nodeId = node[1] 
+        if (!isPrimitive) {
+            const component = this.components[nodeId];
+            if (component == null) return "component " + nodeId + " is not defined";
+            for (let child of this.components[nodeId].children) {
+                const error = this.verifyComponentsRefsExistenceRec(child);
+                if (error != null) return error;
+            }
+        }
         return null;
     }
 
@@ -1147,11 +1186,32 @@ export class MySceneGraph {
         }
         
         //To do: Create display loop for transversing the scene graph
+        this.displayNode([false, this.idRoot]);
 
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
         // this.primitives['demoCylinder'].display();
         // this.primitives['demoSphere'].display();
-        this.primitives['demoTorus'].display();
+        // this.primitives['demoTorus'].display();
+    }
+
+    displayNode(node) {
+        const isPrimitive = node[0];
+        const nodeId = node[1] 
+        if (isPrimitive) {
+            this.primitives[nodeId].display();
+        }
+        else {
+            const component = this.components[nodeId];
+            const material = component.getMaterial()
+            
+            this.scene.multMatrix(component.transfMatrix);
+            for (let child of component.children) {
+                if (material !== 'inherit') material.apply();
+                this.scene.pushMatrix();
+                this.displayNode(child);
+                this.scene.popMatrix();
+            }
+        }
     }
 }
