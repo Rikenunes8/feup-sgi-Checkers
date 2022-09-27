@@ -765,42 +765,41 @@ export class MySceneGraph {
             } else if (primitiveType == 'triangle') {
 
                 const pos1 = [
-                    this.reader.getString(grandChildren[0], 'x1', false),
-                    this.reader.getString(grandChildren[0], 'y1', false),
-                    this.reader.getString(grandChildren[0], 'z1', false)
+                    this.reader.getFloat(grandChildren[0], 'x1', false),
+                    this.reader.getFloat(grandChildren[0], 'y1', false),
+                    this.reader.getFloat(grandChildren[0], 'z1', false)
                 ];
                 const pos2 = [
-                    this.reader.getString(grandChildren[0], 'x2', false),
-                    this.reader.getString(grandChildren[0], 'y2', false),
-                    this.reader.getString(grandChildren[0], 'z2', false)
+                    this.reader.getFloat(grandChildren[0], 'x2', false),
+                    this.reader.getFloat(grandChildren[0], 'y2', false),
+                    this.reader.getFloat(grandChildren[0], 'z2', false)
                 ];
                 const pos3 = [
-                    this.reader.getString(grandChildren[0], 'x3', false),
-                    this.reader.getString(grandChildren[0], 'y3', false),
-                    this.reader.getString(grandChildren[0], 'z3', false)
+                    this.reader.getFloat(grandChildren[0], 'x3', false),
+                    this.reader.getFloat(grandChildren[0], 'y3', false),
+                    this.reader.getFloat(grandChildren[0], 'z3', false)
                 ];
-
-                if (!pos1[0]) {
+                
+                if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
                     return "You must specify x1 position on Triangle primitive " + primitiveId;
-                } else if (!pos1[1]) {
+                else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
                     return "You must specify y1 position on Triangle primitive " + primitiveId;
-                } else if (!pos1[2]) {
+                else if (pos1[2] == null || isNaN(pos1[2]) || pos1[2] < 0)
                     return "You must specify z1 position on Triangle primitive " + primitiveId;
-                } else if (!pos2[0]) {
+                else if (pos2[0] == null || isNaN(pos2[0]) || pos2[0] < 0)
                     return "You must specify x2 position on Triangle primitive " + primitiveId;
-                } else if (!pos2[1]) {
+                else if (pos2[1] == null || isNaN(pos2[1]) || pos2[1] < 0)
                     return "You must specify y2 position on Triangle primitive " + primitiveId;
-                } else if (!pos2[2]) {
+                else if (pos2[2] == null || isNaN(pos2[2]) || pos2[2] < 0)
                     return "You must specify z2 position on Triangle primitive " + primitiveId;
-                } else if (!pos3[0]) {
+                else if (pos3[0] == null || isNaN(pos3[0]) || pos3[0] < 0)
                     return "You must specify x3 position on Triangle primitive " + primitiveId;
-                } else if (!pos3[1]) {
+                else if (pos3[1] == null || isNaN(pos3[1]) || pos3[1] < 0)
                     return "You must specify y3 position on Triangle primitive " + primitiveId;
-                } else if (!pos3[2]) {
+                else if (pos3[2] == null || isNaN(pos3[2]) || pos3[2] < 0)
                     return "You must specify z3 position on Triangle primitive " + primitiveId;
-                }
 
-                var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3) //new MyTorus(this.scene, primitiveId, inner, outter, slices, loops);
+                var triangle = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
                 this.primitives[primitiveId] = triangle;
                 
             } else {

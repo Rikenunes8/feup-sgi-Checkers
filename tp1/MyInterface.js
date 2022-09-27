@@ -26,8 +26,6 @@ export class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayNormals').name("Display normals");
 
-
-        
         // a folder for grouping parameters for one of the lights
         
         // to do add camera booleans here and switch between cameras
