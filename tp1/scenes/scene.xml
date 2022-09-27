@@ -1,0 +1,265 @@
+<sxs>
+    <scene root="feup" axis_length="5"/>
+
+    <views default="defaultCamera">
+        <perspective id="defaultCamera" near="0.1" far="500" angle="45">
+            <from x="100" y="100" z="100" />
+            <to x="0" y="0" z="0" />
+        </perspective>
+
+        <ortho id="cam2" near="0.2" far="500" left="21" right="7" top="19" bottom="219" >
+            <from x="30" y="15" z="30" />
+            <to x="0" y="-2" z="0" />
+            <up x="0" y="1" z="0" /> <!-- opcional, default 0,1,0 -->
+        </ortho>
+    </views>
+
+    <ambient>
+        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+        <background r="0.0" g="0.0" b="0.0" a="1.0" />
+    </ambient>
+
+    <lights>
+        <omni id="demoLight" enabled="1">
+            <location x="9.8" y="11.9" z="10" w="1.0" />
+            <ambient r="0" g="0" b="0" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </omni>
+    </lights>
+
+    <textures>
+        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+    </textures>
+
+    <materials>
+        <material id="gray" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <specular r="0.4" g="0.4" b="0.4" a="1.0" />
+        </material>
+        <material id="vermelho" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="1.0" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.6" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.6" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="gold" shininess="100">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.85" g="0.64" b="0.125" a="1.0" />
+            <diffuse r="0.6" g="0.4" b="0.1" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="green" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.0" g="0.64" b="0.0" a="1.0" />
+            <diffuse r="0.0" g="0.4" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+    </materials>
+
+    <transformations>
+        <transformation id="demoTransform">
+            <scale x="5" y="1" z="5" />
+            <rotate axis="x" angle="-45" />
+            <rotate axis="z" angle="-45" />
+        </transformation>
+    </transformations>
+
+    <primitives>
+        <primitive id="rectangle">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+        <primitive id="cylinder">
+            <cylinder base="1.5" top="1" height="2" slices="16" stacks="8" />
+        </primitive>
+        <primitive id="sphere">
+            <sphere radius="2" slices="32" stacks="32" />
+        </primitive>
+        <primitive id="torus">
+            <torus inner="0.25" outter="1.5" slices="16" loops="20" />
+        </primitive>
+    </primitives>
+
+    <components>
+        <component id="feup">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="ground" />
+                <componentref id="stairs" />
+            </children>
+        </component>
+
+
+
+        <component id="ground">
+            <transformation>
+                <translate x="20" y="0" z="0" />
+                <scale x="20" y="3" z="40" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="green" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="stairs">
+            <transformation>
+                <translate x="20" y="-1" z="46" />
+                <scale x="20" y="1" z="1"/> 
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="step1" />
+                <componentref id="step2" />
+                <componentref id="step3" />
+            </children>
+        </component>
+        <component id="step1">
+            <transformation>
+                <translate x="0" y="-1" z="-1" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="step2">
+            <transformation>
+                <translate x="0" y="1" z="-3" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="step3">
+            <transformation>
+                <translate x="0" y="3" z="-5" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="cubeUpFace">
+            <transformation>
+                <translate x="0" y="1" z="0" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeDownFace">
+            <transformation>
+                <translate x="0" y="-1" z="0" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeLeftFace">
+            <transformation>
+                <translate x="-1" y="0" z="0" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeRightFace">
+            <transformation>
+                <translate x="1" y="0" z="0" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeFrontFace">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeBackFace">
+            <transformation>
+                <translate x="0" y="0" z="-1" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cube">
+            <transformation>
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <componentref id="cubeUpFace"/>
+                <componentref id="cubeDownFace"/>
+                <componentref id="cubeLeftFace"/>
+                <componentref id="cubeRightFace"/>
+                <componentref id="cubeFrontFace"/>
+                <componentref id="cubeBackFace"/>
+            </children>
+        </component>
+
+        
+
+    </components>
+</sxs>

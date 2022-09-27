@@ -40,13 +40,17 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         this.displayNormals = false; // TODO testing
+
+        // TODO Add cameras to interface and switch between them
+        this.cameras = [];
+        this.currCam = 0;
     }
 
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(100, 100, 100), vec3.fromValues(0, 0, 0));
     }
 
     /**
@@ -106,7 +110,7 @@ export class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-        this.camera = this.graph.views[this.graph.defaultCam];
+        //this.camera = this.graph.views[this.graph.defaultCam];
         
         this.initLights();
 

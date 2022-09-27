@@ -302,8 +302,9 @@ export class MySceneGraph {
 
                 // TODO which is the camera that uses this perspective? CGFCamera? Do I need to
                 // calculate the fov?
-                this.views[id] = new CGFcamera(0.4, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
-
+                const camera = new CGFcamera(0.4, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                this.views[id] = camera;
+                this.scene.cameras.push(id);
             } else if (children[i].nodeName === 'ortho') {
 
                 const left = this.reader.getFloat(children[i], 'left', false);
@@ -328,7 +329,7 @@ export class MySceneGraph {
                     return upValues;
 
                 this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
-
+                this.scene.cameras.push(id);
             } else {
                 this.onXMLMinorError("unknown view tag <" + children[i].nodeName + ">");
             }
@@ -923,7 +924,6 @@ export class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
-
 
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
             if (materialsIndex == -1) return "missing materials definition in component " + componentID;
