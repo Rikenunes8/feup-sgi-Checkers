@@ -411,7 +411,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current light.
-            var lightId = this.reader.getString(children[i], 'id');
+            var lightId = this.reader.getString(children[i], 'id', false);
             if (lightId == null)
                 return "no ID defined for light";
 
@@ -421,7 +421,7 @@ export class MySceneGraph {
 
             // Light enable/disable
             var enableLight = true;
-            var aux = this.reader.getBoolean(children[i], 'enabled');
+            var aux = this.reader.getBoolean(children[i], 'enabled', false);
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 

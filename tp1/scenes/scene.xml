@@ -3,7 +3,7 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="100" y="100" z="100" />
+            <from x="40" y="40" z="40" />
             <to x="0" y="0" z="0" />
         </perspective>
 
@@ -25,6 +25,14 @@
             <ambient r="0" g="0" b="0" a="1.0" />
             <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+        <omni id="lampLight" enabled="1">
+            <location x="15" y="7.25" z="-10" w="1.0"/>
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1" g="1" b="1" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
     </lights>
 
@@ -46,7 +54,7 @@
             <specular r="0.6" g="0.0" b="0.0" a="1.0" />
         </material>
         <material id="gold" shininess="100">
-            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.85" g="0.64" b="0.125" a="1.0" />
             <diffuse r="0.6" g="0.4" b="0.1" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -63,6 +71,7 @@
             <diffuse r="0.4" g="0.21" b="0.06" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
+        
     </materials>
 
     <transformations>
@@ -88,6 +97,9 @@
         </primitive>
         <primitive id="adjustCornerTriangle">
             <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="1" x3="1" y3="0" z3="0" />
+        </primitive>
+        <primitive id="frustum">
+            <cylinder base="1.5" top="1" height="2" slices="16" stacks="8" />
         </primitive>
     </primitives>
 
@@ -121,6 +133,7 @@
                 <componentref id="rightFloor" />
                 <componentref id="benches" />
                 <componentref id="bigCircularBench" />
+                <componentref id="lamp" />
             </children>
         </component>
 
@@ -135,6 +148,46 @@
             </materials>
             <children>
                 <primitiveref id="torus" />
+            </children>
+        </component>
+
+        <component id="lamp">
+            <transformation>
+            </transformation>
+            <texture id="none" />
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <componentref id="lampBase" />
+                <componentref id="lampTop" />
+            </children>
+        </component>
+        <component id="lampBase">
+            <transformation>
+                <translate x="15" y="3.25" z="-10"/>
+                <scale x="0.2" y="2" z="0.2" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <primitiveref id="frustum" />
+            </children>
+        </component>
+        <component id="lampTop">
+            <transformation>
+                <translate x="15" y="7.25" z="-10"/>
+                <scale x="0.2" y="0.2" z="0.2" />
+            </transformation>
+            <texture id="none"/>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <children>
+                <primitiveref id="sphere" />
             </children>
         </component>
 
