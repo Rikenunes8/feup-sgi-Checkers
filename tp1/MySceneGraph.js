@@ -302,7 +302,7 @@ export class MySceneGraph {
 
                 // TODO which is the camera that uses this perspective? CGFCamera? Do I need to
                 // calculate the fov?
-                const camera = new CGFcamera(0.4, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                const camera = new CGFcamera(angle * DEGREE_TO_RAD, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
                 this.views[id] = camera;
                 this.scene.cameras.push(id);
             } else if (children[i].nodeName === 'ortho') {
@@ -1236,21 +1236,22 @@ export class MySceneGraph {
 
     displayNode(node) {
         const isPrimitive = node[0];
-        const nodeId = node[1] 
+        const nodeId = node[1];
         if (isPrimitive) {
             this.primitives[nodeId].display();
         }
         else {
             const component = this.components[nodeId];
-            const material = component.getMaterial()
+            const material = component.getMaterial();
 
+            this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
+
             for (let child of component.children) {
                 if (material !== 'inherit') material.apply();
-                this.scene.pushMatrix();
                 this.displayNode(child);
-                this.scene.popMatrix();
             }
+            this.scene.popMatrix();
         }
     }
 }
