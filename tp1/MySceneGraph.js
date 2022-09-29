@@ -1225,7 +1225,8 @@ export class MySceneGraph {
                 this.primitives[id].disableNormalViz();
         }
 
-        this.displayNode([false, this.idRoot]);
+
+        this.displayNode([false, this.idRoot], this.components[this.idRoot].getMaterial());
 
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
@@ -1234,35 +1235,37 @@ export class MySceneGraph {
         // this.primitives['demoTorus'].display();
     }
 
-    displayNode(node) {
+    displayNode(node, prevMaterial) {
+
         const isPrimitive = node[0];
         const nodeId = node[1];
         if (isPrimitive) {
             this.primitives[nodeId].display();
         }
         else {
+
             const component = this.components[nodeId];
             const texture = component.getTexture();
-            const material = component.getMaterial();
+
+            var material = component.getMaterial();
+            if (material === 'inherit') material = prevMaterial;
 
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
 
             for (let child of component.children) {
-                // TODO if texture is none, clear it from material
-                // To do so, pass the material id to the displayNode function
-                // and access the material from the materials array
-                if (texture === 'none') {
-                }
+
+                if (texture === 'none') material.setTexture(null);
+
                 if (texture !== 'none' && texture !== 'inherit') {
                     const [texture, length_s, length_t] = component.getTexture();
 
                     material.setTexture(texture);
-                    console.log("SET TEXTURE " + component.getTexture());
                 }
+
                 if (material !== 'inherit') material.apply();
-                
-                this.displayNode(child);
+
+                this.displayNode(child, material);
             }
             this.scene.popMatrix();
         }
