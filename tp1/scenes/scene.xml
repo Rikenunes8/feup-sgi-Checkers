@@ -506,7 +506,7 @@
                 <translate x="20.55" y="2.99" z="-25" />
                 <scale x="6.45" y="1" z="44" />
             </transformation>
-            <texture id="inherit"/>
+            <texture id="demoTexture" length_s="1" length_t="1"/>
             <materials>
                 <material id="green" />
             </materials>

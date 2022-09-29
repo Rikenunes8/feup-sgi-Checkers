@@ -1050,8 +1050,8 @@ export class MySceneGraph {
 
             const length_s = this.reader.getFloat(texture, 'length_s', false);
             const length_t = this.reader.getFloat(texture, 'length_t', false);
-            if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
-            if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
+            if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
+            if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
 
             componentTexture = [this.textures[textureId], length_s, length_t];
         }
@@ -1242,13 +1242,26 @@ export class MySceneGraph {
         }
         else {
             const component = this.components[nodeId];
+            const texture = component.getTexture();
             const material = component.getMaterial();
 
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
 
             for (let child of component.children) {
+                // TODO if texture is none, clear it from material
+                // To do so, pass the material id to the displayNode function
+                // and access the material from the materials array
+                if (texture === 'none') {
+                }
+                if (texture !== 'none' && texture !== 'inherit') {
+                    const [texture, length_s, length_t] = component.getTexture();
+
+                    material.setTexture(texture);
+                    console.log("SET TEXTURE " + component.getTexture());
+                }
                 if (material !== 'inherit') material.apply();
+                
                 this.displayNode(child);
             }
             this.scene.popMatrix();
