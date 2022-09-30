@@ -37,7 +37,7 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="glass" file="scenes/images/vidral.jpg" />
     </textures>
 
     <materials>
@@ -897,6 +897,8 @@
             </materials>
             <children>
                 <componentref id="blockHead" />
+                <componentref id="blockWindow1" />
+                <componentref id="blockWindow2" />
                 <componentref id="rightBlockPilar" />
                 <componentref id="leftBlockPilar" />
             </children>
@@ -950,6 +952,48 @@
                 <componentref id="cube" />
             </children>
         </component>
+        <component id="blockWindow1" >
+            <transformation>
+                <translate x="0.51" y="3.5" z="1.25" />
+                <scale x="1" y="1.25" z="1.25" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="red" />
+            </materials>
+            <children>
+                <componentref id="window" />
+            </children>
+        </component>
+        <component id="blockWindow2" >
+            <transformation>
+                <translate x="0.51" y="3.5" z="-1.25" />
+                <scale x="1" y="1.25" z="1.25" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <texture id="inherit"/>
+            <materials>
+                <material id="red" />
+            </materials>
+            <children>
+                <componentref id="window" />
+            </children>
+        </component>
+
+        <component id="window" >
+            <transformation>
+            </transformation>
+            <texture id="glass"/>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+
 
         <component id="cubeUpFace">
             <transformation>

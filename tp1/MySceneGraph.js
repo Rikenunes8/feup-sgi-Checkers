@@ -1050,8 +1050,8 @@ export class MySceneGraph {
 
             const length_s = this.reader.getFloat(texture, 'length_s', false);
             const length_t = this.reader.getFloat(texture, 'length_t', false);
-            if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
-            if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
+            // if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
+            // if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
 
             componentTexture = [this.textures[textureId], length_s, length_t];
         }
