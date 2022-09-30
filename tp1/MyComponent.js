@@ -10,7 +10,16 @@ export class MyComponent extends CGFobject {
         this.children = [...children];
         this.material = 0;
     }
+
     getMaterial() {
         return this.materials[this.material];
+    }
+
+    /**
+     * Returns the texture of the component.
+     * @returns {[CGFtexture, length_s, length_t]}
+     */
+    getTexture() {
+        return this.texture;
     }
 }

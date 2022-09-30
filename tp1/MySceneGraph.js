@@ -249,13 +249,13 @@ export class MySceneGraph {
         this.onXMLMinorError("To do: Parse views and create cameras.");
         
         // get the default camera id 
-        const defaultCam = this.reader.getString(viewsNode, 'default', false);
+        const defaultCamera = this.reader.getString(viewsNode, 'default', false);
 
-        // to do return check this error message 
-        if (!defaultCam) {
+        // TODO return check this error message 
+        if (!defaultCamera) {
             return "you must specify a default prop on views";
         } else {
-            this.defaultCam = defaultCam;
+            this.defaultCam = defaultCamera;
         }
 
         var children = viewsNode.children;
@@ -271,8 +271,8 @@ export class MySceneGraph {
             }
 
             const id = this.reader.getString(children[i], 'id', false);
-            const near = this.reader.getString(children[i], 'near', false);
-            const far = this.reader.getString(children[i], 'far', false);
+            const near = this.reader.getFloat(children[i], 'near', false);
+            const far = this.reader.getFloat(children[i], 'far', false);
             const from = this.parseCoordinates3D(fromChild, "'from' property for ID " + id);
             const to = this.parseCoordinates3D(toChild, "'to' property for ID " + id);
 
@@ -300,16 +300,17 @@ export class MySceneGraph {
                 if (!angle)
                     return "perspective view must have angle attribute";
 
-                // TO DO which is the camera that uses this perspective? CGFCamera? Do I need to
+                // TODO which is the camera that uses this perspective? CGFCamera? Do I need to
                 // calculate the fov?
-                this.views[id] = new CGFcamera(0, near, far, from, to);
-
+                const camera = new CGFcamera(angle * DEGREE_TO_RAD, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
+                this.views[id] = camera;
+                this.scene.cameras.push(id);
             } else if (children[i].nodeName === 'ortho') {
 
-                const left = this.reader.getString(children[i], 'left', false);
-                const right = this.reader.getString(children[i], 'right', false);
-                const top = this.reader.getString(children[i], 'top', false);
-                const bottom = this.reader.getString(children[i], 'bottom', false);
+                const left = this.reader.getFloat(children[i], 'left', false);
+                const right = this.reader.getFloat(children[i], 'right', false);
+                const top = this.reader.getFloat(children[i], 'top', false);
+                const bottom = this.reader.getFloat(children[i], 'bottom', false);
                 
                 // the up values are in the third child of node 'ortho' 
                 const upChild = children[i].children[2];
@@ -328,7 +329,7 @@ export class MySceneGraph {
                     return upValues;
 
                 this.views[id] = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, upValues);
-
+                this.scene.cameras.push(id);
             } else {
                 this.onXMLMinorError("unknown view tag <" + children[i].nodeName + ">");
             }
@@ -410,7 +411,7 @@ export class MySceneGraph {
             }
 
             // Get id of the current light.
-            var lightId = this.reader.getString(children[i], 'id');
+            var lightId = this.reader.getString(children[i], 'id', false);
             if (lightId == null)
                 return "no ID defined for light";
 
@@ -420,7 +421,7 @@ export class MySceneGraph {
 
             // Light enable/disable
             var enableLight = true;
-            var aux = this.reader.getBoolean(children[i], 'enabled');
+            var aux = this.reader.getBoolean(children[i], 'enabled', false);
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
@@ -693,7 +694,7 @@ export class MySceneGraph {
                             return "unable to parse axis of the rotate transformation for ID " + transformationID + "; the axis should belong to {x,y,z} instead of " + axis;
 
 
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD, axisArr);
                         atLeastOne = true;
                         break;
                     default:
@@ -886,7 +887,7 @@ export class MySceneGraph {
         this.primitives[primitiveId] = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
     }
 
-    /**
+   /**
    * Parses the <components> block.
    * @param {components block element} componentsNode
    */
@@ -926,7 +927,6 @@ export class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
-
 
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
             if (materialsIndex == -1) return "missing materials definition in component " + componentID;
@@ -1050,8 +1050,8 @@ export class MySceneGraph {
 
             const length_s = this.reader.getFloat(texture, 'length_s', false);
             const length_t = this.reader.getFloat(texture, 'length_t', false);
-            if (length_s == null) return "no length_s defined for texture " + textureId + "in component " + componentID;
-            if (length_t == null) return "no length_t defined for texture " + textureId + "in component " + componentID;
+            // if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
+            // if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
 
             componentTexture = [this.textures[textureId], length_s, length_t];
         }
@@ -1081,7 +1081,7 @@ export class MySceneGraph {
         }
         if (componentChildren.length === 0)
             return "must exists at least one children declaration for component " + componentID;
-        
+
         return [...componentChildren];
     }
 
@@ -1224,9 +1224,9 @@ export class MySceneGraph {
             else
                 this.primitives[id].disableNormalViz();
         }
-        
-        //To do: Create display loop for transversing the scene graph
-        this.displayNode([false, this.idRoot]);
+
+
+        this.displayNode([false, this.idRoot], this.components[this.idRoot].getMaterial());
 
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
@@ -1235,23 +1235,39 @@ export class MySceneGraph {
         // this.primitives['demoTorus'].display();
     }
 
-    displayNode(node) {
+    displayNode(node, prevMaterial) {
+
         const isPrimitive = node[0];
-        const nodeId = node[1] 
+        const nodeId = node[1];
         if (isPrimitive) {
             this.primitives[nodeId].display();
         }
         else {
+
             const component = this.components[nodeId];
-            const material = component.getMaterial()
-            
+            const texture = component.getTexture();
+
+            var material = component.getMaterial();
+            if (material === 'inherit') material = prevMaterial;
+
+            this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
+
             for (let child of component.children) {
+
+                if (texture === 'none') material.setTexture(null);
+
+                if (texture !== 'none' && texture !== 'inherit') {
+                    const [texture, length_s, length_t] = component.getTexture();
+
+                    material.setTexture(texture);
+                }
+
                 if (material !== 'inherit') material.apply();
-                this.scene.pushMatrix();
-                this.displayNode(child);
-                this.scene.popMatrix();
+
+                this.displayNode(child, material);
             }
+            this.scene.popMatrix();
         }
     }
 }

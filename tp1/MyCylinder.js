@@ -28,7 +28,7 @@ export class MyCylinder extends CGFobject {
             theta += thetaIncrement;
         }
         const c = (this.top - this.base)/this.height;
-        const zDeclive = -Math.cos(Math.atan(this.height/(this.top-this.base))); 
+        const k = Math.tan(Math.PI/2 - Math.atan(this.height/(this.base-this.top)));
 
         for (let i = 0; i <= this.stacks; i++) {
             const currHeight = i*heightIncrement;
@@ -54,7 +54,9 @@ export class MyCylinder extends CGFobject {
                         this.indices.push(curr, next + 1, next);
                     }
                 }
-                this.normals.push(x, y, zDeclive);
+                const zDeclive = Math.sqrt(x*x + y*y) * k;
+                let abs = Math.sqrt(x*x + y*y + zDeclive*zDeclive)
+                this.normals.push(x/abs, y/abs, zDeclive/abs);
             }
         }
 

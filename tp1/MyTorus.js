@@ -56,6 +56,7 @@ export class MyTorus extends CGFobject {
                         this.indices.push(curr, next + 1, next);
                     }
                 }
+                let abs = Math.sqrt(Math.pow(x-k1, 2) + Math.pow(y-k2, 2)+ Math.pow(z, 2))
                 this.normals.push(x-k1, y-k2, z);
             }
         }

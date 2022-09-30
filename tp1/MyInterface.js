@@ -30,7 +30,7 @@ export class MyInterface extends CGFinterface {
         
         // to do add camera booleans here and switch between cameras
         var f0 = this.gui.addFolder('Cameras');
-
+        f0.add(this.scene, 'currCam', this.scene.cameras).name("Current Camera");
 
         this.initKeys();
 
