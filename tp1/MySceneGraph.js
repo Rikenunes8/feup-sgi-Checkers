@@ -694,7 +694,7 @@ export class MySceneGraph {
                             return "unable to parse axis of the rotate transformation for ID " + transformationID + "; the axis should belong to {x,y,z} instead of " + axis;
 
 
-                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle, axisArr);
+                        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angle*DEGREE_TO_RAD, axisArr);
                         atLeastOne = true;
                         break;
                     default:
