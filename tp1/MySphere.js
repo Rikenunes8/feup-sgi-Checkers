@@ -57,7 +57,7 @@ export class MySphere extends CGFobject {
                         this.indices.push(curr, next + 1, next);
                     }
                 }
-                this.normals.push(x, y, z);
+                this.normals.push(x/this.radius, y/this.radius, z/this.radius);
             }
         }
 

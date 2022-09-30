@@ -66,10 +66,10 @@ export class MyTriangle extends CGFobject{
      * @returns
      */
     calculateNormal(vec1, vec2) {
-        return [
-            vec1[1] * vec2[2] - vec1[2] * vec2[1],
-            - (vec1[0] * vec2[2] - vec1[2] * vec2[0]),
-            vec1[0] * vec2[1] - vec1[1] * vec2[0]
-        ];
+        let x = vec1[1] * vec2[2] - vec1[2] * vec2[1]
+        let y = - (vec1[0] * vec2[2] - vec1[2] * vec2[0])
+        let z = vec1[0] * vec2[1] - vec1[1] * vec2[0]
+        let abs = Math.sqrt(x*x + y*y + z*z)
+        return [x/abs, y/abs, z/abs];
     }
 }
