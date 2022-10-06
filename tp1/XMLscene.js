@@ -1,7 +1,6 @@
 import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera } from '../lib/CGF.js';
 
-
 var DEGREE_TO_RAD = Math.PI / 180;
 
 /**
@@ -110,12 +109,23 @@ export class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
-        this.camera = this.graph.views[this.graph.defaultCam];
-        this.interface.setActiveCamera(this.camera);
+        this.currCam = this.graph.defaultCam;
+        this.setCamera(this.currCam);
+
+        // to do add camera booleans here and switch between cameras
+        const f0 = this.interface.gui.addFolder('Cameras');
+        f0.add(this, 'currCam', this.cameras).name("Current Camera").onChange(this.setCamera);
 
         this.initLights();
 
         this.sceneInited = true;
+    }
+
+    // Set the current camera
+    setCamera = (cam) => {
+        // Change the cameras
+        this.camera = this.graph.views[cam];
+        this.interface.setActiveCamera(this.camera);
     }
 
     /**

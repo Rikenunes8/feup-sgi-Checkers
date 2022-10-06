@@ -53,7 +53,6 @@ export class MySceneGraph {
          * If any error occurs, the reader calls onXMLError on this object, with an error message
          */
         this.reader.open('scenes/' + filename, this);
-
     }
 
     /*
@@ -169,6 +168,7 @@ export class MySceneGraph {
     parseView(viewsNode) {
 
         this.views = {};
+
         this.defaultCam = null;
 
         this.onXMLMinorError("To do: Parse views and create cameras.");
@@ -225,8 +225,6 @@ export class MySceneGraph {
                 if (!angle)
                     return "perspective view must have angle attribute";
 
-                // TODO which is the camera that uses this perspective? CGFCamera? Do I need to
-                // calculate the fov?
                 const camera = new CGFcamera(angle * DEGREE_TO_RAD, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
                 this.views[id] = camera;
                 this.scene.cameras.push(id);
@@ -725,6 +723,7 @@ export class MySceneGraph {
 
         this.primitives[primitiveId] = new MyRectangle(this.scene, primitiveId, x1, x2, y1, y2);;
     }
+
     parsePrimitiveCylinder(node, primitiveId) {
         var base = this.reader.getFloat(node, 'base', false);
         if (base == null || isNaN(base) || base < 0)
@@ -744,6 +743,7 @@ export class MySceneGraph {
 
         this.primitives[primitiveId] = new MyCylinder(this.scene, primitiveId, base, top, height, slices, stacks);;
     }
+
     parsePrimitiveSphere(node, primitiveId) {
         var radius = this.reader.getFloat(node, 'radius', false);
         if (radius == null || isNaN(radius) || radius < 0)
@@ -757,6 +757,7 @@ export class MySceneGraph {
 
         this.primitives[primitiveId] = new MySphere(this.scene, primitiveId, radius, slices, stacks);;
     }
+
     parsePrimitiveTorus(node, primitiveId) {
         var inner = this.reader.getFloat(node, 'inner', false);
         if (inner == null || isNaN(inner) || inner < 0)
@@ -773,6 +774,7 @@ export class MySceneGraph {
 
         this.primitives[primitiveId] = new MyTorus(this.scene, primitiveId, inner, outer, slices, loops);;
     }
+
     parsePrimitiveTriangle(node, primitiveId) {
         const pos1 = [
             this.reader.getFloat(node, 'x1', false),
@@ -1143,7 +1145,8 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        for (let id in this.primitives) { // TODO testing
+
+        for (let id in this.primitives) { 
             if (this.displayNormals)
                 this.primitives[id].enableNormalViz();
             else
