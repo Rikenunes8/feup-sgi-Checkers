@@ -40,9 +40,10 @@ export class XMLscene extends CGFscene {
 
         this.displayNormals = false; // TODO testing
 
-        // TODO Add cameras to interface and switch between them
         this.cameras = [];
         this.currCam = 0;
+
+        this.lightValues = [];
     }
 
     /**
@@ -85,6 +86,7 @@ export class XMLscene extends CGFscene {
                 else
                     this.lights[i].disable();
 
+
                 this.lights[i].update();
 
                 i++;
@@ -112,11 +114,10 @@ export class XMLscene extends CGFscene {
         this.currCam = this.graph.defaultCam;
         this.setCamera(this.currCam);
 
-        // to do add camera booleans here and switch between cameras
-        const f0 = this.interface.gui.addFolder('Cameras');
-        f0.add(this, 'currCam', this.cameras).name("Current Camera").onChange(this.setCamera);
+        this.interface.addCameras();
 
         this.initLights();
+        this.interface.addLights();
 
         this.sceneInited = true;
     }
@@ -127,6 +128,18 @@ export class XMLscene extends CGFscene {
         this.camera = this.graph.views[cam];
         this.interface.setActiveCamera(this.camera);
     }
+
+    updateLights(key, i) {
+        this.graph.lights[key][0] = !this.graph.lights[key][0];
+
+        if (this.graph.lights[key][0])
+            this.lights[i].enable();
+        else
+            this.lights[i].disable();
+
+        this.lights[i].update();
+    }
+
 
     /**
      * Displays the scene.

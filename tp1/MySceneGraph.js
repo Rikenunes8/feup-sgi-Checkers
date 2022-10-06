@@ -309,7 +309,7 @@ export class MySceneGraph {
     parseLights(lightsNode) {
         var children = lightsNode.children;
 
-        this.lights = [];
+        this.lights = {};
         var numLights = 0;
 
         var grandChildren = [];
@@ -348,7 +348,7 @@ export class MySceneGraph {
             if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
-            enableLight = aux || 1;
+            enableLight = aux ?? 1;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -940,6 +940,7 @@ export class MySceneGraph {
         }
         return [...transfMatrix];
     }
+
     parseComponentMaterials(materials, componentID) {
         let componentMaterials = [];
         for (let j = 0; j < materials.length; j++) {
@@ -963,6 +964,7 @@ export class MySceneGraph {
 
         return [...componentMaterials];
     }
+
     parseComponentTexture(texture, componentID) {
         let componentTexture = undefined;
         const textureId = this.reader.getString(texture, 'id', false);

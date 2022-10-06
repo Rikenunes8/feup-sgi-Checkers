@@ -54,4 +54,24 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
+    addCameras() {
+        const f0 = this.gui.addFolder('Cameras');
+        f0.add(this.scene, 'currCam', this.scene.cameras).name("Current Camera").onChange(this.scene.setCamera);
+    }
+
+    addLights(){
+        const f1 = this.gui.addFolder("Lights");
+
+        const lights = this.scene.graph.lights;
+
+        let i = 0;
+        for (let key in lights) {
+            // must create an object with key property, otherwise f1.add retrieves an error because 
+            // this.scene.graph.lights doesn't have a key property, just indexes
+            this.scene.lightValues[key] = lights[key][0];
+            f1.add(this.scene.lightValues, key).onChange(this.scene.updateLights.bind(this.scene, key, i));
+            i++;
+        }
+    }
+
 }
