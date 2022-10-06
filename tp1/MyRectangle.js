@@ -55,12 +55,23 @@ export class MyRectangle extends CGFobject {
 	}
 
 	setTexCoords(length_s, length_t) {
+        // TODO the way they want
+		this.texCoords = [
+			0, 0,
+			(this.x2-this.x1)/length_s, 0,
+			0, -(this.y2-this.y1)/length_t,
+			(this.x2-this.x1)/length_s, -(this.y2-this.y1)/length_t
+		]
+
+        // TODO the way it should be
+		/*
         this.texCoords = [
 			0, 1*length_t,
 			1*length_s, 1*length_t,
 			0, 0,
 			1*length_s, 0
 		]
+		*/
     }
 
 	/**

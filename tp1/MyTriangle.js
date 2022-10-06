@@ -68,11 +68,21 @@ export class MyTriangle extends CGFobject{
     }
 
     setTexCoords(length_s, length_t) {
+        // TODO the way they want
         this.texCoords = [
 			0, 0,
 			this.distA / length_s, 0,
-            this.distC * this.cosA / length_s, this.distC * this.sinA / length_t,
+            this.distC * this.cosA / length_s, -this.distC * this.sinA / length_t,
 		]
+
+        // TODO the way it should be
+        /*
+        this.texCoords = [
+			0, 0,
+			this.distA * length_s, 0,
+            this.distC * this.cosA * length_s, -1*length_t,
+		]
+        */
     }
 
     updateTexCoords(coords) {
