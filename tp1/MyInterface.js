@@ -27,10 +27,6 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'displayNormals').name("Display normals");
 
         // a folder for grouping parameters for one of the lights
-        
-        // to do add camera booleans here and switch between cameras
-        var f0 = this.gui.addFolder('Cameras');
-        f0.add(this.scene, 'currCam', this.scene.cameras).name("Current Camera");
 
         this.initKeys();
 
@@ -57,4 +53,5 @@ export class MyInterface extends CGFinterface {
     isKeyPressed(keyCode) {
         return this.activeKeys[keyCode] || false;
     }
+
 }
