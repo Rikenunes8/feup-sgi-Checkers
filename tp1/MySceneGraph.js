@@ -971,9 +971,9 @@ export class MySceneGraph {
         if (textureId == null) return "no ID defined for texture defined in component " + componentID;
 
         if (textureId == 'none') {
-            componentTexture = 'none';
+            componentTexture = ['none', 1, 1];
         } else if (textureId == 'inherit') {
-            componentTexture = 'inherit';
+            componentTexture = ['inherit', 1, 1];
         } else {
             if (this.textures[textureId] == null) return "no texture defined with ID " + textureId;
 
@@ -982,7 +982,7 @@ export class MySceneGraph {
             // if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
             // if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
 
-            componentTexture = [this.textures[textureId], length_s, length_t];
+            componentTexture = [textureId, length_s, length_t];
         }
         return componentTexture;
     }
@@ -1165,37 +1165,30 @@ export class MySceneGraph {
         // this.primitives['demoTorus'].display();
     }
 
-    displayNode(node, prevMaterial) {
-
+    displayNode(node, prevMaterial, prevTexture) {
         const isPrimitive = node[0];
         const nodeId = node[1];
         if (isPrimitive) {
+            this.primitives[nodeId].updateTexCoords(prevTexture.slice(-2))
             this.primitives[nodeId].display();
         }
         else {
-
             const component = this.components[nodeId];
             const texture = component.getTexture();
+            const material = component.getMaterial();
 
-            var material = component.getMaterial();
             if (material === 'inherit') material = prevMaterial;
+            if (texture[0] === 'inherit') texture = [...prevTexture]
 
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
-
             for (let child of component.children) {
+                if (texture[0] === 'none') material.setTexture(null);
+                else material.setTexture(this.textures[texture[0]]);
+                material.setTextureWrap('REPEAT', 'REPEAT');
+                material.apply();
 
-                if (texture === 'none') material.setTexture(null);
-
-                if (texture !== 'none' && texture !== 'inherit') {
-                    const [texture, length_s, length_t] = component.getTexture();
-
-                    material.setTexture(texture);
-                }
-
-                if (material !== 'inherit') material.apply();
-
-                this.displayNode(child, material);
+                this.displayNode(child, material, texture);
             }
             this.scene.popMatrix();
         }

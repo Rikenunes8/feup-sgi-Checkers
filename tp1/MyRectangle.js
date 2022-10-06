@@ -49,15 +49,19 @@ export class MyRectangle extends CGFobject {
         t
         */
 
-		this.texCoords = [
-			0, 1,
-			1, 1,
-			0, 0,
-			1, 0
-		]
+		this.setTexCoords(1, 1);
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
+
+	setTexCoords(length_s, length_t) {
+        this.texCoords = [
+			0, 1*length_t,
+			1*length_s, 1*length_t,
+			0, 0,
+			1*length_s, 0
+		]
+    }
 
 	/**
 	 * @method updateTexCoords
@@ -65,7 +69,8 @@ export class MyRectangle extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(coords) {
-		this.texCoords = [...coords];
+		if (coords.length != 2) console.warn("Wrong number of coordinates")
+		this.setTexCoords(coords[0], coords[1])
 		this.updateTexCoordsGLBuffers();
 	}
 }
