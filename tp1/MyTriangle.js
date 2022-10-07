@@ -6,29 +6,23 @@ export class MyTriangle extends CGFobject{
         this.pos1 = [...pos1];
         this.pos2 = [...pos2];
         this.pos3 = [...pos3];
-        this.length_s = 1;
-        this.length_t = 1;
 
         this.initBuffers();
     }
 
     initBuffers() {
 
-        const distA = Math.sqrt(Math.pow(this.pos2[0] - this.pos1[0], 2) + Math.pow(this.pos2[1] - this.pos1[1], 2) + Math.pow(this.pos2[2] - this.pos1[2], 2));
-        const distB = Math.sqrt(Math.pow(this.pos3[0] - this.pos2[0], 2) + Math.pow(this.pos3[1] - this.pos2[1], 2) + Math.pow(this.pos3[2] - this.pos2[2], 2));
-        const distC = Math.sqrt(Math.pow(this.pos1[0] - this.pos3[0], 2) + Math.pow(this.pos1[1] - this.pos3[1], 2) + Math.pow(this.pos1[2] - this.pos3[2], 2));
+        this.distA = Math.sqrt(Math.pow(this.pos2[0] - this.pos1[0], 2) + Math.pow(this.pos2[1] - this.pos1[1], 2) + Math.pow(this.pos2[2] - this.pos1[2], 2));
+        this.distB = Math.sqrt(Math.pow(this.pos3[0] - this.pos2[0], 2) + Math.pow(this.pos3[1] - this.pos2[1], 2) + Math.pow(this.pos3[2] - this.pos2[2], 2));
+        this.distC = Math.sqrt(Math.pow(this.pos1[0] - this.pos3[0], 2) + Math.pow(this.pos1[1] - this.pos3[1], 2) + Math.pow(this.pos1[2] - this.pos3[2], 2));
 
-        const cosA = (distA * distA - distB * distB + distC * distC) / (2 * distA * distC);
-        const cosB = (distA * distA + distB * distB - distC * distC) / (2 * distA * distB);
-        const cosY = (- distA * distA + distB * distB + distC * distC) / (2 * distB * distC);
+        this.cosA = (this.distA * this.distA - this.distB * this.distB + this.distC * this.distC) / (2 * this.distA * this.distC);
+        // const cosB = (distA * distA + distB * distB - distC * distC) / (2 * distA * distB);
+        // const cosY = (- distA * distA + distB * distB + distC * distC) / (2 * distB * distC);
 
-        const sinA = Math.sqrt(1 - cosA * cosA);
+        this.sinA = Math.sqrt(1 - this.cosA * this.cosA);
 
-        this.texCoords = [
-			0, 0,
-			distA / this.length_s, 0,
-            distC * cosA / this.length_s, distC * sinA / this.length_t,
-		]
+
 
         this.vertices = [
             this.pos1[0], this.pos1[1], this.pos1[2], // 0
@@ -72,4 +66,28 @@ export class MyTriangle extends CGFobject{
         let abs = Math.sqrt(x*x + y*y + z*z)
         return [x/abs, y/abs, z/abs];
     }
+
+    setTexCoords(length_s, length_t) {
+        // TODO the way they want
+        this.texCoords = [
+			0, 0,
+			this.distA / length_s, 0,
+            this.distC * this.cosA / length_s, -this.distC * this.sinA / length_t,
+		]
+
+        // TODO the way it should be
+        /*
+        this.texCoords = [
+			0, 0,
+			this.distA * length_s, 0,
+            this.distC * this.cosA * length_s, -1*length_t,
+		]
+        */
+    }
+
+    updateTexCoords(coords) {
+        if (coords.length != 2) console.warn("Wrong number of coordinates")
+		this.setTexCoords(coords[0], coords[1])
+		this.updateTexCoordsGLBuffers();
+	}
 }
