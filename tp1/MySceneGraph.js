@@ -1174,8 +1174,8 @@ export class MySceneGraph {
         }
         else {
             const component = this.components[nodeId];
-            const texture = component.getTexture();
-            const material = component.getMaterial();
+            let material = component.getMaterial();
+            let texture = component.getTexture();
 
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]

@@ -64,12 +64,9 @@ export class MyCylinder extends CGFobject {
         this.initGLBuffers();
     }
 
-    updateBuffers(complexity) { // TODO what is this?
-        this.slices = Math.round(complexity);
-
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
+    updateTexCoords(coords) {
+		
+	}
 
     toRad(angle) {
         return angle * Math.PI / 180;

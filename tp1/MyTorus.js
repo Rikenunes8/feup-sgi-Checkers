@@ -77,4 +77,7 @@ export class MyTorus extends CGFobject {
         }
         return [[...sines], [...cosines]];
     }
+
+    updateTexCoords(coords) {
+	}
 }
