@@ -15,7 +15,8 @@ export class MyTorus extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
-        
+        this.texCoords = [];
+
 
         const thetaAngles = this.getCosinesAndSines(this.slices);
         const alphaAngles = this.getCosinesAndSines(this.loops);
@@ -24,11 +25,16 @@ export class MyTorus extends CGFobject {
         const alphaSines = alphaAngles[0];
         const alphaCosines = alphaAngles[1];
 
+        thetaCosines.push(thetaCosines[0])
+        thetaSines.push(thetaSines[0])
+        alphaSines.push(alphaSines[0])
+        alphaCosines.push(alphaCosines[0])
+
         
-        for (let i = 0; i < this.loops; i++) {
+        for (let i = 0; i < this.loops+1; i++) {
             const k1 = this.outter * alphaCosines[i];
             const k2 = this.outter * alphaSines[i];
-            for (let j = 0; j < this.slices; j++) {
+            for (let j = 0; j < this.slices+1; j++) {
                 // Vertices coordinates
                 const x = k1 + this.inner*thetaCosines[j] * alphaCosines[i];
                 const y = k2 + this.inner*thetaCosines[j] * alphaSines[i];
@@ -37,27 +43,17 @@ export class MyTorus extends CGFobject {
                 this.vertices.push(x, y, z);
                 
                 // Indices
-                const curr = i * this.slices + j;
-                const next = curr + this.slices; // (i+1) * (this.slices) + j
-                if (i == this.loops-1) {
-                    if (j == this.slices-1) {
-                        this.indices.push(curr, curr - (this.slices-1), 0);
-                        this.indices.push(curr, 0, this.slices-1);
-                    } else {
-                        this.indices.push(curr, curr + 1, j+1);
-                        this.indices.push(curr, j+1, j);
-                    }
-                } else {
-                    if (j == this.slices-1) {
-                        this.indices.push(curr, curr - (this.slices-1), curr + 1);
-                        this.indices.push(curr, curr + 1, next);
-                    } else {
+                const curr = i * (this.slices+1) + j;
+                const next = curr + (this.slices+1); // (i+1) * (this.slices+1) + j
+                if (i != this.loops) {
+                    if (j != this.slices) {
                         this.indices.push(curr, curr + 1, next + 1);
                         this.indices.push(curr, next + 1, next);
                     }
                 }
                 let abs = Math.sqrt(Math.pow(x-k1, 2) + Math.pow(y-k2, 2)+ Math.pow(z, 2))
-                this.normals.push(x-k1, y-k2, z);
+                this.normals.push((x-k1)/abs, (y-k2)/abs, z/abs);
+                this.texCoords.push(- j / this.slices, i / this.loops);
             }
         }
 
