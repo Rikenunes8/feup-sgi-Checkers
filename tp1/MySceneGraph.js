@@ -979,10 +979,11 @@ export class MySceneGraph {
 
             const length_s = this.reader.getFloat(texture, 'length_s', false);
             const length_t = this.reader.getFloat(texture, 'length_t', false);
+            
             // if (length_s == null) return "no length_s defined for texture " + textureId + " in component " + componentID;
             // if (length_t == null) return "no length_t defined for texture " + textureId + " in component " + componentID;
-
-            componentTexture = [textureId, length_s, length_t];
+            
+            componentTexture = [textureId, length_s ?? 1, length_t ?? 1];
         }
         return componentTexture;
     }
@@ -1180,6 +1181,7 @@ export class MySceneGraph {
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
 
+            if (nodeId == 'window') console.log(texture)
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
             for (let child of component.children) {
