@@ -39,6 +39,8 @@ export class XMLscene extends CGFscene {
         this.setUpdatePeriod(100);
 
         this.displayNormals = false; // TODO testing
+        this.displayLights = false;
+        this.displayingLights = this.displayLights;
 
         this.cameras = [];
         this.currCam = 0;
@@ -165,9 +167,11 @@ export class XMLscene extends CGFscene {
         this.pushMatrix();
         this.axis.display();
 
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].update();
+        if (this.displayingLights !== this.displayLights) {
+            for (var i = 0; i < this.lights.length; i++) {
+                this.lights[i].setVisible(this.displayLights);
+                this.lights[i].update();
+            }
         }
 
         if (this.sceneInited) {
