@@ -74,13 +74,17 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
                 this.lights[i].setSpecular(light[5][0], light[5][1], light[5][2], light[5][3]);
 
+                this.lights[i].setConstantAttenuation(light[6][0]);
+                this.lights[i].setLinearAttenuation(light[6][1]);
+                this.lights[i].setQuadraticAttenuation(light[6][2]);
+
                 if (light[1] == "spot") {
-                    this.lights[i].setSpotCutOff(light[6]);
-                    this.lights[i].setSpotExponent(light[7]);
-                    this.lights[i].setSpotDirection(light[8][0], light[8][1], light[8][2]);
+                    this.lights[i].setSpotCutOff(light[7]);
+                    this.lights[i].setSpotExponent(light[8]);
+                    this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
                 }
 
-                this.lights[i].setVisible(true);
+                this.lights[i].setVisible(false);
                 if (light[0])
                     this.lights[i].enable();
                 else
@@ -163,7 +167,7 @@ export class XMLscene extends CGFscene {
 
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
-            this.lights[i].enable();
+            this.lights[i].update();
         }
 
         if (this.sceneInited) {
