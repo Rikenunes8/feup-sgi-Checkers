@@ -501,9 +501,9 @@
                 <translate x="20.55" y="2.99" z="-25" />
                 <scale x="6.45" y="1" z="44" />
             </transformation>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <materials>
-                <material id="green" />
+                <material id="inherit" />
             </materials>
             <children>
                 <primitiveref id="adjustCornerTriangle"/>
@@ -517,7 +517,7 @@
             </transformation>
             <texture id="inherit"/>
             <materials>
-                <material id="green" />
+                <material id="inherit" />
             </materials>
             <children>
                 <primitiveref id="adjustCornerTriangle"/>
@@ -531,7 +531,7 @@
             </transformation>
             <texture id="inherit"/>
             <materials>
-                <material id="green" />
+                <material id="inherit" />
             </materials>
             <children>
                 <primitiveref id="rectangle"/>
