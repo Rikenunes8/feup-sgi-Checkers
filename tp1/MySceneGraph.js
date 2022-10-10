@@ -221,7 +221,7 @@ export class MySceneGraph {
 
                 const angle = this.reader.getFloat(children[i], 'angle', false);
                 if (!angle)
-                    return "perspective view must have angle attribute";
+                    return "Missing property angle on View with id " + id;
 
                 const camera = new CGFcamera(angle * DEGREE_TO_RAD, near, far, vec3.fromValues(from[0], from[1], from[2]), vec3.fromValues(to[0], to[1], to[2]));
                 this.views[id] = camera;
@@ -235,7 +235,11 @@ export class MySceneGraph {
                 
                 // the up values are in the third child of node 'ortho' 
                 const upChild = children[i].children[2];
-                const upValues = this.parseCoordinates3D(upChild, "'up' property for ID " + id);
+                let upValues = [0, 1, 0];
+                if (upChild) {
+                    if (upChild.nodeName !== 'up') this.onXMLMinorError("Uknown property " + upChild.nodeName + ' for view ' + id);
+                    else upValues = this.parseCoordinates3D(upChild, "'up' property for ID " + id);
+                }
 
                 if (!left) {
                     return "Missing property left on Ortho View with id " + id;
@@ -276,7 +280,6 @@ export class MySceneGraph {
         this.background = [];
 
         var nodeNames = [];
-
         for (var i = 0; i < children.length; i++)
             nodeNames.push(children[i].nodeName);
 
@@ -327,12 +330,12 @@ export class MySceneGraph {
                 continue;
             }
             else {
-                attributeNames.push(...["location", "ambient", "diffuse", "specular"]);
-                attributeTypes.push(...["position", "color", "color", "color"]);
+                attributeNames.push(...["location", "ambient", "diffuse", "specular", "attenuation"]);
+                attributeTypes.push(...["position", "color", "color", "color", "greatness"]);
             }
 
             // Get id of the current light.
-            var lightId = this.reader.getString(children[i], 'id', false);
+            const lightId = this.reader.getString(children[i], 'id', false);
             if (lightId == null)
                 return "no ID defined for light";
 
@@ -341,12 +344,11 @@ export class MySceneGraph {
                 return "ID must be unique for each light (conflict: ID = " + lightId + ")";
 
             // Light enable/disable
-            var enableLight = true;
-            var aux = this.reader.getBoolean(children[i], 'enabled', false);
-            if (!(aux != null && !isNaN(aux) && (aux == true || aux == false)))
+            const enabled = this.reader.getBoolean(children[i], 'enabled', false);
+            if (!(enabled != null && !isNaN(enabled) && (enabled == true || enabled == false)))
                 this.onXMLMinorError("unable to parse value component of the 'enable light' field for ID = " + lightId + "; assuming 'value = 1'");
 
-            enableLight = aux ?? 1;
+            const enableLight = enabled ?? 1;
 
             //Add enabled boolean and type name to light info
             global.push(enableLight);
@@ -356,19 +358,40 @@ export class MySceneGraph {
             // Specifications for the current light.
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (let j = 0; j < grandChildren.length; j++) {
                 nodeNames.push(grandChildren[j].nodeName);
             }
 
-            for (var j = 0; j < attributeNames.length; j++) {
-                var attributeIndex = nodeNames.indexOf(attributeNames[j]);
-
+            for (let j = 0; j < attributeNames.length; j++) {
+                let attributeIndex = nodeNames.indexOf(attributeNames[j]);
+                let aux;
                 if (attributeIndex != -1) {
                     if (attributeTypes[j] == "position")
-                        var aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
-                    else
-                        var aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+                        aux = this.parseCoordinates4D(grandChildren[attributeIndex], "light position for ID" + lightId);
+                    else if (attributeTypes[j] == 'color') 
+                        aux = this.parseColor(grandChildren[attributeIndex], attributeNames[j] + " illumination for ID" + lightId);
+                    else {
+                        const messageError = "'attenuation' component of light " + lightId;
+                        // constant
+                        const c = this.reader.getFloat(grandChildren[attributeIndex], 'constant');
+                        if (!(c != null && !isNaN(c) && (c == 0 || c == 1)))
+                            return "unable to parse 'constant' component of the " + messageError;
+                
+                        // linear
+                        const l = this.reader.getFloat(grandChildren[attributeIndex], 'linear');
+                        if (!(l != null && !isNaN(l) && (l == 0 || l == 1)))
+                            return "unable to parse 'linear' component of the " + messageError;
+                
+                        // quadratic
+                        const q = this.reader.getFloat(grandChildren[attributeIndex], 'quadratic');
+                        if (!(q != null && !isNaN(q) && (q == 0 || q == 1)))
+                            return "unable to parse B component of the " + messageError;
 
+                        aux = [...[c, l, q]];
+
+                        if (aux.reduce((a, b) => a+b, 0) != 1)
+                            return "only a property should be 1.0 in " + messageError;
+                    }
                     if (!Array.isArray(aux))
                         return aux;
 

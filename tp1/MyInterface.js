@@ -25,6 +25,8 @@ export class MyInterface extends CGFinterface {
 
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayNormals').name("Display normals");
+        this.gui.add(this.scene, 'displayLights').name("Display lights");
+
 
         // a folder for grouping parameters for one of the lights
 
