@@ -3,8 +3,8 @@
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
-            <from x="30" y="15" z="30" />
-            <to x="0" y="-2" z="0" />
+            <from x="0" y="0" z="3" />
+            <to x="0" y="0" z="0" />
         </perspective>
     </views>
 
@@ -45,10 +45,10 @@
 
     <primitives>
         <primitive id="demoRectangle">
-            <rectangle x1="-5.5" y1="-6" x2="5.5" y2="6" />
+            <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>
         <primitive id="demoCylinder">
-            <cylinder base="1" top="2" height="3" slices="16" stacks="3" />
+            <cylinder base="1" top="1" height="3" slices="16" stacks="3" />
         </primitive>
         <primitive id="demoSphere">
             <sphere radius="2" slices="32" stacks="32" />
@@ -59,23 +59,23 @@
         <primitive id="demoTriangle">
             <triangle
                 x1="0" y1="0" z1="0"
-                x2="5" y2="0" z2="0"
-                x3="2.5" y3="5" z3="0" />
+                x2="2" y2="0" z2="0"
+                x3="0" y3="2" z3="0" />
         </primitive>
     </primitives>
 
     <components>
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="10" />
-                <scale x="5" y="1" z="1" />
+                <translate x="0" y="0" z="0" />
+                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
             </materials>
             <texture id="demoTexture" length_s="1" length_t="1"/>
             <children>
-                <primitiveref id="demoTriangle" />
+                <primitiveref id="demoTorus" />
             </children>
         </component>
     </components>

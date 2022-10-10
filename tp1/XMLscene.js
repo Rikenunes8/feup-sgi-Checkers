@@ -147,6 +147,16 @@ export class XMLscene extends CGFscene {
     }
 
 
+    update(t) {
+        if (this.gui.isKeyPressed("KeyM")) {
+            for (let key in this.graph.components) {
+                this.graph.components[key].nextMaterial();
+            }
+        }
+
+    }
+
+
     /**
      * Displays the scene.
      */

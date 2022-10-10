@@ -170,8 +170,6 @@ export class MySceneGraph {
         this.views = {};
 
         this.defaultCam = null;
-
-        this.onXMLMinorError("To do: Parse views and create cameras.");
         
         // get the default camera id 
         const defaultCamera = this.reader.getString(viewsNode, 'default', false);
@@ -479,10 +477,6 @@ export class MySceneGraph {
 
         if (Object.keys(this.textures).length === 0)
             return "at least one texture must be defined";
-
-            
-        // For each texture in textures block, check ID and file URL
-        this.onXMLMinorError("To do: Test textures parse when Components parse is done.");
             
         this.log("Parsed textures");
         return null;
@@ -713,7 +707,7 @@ export class MySceneGraph {
             } else if (primitiveType == 'triangle') {
                 error = this.parsePrimitiveTriangle(grandChildren[0], primitiveId);
             } else {
-                console.warn("To do: Parse other primitives.");
+                console.warn("Primitive " + primitiveType + " not implemented.");
                 continue;
             }
             if (error != null) return error;
@@ -972,7 +966,7 @@ export class MySceneGraph {
                 continue;
             }
 
-            const materialId = this.reader.getString(materials[0], 'id', false);
+            const materialId = this.reader.getString(materials[j], 'id', false);
             if (materialId == null) return "no ID defined for material defined in component " + componentID;
 
             if (materialId == 'inherit') {
@@ -1204,7 +1198,6 @@ export class MySceneGraph {
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
 
-            if (nodeId == 'window') console.log(texture)
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
             for (let child of component.children) {
