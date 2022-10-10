@@ -16,13 +16,14 @@ export class MyCylinder extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
 
         let theta = 0;
         let thetaIncrement = (2*Math.PI) / this.slices;
         let heightIncrement = this.height / this.stacks;
         let cosines = [];
         let sines = [];
-        for (let i = 0; i < this.slices; i++) {
+        for (let i = 0; i < this.slices+1; i++) {
             cosines.push(Math.cos(theta));
             sines.push(Math.sin(theta));
             theta += thetaIncrement;
@@ -33,7 +34,7 @@ export class MyCylinder extends CGFobject {
         for (let i = 0; i <= this.stacks; i++) {
             const currHeight = i*heightIncrement;
             const currRadius = this.base + c*currHeight;
-            for (let j = 0; j < this.slices; j++) {
+            for (let j = 0; j < this.slices+1; j++) {
                 // Vertices coordinates
                 const x = currRadius*cosines[j];
                 const y = currRadius*sines[j];
@@ -43,13 +44,10 @@ export class MyCylinder extends CGFobject {
 
                 // Indices
                 if (i < this.stacks) {
-                    const curr = i * this.slices + j;
-                    const next = curr + this.slices; // (i+1) * (this.slices) + j
+                    const curr = i * (this.slices+1) + j;
+                    const next = curr + (this.slices+1); // (i+1) * (this.slices+1) + j
                     
-                    if (j == this.slices-1) {
-                        this.indices.push(curr, curr - (this.slices-1), curr + 1);
-                        this.indices.push(curr, curr + 1, next);
-                    } else {
+                    if (j != this.slices) {
                         this.indices.push(curr, curr + 1, next + 1);
                         this.indices.push(curr, next + 1, next);
                     }
@@ -57,6 +55,7 @@ export class MyCylinder extends CGFobject {
                 const zDeclive = Math.sqrt(x*x + y*y) * k;
                 let abs = Math.sqrt(x*x + y*y + zDeclive*zDeclive)
                 this.normals.push(x/abs, y/abs, zDeclive/abs);
+                this.texCoords.push(-j / this.slices, i / this.height)
             }
         }
 

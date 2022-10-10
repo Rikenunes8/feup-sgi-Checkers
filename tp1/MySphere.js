@@ -14,6 +14,7 @@ export class MySphere extends CGFobject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
 
         let theta = 0;
         let thetaIncrement = (2*Math.PI) / this.slices;
@@ -24,7 +25,7 @@ export class MySphere extends CGFobject {
         let phiCosines = [];
         let phiSines = [];
 
-        for (let i = 0; i < this.slices; i++) {
+        for (let i = 0; i < this.slices+1; i++) {
             thetaCosines.push(Math.cos(theta));
             thetaSines.push(Math.sin(theta));
             theta += thetaIncrement;
@@ -36,7 +37,7 @@ export class MySphere extends CGFobject {
         }
 
         for (let i = 0; i <= this.stacks; i++) {
-            for (let j = 0; j < this.slices; j++) {
+            for (let j = 0; j < this.slices+1; j++) {
                 // Vertices coordinates
                 const x = this.radius * phiSines[i] * thetaCosines[j];
                 const y = this.radius * phiSines[i] * thetaSines[j];
@@ -46,18 +47,16 @@ export class MySphere extends CGFobject {
 
                 // Indices
                 if (i < this.stacks) {
-                    const curr = i * this.slices + j;
-                    const next = curr + this.slices; // (i+1) * (this.slices) + j
+                    const curr = i * (this.slices+1) + j;
+                    const next = curr + (this.slices+1); // (i+1) * (this.slices) + j
 
-                    if (j == this.slices-1) {
-                        this.indices.push(curr, curr - (this.slices-1), curr + 1);
-                        this.indices.push(curr, curr + 1, next);
-                    } else {
+                    if (j != this.slices) {
                         this.indices.push(curr, curr + 1, next + 1);
                         this.indices.push(curr, next + 1, next);
                     }
                 }
                 this.normals.push(x/this.radius, y/this.radius, z/this.radius);
+                this.texCoords.push(- j / this.slices, i / this.stacks)
             }
         }
 
