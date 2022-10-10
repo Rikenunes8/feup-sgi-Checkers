@@ -11,6 +11,10 @@ export class MyComponent extends CGFobject {
         this.material = 0;
     }
 
+    nextMaterial() {
+        this.material = (this.material+1) % this.materials.length
+    }
+
     getMaterial() {
         return this.materials[this.material];
     }
