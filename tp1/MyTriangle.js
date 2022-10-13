@@ -22,8 +22,6 @@ export class MyTriangle extends CGFobject{
 
         this.sinA = Math.sqrt(1 - this.cosA * this.cosA);
 
-
-
         this.vertices = [
             this.pos1[0], this.pos1[1], this.pos1[2], // 0
             this.pos2[0], this.pos2[1], this.pos2[2], // 1
