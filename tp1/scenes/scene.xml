@@ -48,6 +48,7 @@
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="moon" file="scenes/images/moon.png" />
         <texture id="grass" file="scenes/images/leaves.jpg" />
+        <texture id="rightBuildingGlass" file="scenes/images/glass.jpg" />
     </textures>
 
     <materials>
@@ -152,7 +153,7 @@
                 <componentref id="bigCircularBench" />
                 <componentref id="lamp" />
                 <componentref id="moon" />
-
+                <componentref id="rightBuilding" />
             </children>
         </component>
 
@@ -1096,6 +1097,48 @@
                 <componentref id="block" />
             </children>
         </component>
+
+
+        <component id="rightBuilding">
+            <transformation>
+                <translate x="30.9" y="6.2" z="3"/>
+                <rotate axis="y" angle="-8" />
+                <scale x="10" y="15" z="53" />
+            </transformation>
+            <materials>
+                <material id="wall"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="glassWall"/>
+                <componentref id="glassWallFace"/>
+            </children>
+        </component>
+        <component id="glassWall">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+               <componentref id="cube"/> 
+            </children>
+        </component>
+        <component id="glassWallFace">
+            <transformation>
+                <translate x="-0.5" y="0" z="0"/>
+                <rotate axis="y" angle="-90"/>
+            </transformation>
+            <materials>
+                <material id="glass"/>
+            </materials>
+            <texture id="rightBuildingGlass"/>
+            <children>
+               <primitiveref id="rectangle"/> 
+            </children>
+        </component>
+
         <component id="block">
             <transformation>
             </transformation>
@@ -1198,7 +1241,6 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>
-
 
 
         <component id="cubeUpFace">
