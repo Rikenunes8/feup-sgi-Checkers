@@ -44,8 +44,6 @@ export class XMLscene extends CGFscene {
 
         this.cameras = [];
         this.currCam = 0;
-
-        this.lightValues = [];
     }
 
     /**
@@ -71,6 +69,8 @@ export class XMLscene extends CGFscene {
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
 
+                this.lights[i].name = key;
+
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
@@ -86,18 +86,18 @@ export class XMLscene extends CGFscene {
                     this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
                 }
 
-                this.lights[i].setVisible(false);
+                this.lights[i].setVisible(this.displayLights);
                 if (light[0])
                     this.lights[i].enable();
                 else
                     this.lights[i].disable();
-
 
                 this.lights[i].update();
 
                 i++;
             }
         }
+
     }
 
     setDefaultAppearance() {
@@ -120,9 +120,9 @@ export class XMLscene extends CGFscene {
         this.currCam = this.graph.defaultCam;
         this.setCamera(this.currCam);
 
-        this.interface.addCameras();
-
         this.initLights();
+        
+        this.interface.addCameras();
         this.interface.addLights();
 
         this.sceneInited = true;
@@ -135,17 +135,12 @@ export class XMLscene extends CGFscene {
         this.interface.setActiveCamera(this.camera);
     }
 
-    updateLights(key, i) {
-        this.graph.lights[key][0] = !this.graph.lights[key][0];
 
-        if (this.graph.lights[key][0])
-            this.lights[i].enable();
-        else
-            this.lights[i].disable();
-
-        this.lights[i].update();
+    updateAllLights() {
+        for (let light of this.lights) {
+            light.update();
+        }
     }
-
 
     update(t) {
         if (this.gui.isKeyPressed("KeyM")) {
@@ -153,9 +148,7 @@ export class XMLscene extends CGFscene {
                 this.graph.components[key].nextMaterial();
             }
         }
-
     }
-
 
     /**
      * Displays the scene.
@@ -177,14 +170,15 @@ export class XMLscene extends CGFscene {
         this.pushMatrix();
         this.axis.display();
 
-        if (this.displayingLights !== this.displayLights) {
-            for (var i = 0; i < this.lights.length; i++) {
-                this.lights[i].setVisible(this.displayLights);
-                this.lights[i].update();
-            }
-        }
-
         if (this.sceneInited) {
+
+            if (this.displayLights !== this.displayingLights) {
+                this.displayingLights = this.displayLights;
+                for (let light of this.lights)
+                    light.setVisible(this.displayLights);
+            }
+            this.updateAllLights();
+
             // Draw axis
             this.setDefaultAppearance();
 

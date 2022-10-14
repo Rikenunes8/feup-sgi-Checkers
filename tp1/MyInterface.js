@@ -27,7 +27,6 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'displayNormals').name("Display normals");
         this.gui.add(this.scene, 'displayLights').name("Display lights");
 
-
         // a folder for grouping parameters for one of the lights
 
         this.initKeys();
@@ -60,20 +59,12 @@ export class MyInterface extends CGFinterface {
         const f0 = this.gui.addFolder('Cameras');
         f0.add(this.scene, 'currCam', this.scene.cameras).name("Current Camera").onChange(this.scene.setCamera);
     }
-
-    addLights(){
-        const f1 = this.gui.addFolder("Lights");
-
-        const lights = this.scene.graph.lights;
-
-        let i = 0;
-        for (let key in lights) {
-            // must create an object with key property, otherwise f1.add retrieves an error because 
-            // this.scene.graph.lights doesn't have a key property, just indexes
-            this.scene.lightValues[key] = lights[key][0];
-            f1.add(this.scene.lightValues, key).onChange(this.scene.updateLights.bind(this.scene, key, i));
-            i++;
+    addLights() {
+        const folder = this.gui.addFolder('Lights');
+        let c = 0;
+        for (let _ in this.scene.graph.lights) {
+            folder.add(this.scene.lights[c], 'enabled').name(this.scene.lights[c].name);
+            c++;
         }
     }
-
 }
