@@ -528,9 +528,9 @@
         </component>
         <component id="rightFloor">
             <transformation>
-                <translate x="25.4" y="0.88" z="-4.6" />
+                <translate x="25.15" y="0.88" z="-2.75" />
                 <rotate axis="y" angle="-8" />
-                <scale x="3" y="4.2" z="50" />
+                <scale x="3" y="4.2" z="44.5" />
                 <rotate axis="x" angle="-90" />
             </transformation>
             <texture id="none"/>
@@ -560,7 +560,7 @@
         <component id="garden1">
             <transformation>
                 <translate x="20.55" y="2.99" z="-25" />
-                <scale x="6.45" y="1" z="44" />
+                <scale x="6.2" y="1" z="44" />
             </transformation>
             <texture id="grass" length_s="0.04" length_t="0.12"/>
             <materials>
@@ -586,8 +586,8 @@
         </component>
         <component id="garden3">
             <transformation>
-                <translate x="10.5" y="2.99" z="-4.75" />
-                <scale x="21" y="1" z="40.5" />
+                <translate x="10.3" y="2.99" z="-4.90" />
+                <scale x="20.55" y="1" z="40.2" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
             <texture id="inherit"/>
@@ -1109,9 +1109,9 @@
 
         <component id="rightBuilding">
             <transformation>
-                <translate x="30.9" y="6.2" z="3"/>
+                <translate x="30.9" y="4" z="3"/>
                 <rotate axis="y" angle="-8" />
-                <scale x="10" y="15" z="53" />
+                <scale x="10" y="10.45" z="53" />
             </transformation>
             <materials>
                 <material id="wall"/>
@@ -1141,7 +1141,7 @@
             <materials>
                 <material id="glass"/>
             </materials>
-            <texture length_s="0.1" length_t="0.1" id="rightBuildingGlass"/>
+            <texture length_s="0.1" length_t="0.127" id="rightBuildingGlass"/>
             <children>
                <primitiveref id="rectangle"/> 
             </children>
@@ -1163,9 +1163,9 @@
         </component>
         <component id="doorBackLeg">
             <transformation>
-                <translate x="23.55" y="5.5" z="18.7" />
+                <translate x="23.55" y="4.25" z="18.705" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="5" z="0.2"/>
+                <scale x="0.2" y="2.5" z="0.2"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -1177,9 +1177,9 @@
         </component>
         <component id="doorFrontLeg">
             <transformation>
-                <translate x="23.3" y="5.5" z="20.5" />
+                <translate x="23.3" y="4.25" z="20.495" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="5" z="0.2"/>
+                <scale x="0.2" y="2.5" z="0.2"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -1191,10 +1191,10 @@
         </component>
         <component id="doorUpLeg">
             <transformation>
-                <translate x="23.42" y="8" z="19.6" />
+                <translate x="23.42" y="5.5" z="19.6" />
                 <rotate axis="y" angle="-8"/>
                 <rotate axis="x" angle="90"/>
-                <scale x="0.2" y="2" z="0.2"/>
+                <scale x="0.2" y="2.01" z="0.2"/>
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -1206,9 +1206,9 @@
         </component>
         <component id="doorBackFace">
             <transformation>
-                <translate x="23.4" y="5.5" z="19.6" />
+                <translate x="23.4" y="4.25" z="19.6" />
                 <rotate axis="y" angle="-98"/>
-                <scale x="1.6" y="5" z="2"/>
+                <scale x="1.6" y="2.5" z="2"/>
             </transformation>
             <materials>
                 <material id="gray"/>
