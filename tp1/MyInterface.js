@@ -61,10 +61,8 @@ export class MyInterface extends CGFinterface {
     }
     addLights() {
         const folder = this.gui.addFolder('Lights');
-        let c = 0;
-        for (let _ in this.scene.graph.lights) {
+        for (let c = 0; c < Object.keys(this.scene.graph.lights).length; c++) {
             folder.add(this.scene.lights[c], 'enabled').name(this.scene.lights[c].name);
-            c++;
         }
     }
 }
