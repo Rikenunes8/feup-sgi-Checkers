@@ -81,7 +81,7 @@
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="moon" file="scenes/images/moon.png" />
         <texture id="grass" file="scenes/images/leaves.jpg" />
-        <texture id="rightBuildingGlass" file="scenes/images/glass.jpg" />
+        <texture id="buildingBGlass" file="scenes/images/glass.jpg" />
         <texture id="insideDoor" file="scenes/images/insideDoor.jpg" />
         <texture id="trunk" file="scenes/images/trunk.jpg" />
     </textures>
@@ -206,12 +206,14 @@
                 <componentref id="buildingF" />
                 <componentref id="buildingG" />
                 <componentref id="rightFloor" />
+                <componentref id="buildingB" />
                 <componentref id="benches" />
                 <componentref id="bigCircularBench" />
                 <componentref id="lamps" />
                 <componentref id="moon" />
-                <componentref id="buildingB" />
-                <componentref id="rightBuildingDoor" />
+
+                <componentref id="holePlugBack" />
+                <componentref id="holePlugBottom" />
             </children>
         </component>
 
@@ -1358,14 +1360,26 @@
 
         <component id="buildingB">
             <transformation>
-                <translate x="30.9" y="4" z="3"/>
-                <rotate axis="y" angle="-8" />
-                <scale x="10" y="10.45" z="53" />
             </transformation>
             <materials>
                 <material id="wall"/>
             </materials>
             <texture id="none"/>
+            <children>
+                <componentref id="buildingBWithoutDoor"/>
+                <componentref id="buildingBDoor"/>
+            </children>
+        </component>
+        <component id="buildingBWithoutDoor">
+            <transformation>
+                <translate x="30.9" y="4" z="3"/>
+                <rotate axis="y" angle="-8" />
+                <scale x="10" y="10.45" z="53" />
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="glassWall"/>
                 <componentref id="glassWallFace"/>
@@ -1390,13 +1404,13 @@
             <materials>
                 <material id="glass"/>
             </materials>
-            <texture length_s="0.1" length_t="0.127" id="rightBuildingGlass"/>
+            <texture length_s="0.1" length_t="0.127" id="buildingBGlass"/>
             <children>
                <primitiveref id="rectangle"/> 
             </children>
         </component>
 
-        <component id="rightBuildingDoor">
+        <component id="buildingBDoor">
             <transformation>
             </transformation>
             <materials>
@@ -1578,6 +1592,33 @@
             </children>
         </component>
 
-
+        <component id="holePlugBack">
+            <transformation>
+                <translate x="13.5" y="0.9" z="-25"/>
+                <scale x="27" y="4.2" z="1" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="holePlugBottom">
+            <transformation>
+                <translate x="12" y="-1.2" z="0.45"/>
+                <scale x="30" y="1" z="51" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
     </components>
 </sxs>
