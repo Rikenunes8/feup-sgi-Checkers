@@ -22,8 +22,6 @@ export class MyTriangle extends CGFobject{
 
         this.sinA = Math.sqrt(1 - this.cosA * this.cosA);
 
-
-
         this.vertices = [
             this.pos1[0], this.pos1[1], this.pos1[2], // 0
             this.pos2[0], this.pos2[1], this.pos2[2], // 1
@@ -69,10 +67,10 @@ export class MyTriangle extends CGFobject{
 
     setTexCoords(length_s, length_t) {
         this.texCoords = [
-			0, 0,
-			this.distA / length_s, 0,
+            0, 0,
+            this.distA / length_s, 0,
             this.distC * this.cosA / length_s, -this.distC * this.sinA / length_t,
-		]
+        ];
     }
 
     updateTexCoords(coords) {
