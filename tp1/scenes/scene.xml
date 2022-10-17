@@ -42,8 +42,8 @@
         </omni>
         
         <spot id="doorLight" enabled="1" angle="70" exponent="1">
-            <location x="23.3" y="5.3" z="18.7" w="1.0" />
-            <target x="20" y="0" z="18.7" />
+            <location x="23.1" y="5.5" z="19.6" w="1.0" />
+            <target x="20" y="0" z="19.6" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -1237,7 +1237,7 @@
         </component>
         <component id="doorLight">
             <transformation>
-                <translate x="23.4" y="5.3" z="18.9" />
+                <translate x="23.4" y="5.5" z="18.8" />
                 <rotate axis="y" angle="-8"/>
                 <scale x="0.1" y="0.1" z="0.8"/>
             </transformation>
