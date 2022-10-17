@@ -36,29 +36,29 @@
     <lights>
         <omni id="moon" enabled="1">
             <location x="30" y="25" z="40" w="1.0" />
-            <ambient r="0.8" g="0.72" b="0.64" a="1.0" />
+            <ambient r="0.4" g="0.36" b="0.32" a="1.0" />
             <diffuse r="1.0" g="0.9" b="0.8" a="1.0" />
             <specular r="0.5" g="0.45" b="0.4" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 1" enabled="1">
+        <omni id="Lamp 1" enabled="0">
             <location x="15" y="6" z="-10" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 2" enabled="1">
+        <omni id="Lamp 2" enabled="0">
             <location x="5.0" y="6" z="5.0" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 3" enabled="1">
+        <omni id="Lamp 3" enabled="0">
             <location x="22" y="6" z="0" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
@@ -76,7 +76,7 @@
 
     <textures>
         <texture id="glass" file="scenes/images/vidral.jpg" />
-        <texture id="frosted_glass" file="scenes/images/frosted_glass_.png" />
+        <texture id="frosted_glass" file="scenes/images/frosted_glass_mirror.png" />
         <texture id="floor" file="scenes/images/rocks.jpg" />
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="moon" file="scenes/images/moon.png" />
@@ -202,6 +202,7 @@
                 <componentref id="stairsRightWall" />
                 <componentref id="leftFloor" />
                 <componentref id="leftCorridor" />
+                <componentref id="wallNextToBuildingF" />
                 <componentref id="buildingF" />
                 <componentref id="buildingG" />
                 <componentref id="rightFloor" />
@@ -633,6 +634,7 @@
 
         <component id="leftFloor">
             <transformation>
+                <scale x="2.5" y="1" z="1" />
                 <translate x="-5" y="0.9" z="0.65" />
                 <scale x="10" y="4.2" z="51.3" />
                 <rotate axis="x" angle="-90" />
@@ -923,6 +925,20 @@
             </children>
         </component>
 
+
+        <component id="wallNextToBuildingF">
+            <transformation>
+                <translate x="-8.75" y="4.5" z="20" />
+                <scale x="2.5" y="3" z="10" />
+            </transformation>
+            <materials>
+                <material id="wall" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
         <component id="buildingF">
             <transformation>
                 <translate x="-15" y="13" z="8" />
