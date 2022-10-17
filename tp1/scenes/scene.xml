@@ -206,6 +206,7 @@
                 <componentref id="buildingF" />
                 <componentref id="buildingG" />
                 <componentref id="rightFloor" />
+                <componentref id="buildingBFloor" />
                 <componentref id="buildingB" />
                 <componentref id="benches" />
                 <componentref id="bigCircularBench" />
@@ -655,6 +656,20 @@
                 <rotate axis="y" angle="-8" />
                 <scale x="3" y="4.2" z="44.5" />
                 <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="buildingBFloor">
+            <transformation>
+                <translate x="30.6" y="0.88" z="4.68"/>
+                <rotate axis="y" angle="-8" />
+                <scale x="10" y="4.2" z="57.7" />
             </transformation>
             <materials>
                 <material id="gray" />
@@ -1372,9 +1387,9 @@
         </component>
         <component id="buildingBWithoutDoor">
             <transformation>
-                <translate x="30.9" y="4" z="3"/>
+                <translate x="30.6" y="6.1" z="4.68"/>
                 <rotate axis="y" angle="-8" />
-                <scale x="10" y="10.45" z="53" />
+                <scale x="10" y="6.25" z="57.7" />
             </transformation>
             <materials>
                 <material id="inherit"/>
@@ -1404,7 +1419,7 @@
             <materials>
                 <material id="glass"/>
             </materials>
-            <texture length_s="0.1" length_t="0.127" id="buildingBGlass"/>
+            <texture length_s="0.1" length_t="0.2" id="buildingBGlass"/>
             <children>
                <primitiveref id="rectangle"/> 
             </children>
