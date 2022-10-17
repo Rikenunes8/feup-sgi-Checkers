@@ -40,6 +40,16 @@
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
+        
+        <spot id="doorLight" enabled="1" angle="10" exponent="1">
+            <location x="23.3" y="5.3" z="18.7" w="1.0" />
+            <target x="22.5" y="0" z="18.6" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="1" g="1" b="1" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </spot>
+
     </lights>
 
     <textures>
@@ -106,6 +116,12 @@
             <ambient r="0.4" g="0.21" b="0.06" a="1.0" />
             <diffuse r="0.4" g="0.21" b="0.06" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+        </material>
+        <material id="light" shininess="500">
+            <emission r="0.5" g="0.5" b="0.5" a="1.0" />
+            <ambient r="0.20" g="0.21" b="0.21" a="1" />
+            <diffuse r="0.46" g="0.54" b="0.59" a="1.0" />
+            <specular r="0.23" g="0.27" b="0.30" a="1.0" />
         </material>
         
     </materials>
@@ -1159,6 +1175,7 @@
                 <componentref id="doorFrontLeg" /> 
                 <componentref id="doorUpLeg" />
                 <componentref id="doorBackFace" />
+                <componentref id="doorLight" />
             </children>
         </component>
         <component id="doorBackLeg">
@@ -1216,6 +1233,20 @@
             <texture id="insideDoor"/>
             <children>
                <primitiveref id="rectangle"/> 
+            </children>
+        </component>
+        <component id="doorLight">
+            <transformation>
+                <translate x="23.4" y="5.3" z="18.9" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.1" y="0.1" z="0.8"/>
+            </transformation>
+            <materials>
+                <material id="light"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+               <primitiveref id="cylinder"/> 
             </children>
         </component>
 
