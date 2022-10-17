@@ -398,7 +398,7 @@ export class MySceneGraph {
                     global.push(aux);
                 }
                 else
-                    return "light " + attributeNames[i] + " undefined for ID = " + lightId;
+                    return "light " + attributeNames[j] + " undefined for ID = " + lightId;
             }
 
             // Gets the additional attributes of the spot light
