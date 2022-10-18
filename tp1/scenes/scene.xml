@@ -1,22 +1,34 @@
 <sxs>
-    <scene root="feup" axis_length="0.00000001"/>
+    <scene root="feup" axis_length="0.00001"/>
 
-    <views default="cam1">
-        <perspective id="cam1" near="0.1" far="500" angle="45">
+    <views default="perspective1">
+        <perspective id="perspective1" near="0.1" far="500" angle="45">
             <from x="40" y="40" z="40" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="cam2" near="0.1" far="500" angle="45">
+        <perspective id="perspective2" near="0.1" far="500" angle="45">
             <from x="15" y="5" z="60" />
             <to x="10" y="0" z="0" />
         </perspective>
-        <perspective id="cam3" near="0.1" far="500" angle="90">
+        <perspective id="perspective3" near="0.1" far="500" angle="90">
             <from x="15" y="7" z="20" />
             <to x="10" y="5" z="0" />
         </perspective>
-        <ortho id="cam4" near="0.1" far="500" left="-2" right="40" top="10" bottom="-5">
+        <perspective id="perspective4" near="0.1" far="500" angle="90">
+            <from x="2" y="4" z="-20" />
+            <to x="10" y="5" z="0" />
+        </perspective>
+        <perspective id="perspective5" near="0.1" far="100" angle="90">
+            <from x="13" y="5" z="18" />
+            <to x="30" y="4" z="18" />
+        </perspective>
+        <ortho id="ortho1" near="0.1" far="500" left="-2" right="40" top="10" bottom="-5">
             <from x="0" y="0" z="60" />
             <to x="0" y="0" z="0" />
+        </ortho>
+        <ortho id="ortho2" near="0.1" far="500" left="-10" right="10" top="5" bottom="-2">
+            <from x="25" y="4" z="-3" />
+            <to x="0" y="4" z="-3" />
         </ortho>
     </views>
 
@@ -28,15 +40,29 @@
     <lights>
         <omni id="moon" enabled="1">
             <location x="30" y="25" z="40" w="1.0" />
-            <ambient r="0.8" g="0.72" b="0.64" a="1.0" />
+            <ambient r="0.4" g="0.36" b="0.32" a="1.0" />
             <diffuse r="1.0" g="0.9" b="0.8" a="1.0" />
             <specular r="0.5" g="0.45" b="0.4" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="lampLight" enabled="1">
-            <location x="15" y="8.25" z="-10" w="1.0"/>
+        <omni id="Lamp 1" enabled="0">
+            <location x="15" y="6" z="-10" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
-            <diffuse r="0.4" g="0.4" b="0.4" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+        <omni id="Lamp 2" enabled="0">
+            <location x="5.0" y="6" z="5.0" w="1.0"/>
+            <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+        <omni id="Lamp 3" enabled="0">
+            <location x="22" y="6" z="0" w="1.0"/>
+            <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
+            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
@@ -54,18 +80,20 @@
 
     <textures>
         <texture id="glass" file="scenes/images/vidral.jpg" />
+        <texture id="frosted_glass" file="scenes/images/frosted_glass_mirror.png" />
         <texture id="floor" file="scenes/images/rocks.jpg" />
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="moon" file="scenes/images/moon.png" />
         <texture id="grass" file="scenes/images/leaves.jpg" />
-        <texture id="rightBuildingGlass" file="scenes/images/glass.jpg" />
+        <texture id="buildingBGlass" file="scenes/images/glass.jpg" />
         <texture id="insideDoor" file="scenes/images/insideDoor.jpg" />
+        <texture id="trunk" file="scenes/images/trunk.jpg" />
     </textures>
 
     <materials>
-        <material id="moon" shininess="1">
-            <emission r="1.0" g="0.9" b="0.3" a="1.0" />
-            <ambient r="1.0" g="0.9" b="0.3" a="1.0" />
+        <material id="moon" shininess="1000">
+            <emission r="0.6" g="0.6" b="0.6" a="1.0" />
+            <ambient r="0.4" g="0.4" b="0.4" a="1" />
             <diffuse r="1.0" g="0.9" b="0.3" a="1.0" />
             <specular r="1.0" g="0.9" b="0.3" a="1.0" />
         </material>
@@ -77,7 +105,7 @@
         </material>
         <material id="glass" shininess="500">
             <emission r="0" g="0" b="0" a="1.0" />
-            <ambient r="0.898" g="0.894" b="0.886" a="0.5   " />
+            <ambient r="0.898" g="0.894" b="0.886" a="0.5" />
             <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
             <specular r="1.0" g="1.0" b="1.0" a="1.0" />
         </material>
@@ -85,6 +113,12 @@
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.0" g="0.64" b="0.0" a="1.0" />
             <diffuse r="0.0" g="0.4" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="darkGreen" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.2" g="0.4" b="0.0" a="1.0" />
+            <diffuse r="0.2" g="0.4" b="0.0" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
         <material id="wall" shininess="35">
@@ -107,15 +141,15 @@
         </material>
         <material id="gold" shininess="100">
             <emission r="0" g="0" b="0" a="1.0" />
-            <ambient r="0.85" g="0.64" b="0.125" a="1.0" />
-            <diffuse r="0.6" g="0.4" b="0.1" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.6375" g="0.48" b="0.09375" a="1.0" />
+            <diffuse r="0.3" g="0.2" b="0.05" a="1.0" />
+            <specular r="0.85" g="0.64" b="0.125" a="1.0" />
         </material>
         <material id="brown" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.4" g="0.21" b="0.06" a="1.0" />
             <diffuse r="0.4" g="0.21" b="0.06" a="1.0" />
-            <specular r="1.0" g="1.0" b="1.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
         <material id="light" shininess="500">
             <emission r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -140,7 +174,7 @@
             <cylinder base="1" top="1" height="2" slices="16" stacks="8" />
         </primitive>
         <primitive id="sphere">
-            <sphere radius="2" slices="32" stacks="32" />
+            <sphere radius="1" slices="32" stacks="32" />
         </primitive>
         <primitive id="torus">
             <torus inner="0.25" outer="2" slices="16" loops="40" />
@@ -149,7 +183,10 @@
             <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="1" x3="1" y3="0" z3="0" />
         </primitive>
         <primitive id="frustum">
-            <cylinder base="1.5" top="1" height="2" slices="16" stacks="8" />
+            <cylinder base="1" top="0.25" height="1" slices="16" stacks="8" />
+        </primitive>
+        <primitive id="frustum_smooth">
+            <cylinder base="1" top="0.5" height="1" slices="16" stacks="8" />
         </primitive>
     </primitives>
 
@@ -169,22 +206,26 @@
                 <componentref id="stairsRightWall" />
                 <componentref id="leftFloor" />
                 <componentref id="leftCorridor" />
+                <componentref id="wallNextToBuildingF" />
                 <componentref id="buildingF" />
                 <componentref id="buildingG" />
                 <componentref id="rightFloor" />
+                <componentref id="buildingBFloor" />
+                <componentref id="buildingB" />
                 <componentref id="benches" />
                 <componentref id="bigCircularBench" />
-                <componentref id="lamp" />
+                <componentref id="lamps" />
                 <componentref id="moon" />
-                <componentref id="rightBuilding" />
-                <componentref id="rightBuildingDoor" />
+
+                <componentref id="holePlugBack" />
+                <componentref id="holePlugBottom" />
             </children>
         </component>
 
         <component id="moon">
             <transformation>
                 <translate x="100" y="125" z="200"/>
-                <scale x="3" y="3" z="3" />
+                <scale x="6" y="6" z="6" />
             </transformation>
             <materials>
                 <material id="moon" />
@@ -203,48 +244,117 @@
             <materials>
                 <material id="brown" />
                 <material id="gold" />
+                <material id="darkGreen" />
             </materials>
-            <texture id="none"/>
+            <texture id="trunk"/>
             <children>
                 <primitiveref id="torus" />
             </children>
         </component>
 
+
+        <component id="lamps">
+            <transformation>
+                <translate x="0" y="3" z="0"/>
+            </transformation>
+            <materials>
+                <material id="gray" />
+                <material id="darkGray" />
+                <material id="gold" />
+            </materials>
+            <texture id="none" />
+            <children>
+                <componentref id="lamp1" />
+                <componentref id="lamp2" />
+                <componentref id="lamp3" />
+            </children>
+        </component>
+        <component id="lamp1">
+            <transformation>
+                <translate x="15" y="0" z="-10"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="lamp" />
+            </children>
+        </component>
+        <component id="lamp2">
+            <transformation>
+                <translate x="5" y="0" z="5"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="lamp" />
+            </children>
+        </component>
+        <component id="lamp3">
+            <transformation>
+                <translate x="22" y="0" z="0"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="lamp" />
+            </children>
+        </component>
         <component id="lamp">
             <transformation>
             </transformation>
             <materials>
-                <material id="gray" />
+                <material id="inherit" />
             </materials>
-            <texture id="none" />
+            <texture id="inherit" />
             <children>
                 <componentref id="lampBase" />
-                <componentref id="lampTop" />
+                <componentref id="lampStick" />
+                <componentref id="lampSphere" />
             </children>
         </component>
         <component id="lampBase">
             <transformation>
-                <translate x="15" y="3.25" z="-10"/>
-                <scale x="0.2" y="2" z="0.2" />
+                <scale x="0.25" y="0.2" z="0.25" />
                 <rotate axis="x" angle="-90" />
             </transformation>
             <materials>
-                <material id="gray" />
+                <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="frustum" />
             </children>
         </component>
-        <component id="lampTop">
+        <component id="lampStick">
             <transformation>
-                <translate x="15" y="7.25" z="-10"/>
+                <translate x="0" y="0.2" z="0" />
+                <scale x="0.0625" y="2.5" z="0.0625" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="frustum_smooth" />
+            </children>
+        </component>
+        <component id="lampSphere">
+            <transformation>
+                <translate x="0" y="2.75" z="0"/>
+                <rotate axis="x" angle="-90" />
                 <scale x="0.2" y="0.2" z="0.2" />
             </transformation>
             <materials>
-                <material id="gray" />
+                <material id="glass" />
             </materials>
-            <texture id="none"/>
+            <texture id="frosted_glass"/>
             <children>
                 <primitiveref id="sphere" />
             </children>
@@ -255,6 +365,7 @@
             </transformation>
             <materials>
                 <material id="gardenBank" />
+                <material id="brown" />
             </materials>
             <texture id="bank"/>
             <children>
@@ -466,10 +577,10 @@
             <transformation>
                 <translate x="13" y="-1.25" z="30.5" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="circPilar" />
             </children>
@@ -478,10 +589,10 @@
             <transformation>
                 <translate x="0.5" y="-1.25" z="28.75" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="circPilar" />
             </children>
@@ -491,10 +602,10 @@
                 <scale x="0.4" y="2" z="0.4" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="cylinder" />
             </children>
@@ -505,10 +616,10 @@
                 <translate x="0.5" y="0.9" z="20.8" />
                 <scale x="1" y="4.2" z="11" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -519,10 +630,10 @@
                 <rotate axis="y" angle="-8"/>
                 <scale x="5" y="4.2" z="10" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -530,14 +641,15 @@
 
         <component id="leftFloor">
             <transformation>
+                <scale x="2.5" y="1" z="1" />
                 <translate x="-5" y="0.9" z="0.65" />
                 <scale x="10" y="4.2" z="51.3" />
                 <rotate axis="x" angle="-90" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -549,10 +661,24 @@
                 <scale x="3" y="4.2" z="44.5" />
                 <rotate axis="x" angle="-90" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="buildingBFloor">
+            <transformation>
+                <translate x="30.6" y="0.88" z="4.68"/>
+                <rotate axis="y" angle="-8" />
+                <scale x="10" y="4.2" z="57.7" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -563,10 +689,10 @@
             <transformation>
                 <translate x="0" y="-0.01" z="0" />
             </transformation>
-            <texture id="grass" length_s="0.04" length_t="0.02"/>
             <materials>
                 <material id="green" />
             </materials>
+            <texture id="grass" length_s="0.04" length_t="0.02"/>
             <children>
                 <componentref id="garden1" />
                 <componentref id="garden2" />
@@ -578,10 +704,10 @@
                 <translate x="20.55" y="2.99" z="-25" />
                 <scale x="6.2" y="1" z="44" />
             </transformation>
-            <texture id="grass" length_s="0.04" length_t="0.12"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="grass" length_s="0.04" length_t="0.12"/>
             <children>
                 <primitiveref id="adjustCornerTriangle"/>
             </children>
@@ -592,10 +718,10 @@
                 <scale x="20.55" y="1" z="3" />
                 <rotate axis="y" angle="-90"/>
             </transformation>
-            <texture id="grass" length_s="0.04" length_t="0.18"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="grass" length_s="0.04" length_t="0.18"/>
             <children>
                 <primitiveref id="adjustCornerTriangle"/>
             </children>
@@ -606,10 +732,10 @@
                 <scale x="20.55" y="1" z="40.2" />
                 <rotate axis="x" angle="-90"/>
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle"/>
             </children>
@@ -620,10 +746,10 @@
                 <translate x="11.5" y="2.89" z="17.75" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="gardenUpHalfStairs" />
                 <componentref id="gardenDownHalfStairs" />
@@ -633,10 +759,10 @@
             <transformation>
                 <translate x="0" y="-2" z="5" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="gardenUpHalfStairs" />
             </children>
@@ -644,10 +770,10 @@
         <component id="gardenUpHalfStairs">
             <transformation>
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="bigStep" />
                 <componentref id="stairs11" />
@@ -657,10 +783,10 @@
             <transformation>
                 <scale x="24" y="0.2" z="2" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="gray" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -691,10 +817,10 @@
         <component id="step1">
             <transformation>
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -703,10 +829,10 @@
             <transformation>
                 <translate x="0" y="1" z="-1" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -715,10 +841,10 @@
             <transformation>
                 <translate x="0" y="2" z="-2" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -727,10 +853,10 @@
             <transformation>
                 <translate x="0" y="3" z="-3" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -739,10 +865,10 @@
             <transformation>
                 <translate x="0" y="4" z="-4" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -751,10 +877,10 @@
             <transformation>
                 <translate x="0" y="5" z="-5" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -763,10 +889,10 @@
             <transformation>
                 <translate x="0" y="6" z="-6" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -775,10 +901,10 @@
             <transformation>
                 <translate x="0" y="7" z="-7" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -787,10 +913,10 @@
             <transformation>
                 <translate x="0" y="8" z="-8" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -799,10 +925,10 @@
             <transformation>
                 <translate x="0" y="9" z="-9" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -811,23 +937,37 @@
             <transformation>
                 <translate x="0" y="10" z="-10" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
         </component>
 
+
+        <component id="wallNextToBuildingF">
+            <transformation>
+                <translate x="-8.75" y="4.5" z="20" />
+                <scale x="2.5" y="3" z="10" />
+            </transformation>
+            <materials>
+                <material id="wall" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
         <component id="buildingF">
             <transformation>
                 <translate x="-15" y="13" z="8" />
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="wall" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="northBuilding" />
             </children>
@@ -836,10 +976,10 @@
             <transformation>
                 <translate x="-15" y="13" z="-17.5" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="inherit" />
+                <material id="wall" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="northBuilding" />
             </children>
@@ -847,10 +987,10 @@
         <component id="northBuilding">
             <transformation>
             </transformation>
-            <texture id="none"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="none"/>
             <children>
                 <componentref id="northBuildingWithoutWindows"/>
                 <componentref id="northBuildingWindows"/>
@@ -860,10 +1000,10 @@
             <transformation>
                 <scale x="20" y="20" z="15" />
             </transformation>
-            <texture id="inherit"/>
             <materials>
                 <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="cube" />
             </children>
@@ -871,10 +1011,10 @@
         <component id="northBuildingWindows" >
             <transformation>
             </transformation>
-            <texture id="glass"/>
             <materials>
                 <material id="glass" />
             </materials>
+            <texture id="glass"/>
             <children>
                 <componentref id="northBuildingWindowsColumn1" />
                 <componentref id="northBuildingWindowsColumn2" />
@@ -886,10 +1026,10 @@
         <component id="northBuildingWindowsColumn" >
             <transformation>
             </transformation>
-            <texture id="glass"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="northBuildingWindow1" />
                 <componentref id="northBuildingWindow2" />
@@ -900,10 +1040,10 @@
             <transformation>
                 <translate x="0" y="0" z="3.75" />
             </transformation>
-            <texture id="glass"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="northBuildingWindowsColumn" />
             </children>
@@ -912,10 +1052,10 @@
             <transformation>
                 <translate x="0" y="0" z="1.25" />
             </transformation>
-            <texture id="glass"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="northBuildingWindowsColumn" />
             </children>
@@ -924,10 +1064,10 @@
             <transformation>
                 <translate x="0" y="0" z="-1.25" />
             </transformation>
-            <texture id="glass"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="northBuildingWindowsColumn" />
             </children>
@@ -936,10 +1076,10 @@
             <transformation>
                 <translate x="0" y="0" z="-3.75" />
             </transformation>
-            <texture id="glass"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="northBuildingWindowsColumn" />
             </children>
@@ -948,9 +1088,9 @@
             <transformation>
                 <translate x="10.01" y="6" z="0" />
             </transformation>
-            <texture id="glass"/>
+            <texture id="inherit"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
             <children>
                 <componentref id="window" />
@@ -960,9 +1100,9 @@
             <transformation>
                 <translate x="10.01" y="3" z="0" />
             </transformation>
-            <texture id="glass"/>
+            <texture id="inherit"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
             <children>
                 <componentref id="window" />
@@ -972,9 +1112,9 @@
             <transformation>
                 <translate x="10.01" y="0" z="0" />
             </transformation>
-            <texture id="glass"/>
+            <texture id="inherit"/>
             <materials>
-                <material id="glass" />
+                <material id="inherit" />
             </materials>
             <children>
                 <componentref id="window" />
@@ -1005,10 +1145,10 @@
         <component id="block1">
             <transformation>
             </transformation>
-            <texture id="inherit"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1017,10 +1157,10 @@
             <transformation>
                 <translate x="0" y="0" z="-5" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1029,10 +1169,10 @@
             <transformation>
                 <translate x="0" y="0" z="-10" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1041,10 +1181,10 @@
             <transformation>
                 <translate x="0" y="0" z="-15" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1053,10 +1193,10 @@
             <transformation>
                 <translate x="0" y="0" z="-20" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1065,10 +1205,10 @@
             <transformation>
                 <translate x="0" y="0" z="-25" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1077,10 +1217,10 @@
             <transformation>
                 <translate x="0" y="0" z="-30" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1089,10 +1229,10 @@
             <transformation>
                 <translate x="0" y="0" z="-35" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1101,10 +1241,10 @@
             <transformation>
                 <translate x="0" y="0" z="-40" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
@@ -1113,26 +1253,152 @@
             <transformation>
                 <translate x="0" y="0" z="-45" />
             </transformation>
-            <texture id="none"/>
             <materials>
-                <material id="wall" />
+                <material id="inherit" />
             </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="block" />
             </children>
         </component>
 
-
-        <component id="rightBuilding">
+        <component id="block">
             <transformation>
-                <translate x="30.9" y="4" z="3"/>
-                <rotate axis="y" angle="-8" />
-                <scale x="10" y="10.45" z="53" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="blockHead" />
+                <componentref id="blockWindows" />
+                <componentref id="rightBlockPilar" />
+                <componentref id="leftBlockPilar" />
+            </children>
+        </component>
+        <component id="blockHead">
+            <transformation>
+                <translate x="-4.5" y="3.5" z="0" />
+                <scale x="10" y="4" z="5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="rightBlockPilar" >
+            <transformation>
+                <translate x="0.25" y="0" z="-2.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="rectPilar" />
+            </children>
+        </component>
+        <component id="leftBlockPilar" >
+            <transformation>
+                <translate x="0.25" y="0" z="2.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="rectPilar" />
+            </children>
+        </component>
+        <component id="rectPilar" >
+            <transformation>
+                <scale x="0.5" y="3" z="0.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="blockWindows" >
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="glass" />
+            </materials>
+            <texture id="glass"/>
+            <children>
+                <componentref id="blockWindow1" />
+                <componentref id="blockWindow2" />
+            </children>
+        </component>
+        <component id="blockWindow1" >
+            <transformation>
+                <translate x="0.51" y="3.5" z="1.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="window" />
+            </children>
+        </component>
+        <component id="blockWindow2" >
+            <transformation>
+                <translate x="0.51" y="3.5" z="-1.25" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="window" />
+            </children>
+        </component>
+
+        <component id="window" >
+            <transformation>
+                <scale x="1" y="1.25" z="1.25" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+
+
+        <component id="buildingB">
+            <transformation>
             </transformation>
             <materials>
                 <material id="wall"/>
             </materials>
             <texture id="none"/>
+            <children>
+                <componentref id="buildingBWithoutDoor"/>
+                <componentref id="buildingBDoor"/>
+            </children>
+        </component>
+        <component id="buildingBWithoutDoor">
+            <transformation>
+                <translate x="30.6" y="6.1" z="4.68"/>
+                <rotate axis="y" angle="-8" />
+                <scale x="10" y="6.25" z="57.7" />
+            </transformation>
+            <materials>
+                <material id="inherit"/>
+            </materials>
+            <texture id="inherit"/>
             <children>
                 <componentref id="glassWall"/>
                 <componentref id="glassWallFace"/>
@@ -1157,13 +1423,13 @@
             <materials>
                 <material id="glass"/>
             </materials>
-            <texture length_s="0.1" length_t="0.127" id="rightBuildingGlass"/>
+            <texture length_s="0.1" length_t="0.2" id="buildingBGlass"/>
             <children>
                <primitiveref id="rectangle"/> 
             </children>
         </component>
 
-        <component id="rightBuildingDoor">
+        <component id="buildingBDoor">
             <transformation>
             </transformation>
             <materials>
@@ -1247,109 +1513,6 @@
             <texture id="none"/>
             <children>
                <primitiveref id="cylinder"/> 
-            </children>
-        </component>
-
-        <component id="block">
-            <transformation>
-            </transformation>
-            <texture id="none"/>
-            <materials>
-                <material id="wall" />
-            </materials>
-            <children>
-                <componentref id="blockHead" />
-                <componentref id="blockWindow1" />
-                <componentref id="blockWindow2" />
-                <componentref id="rightBlockPilar" />
-                <componentref id="leftBlockPilar" />
-            </children>
-        </component>
-        <component id="blockHead">
-            <transformation>
-                <translate x="-4.5" y="3.5" z="0" />
-                <scale x="10" y="4" z="5" />
-            </transformation>
-            <texture id="none"/>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <children>
-                <componentref id="cube" />
-            </children>
-        </component>
-        <component id="rightBlockPilar" >
-            <transformation>
-                <translate x="0.25" y="0" z="-2.25" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <children>
-                <componentref id="rectPilar" />
-            </children>
-        </component>
-        <component id="leftBlockPilar" >
-            <transformation>
-                <translate x="0.25" y="0" z="2.25" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <children>
-                <componentref id="rectPilar" />
-            </children>
-        </component>
-        <component id="rectPilar" >
-            <transformation>
-                <scale x="0.5" y="3" z="0.5" />
-            </transformation>
-            <texture id="inherit"/>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <children>
-                <componentref id="cube" />
-            </children>
-        </component>
-        <component id="blockWindow1" >
-            <transformation>
-                <translate x="0.51" y="3.5" z="1.25" />
-            </transformation>
-            <texture id="none"/>
-            <materials>
-                <material id="glass" />
-            </materials>
-            <children>
-                <componentref id="window" />
-            </children>
-        </component>
-        <component id="blockWindow2" >
-            <transformation>
-                <translate x="0.51" y="3.5" z="-1.25" />
-            </transformation>
-            <texture id="none"/>
-            <materials>
-                <material id="glass" />
-            </materials>
-            <children>
-                <componentref id="window" />
-            </children>
-        </component>
-
-        <component id="window" >
-            <transformation>
-                <scale x="1" y="1.25" z="1.25" />
-                <rotate axis="y" angle="90" />
-            </transformation>
-            <texture id="glass"/>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <children>
-                <primitiveref id="rectangle" />
             </children>
         </component>
 
@@ -1448,6 +1611,33 @@
             </children>
         </component>
 
-
+        <component id="holePlugBack">
+            <transformation>
+                <translate x="13.5" y="0.9" z="-25"/>
+                <scale x="27" y="4.2" z="1" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="holePlugBottom">
+            <transformation>
+                <translate x="12" y="-1.2" z="0.45"/>
+                <scale x="30" y="1" z="51" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+            <materials>
+                <material id="gray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle" />
+            </children>
+        </component>
     </components>
 </sxs>
