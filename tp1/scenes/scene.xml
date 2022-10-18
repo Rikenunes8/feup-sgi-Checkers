@@ -1773,8 +1773,143 @@
             <texture id="none"/>
             <children>
                 <componentref id="frontRail" />
+                <componentref id="backRail" />
             </children>
         </component>
+
+        <component id="backRail">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="backRailFront" />
+                <componentref id="backRailRightLeg" />
+                <componentref id="backRailLeftLeg" />
+                <componentref id="backRailMiddleLeg" />
+                <componentref id="rightRail" />
+                <componentref id="leftRail" />
+                <componentref id="rightRailLeg" />
+                <componentref id="leftRailLeg" />
+            </children>
+        </component>
+        <component id="backRailFront">
+            <transformation>
+                <translate x="9.3" y="5" z="27" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="18" y="0.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="backRailRightLeg">
+            <transformation>
+                <translate x="18.3" y="4" z="28.265" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="backRailLeftLeg">
+            <transformation>
+                <translate x="0.4" y="4" z="25.75" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="backRailMiddleLeg">
+            <transformation>
+                <translate x="9.3" y="4" z="27" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        
+        <component id="rightRail">
+            <transformation>
+                <translate x="18.84" y="5" z="24.4" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="0.2" z="8" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="rightRailLeg">
+            <transformation>
+                <translate x="19.3835" y="4.0" z="20.538" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2.1" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        
+        <component id="leftRail">
+            <transformation>
+                <translate x="0.465" y="5" z="21.82" />
+                <rotate axis="y" angle="-1"/>
+                <scale x="0.2" y="0.2" z="8" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="leftRailLeg">
+            <transformation>
+                <translate x="0.5335" y="4.05" z="17.925" />
+                <rotate axis="y" angle="-1"/>
+                <scale x="0.2" y="2.1" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
 
         <component id="frontRail">
             <transformation>
@@ -1808,9 +1943,9 @@
         </component>
         <component id="frontRailBackLeg">
             <transformation>
-                <translate x="-6.8" y="4.1" z="26.55" />
+                <translate x="-6.8" y="4" z="26.55" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="2" z="0.2" />
+                <scale x="0.2" y="2.2" z="0.2" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1836,9 +1971,9 @@
         </component>
         <component id="frontRailLeftLeg">
             <transformation>
-                <translate x="-7" y="4.1" z="27.98" />
+                <translate x="-7" y="4" z="27.98" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="2" z="0.2" />
+                <scale x="0.2" y="2.2" z="0.2" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1850,9 +1985,9 @@
         </component>
         <component id="frontRailMiddleLeg">
             <transformation>
-                <translate x="7" y="4.1" z="29.95" />
+                <translate x="7" y="4" z="29.95" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="2" z="0.2" />
+                <scale x="0.2" y="2.2" z="0.2" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1864,9 +1999,9 @@
         </component>
         <component id="frontRailRightLeg">
             <transformation>
-                <translate x="20" y="4.1" z="31.78" />
+                <translate x="20" y="4" z="31.78" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="0.2" y="2" z="0.2" />
+                <scale x="0.2" y="2.2" z="0.2" />
             </transformation>
             <materials>
                 <material id="inherit" />
