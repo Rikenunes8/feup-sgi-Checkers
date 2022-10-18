@@ -246,6 +246,9 @@
 
                 <componentref id="holePlugBack" />
                 <componentref id="holePlugBottom" />
+                
+                <componentref id="rail" />
+
             </children>
         </component>
 
@@ -1760,5 +1763,119 @@
                 <primitiveref id="rectangle" />
             </children>
         </component>
+
+        <component id="rail">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="darkGray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="frontRail" />
+            </children>
+        </component>
+
+        <component id="frontRail">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="frontRailBack" />
+                <componentref id="frontRailBackLeg" /> 
+                <componentref id="frontRailUp" />
+                <componentref id="frontRailLeftLeg" />
+                <componentref id="frontRailMiddleLeg" />
+                <componentref id="frontRailRightLeg" />
+            </children>
+        </component>
+        <component id="frontRailBack">
+            <transformation>
+                <translate x="-6.89" y="5" z="27.2" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="0.2" z="1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="frontRailBackLeg">
+            <transformation>
+                <translate x="-6.8" y="4.1" z="26.55" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="frontRailUp">
+            <transformation>
+                <translate x="7.35" y="5" z="30" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="29" y="0.2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="frontRailLeftLeg">
+            <transformation>
+                <translate x="-7" y="4.1" z="27.98" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="frontRailMiddleLeg">
+            <transformation>
+                <translate x="7" y="4.1" z="29.95" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <component id="frontRailRightLeg">
+            <transformation>
+                <translate x="20" y="4.1" z="31.78" />
+                <rotate axis="y" angle="-8"/>
+                <scale x="0.2" y="2" z="0.2" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
     </components>
 </sxs>
