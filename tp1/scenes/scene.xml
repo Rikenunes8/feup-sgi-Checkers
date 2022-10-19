@@ -22,7 +22,7 @@
             <from x="13" y="5" z="18" />
             <to x="30" y="4" z="18" />
         </perspective>
-        <perspective id="test1" near="0.1" far="500" angle="60">
+        <perspective id="perspective6" near="0.1" far="500" angle="60">
             <from x="-3" y="5" z="28" />
             <to x="4" y="4" z="22" />
         </perspective>
@@ -1803,7 +1803,7 @@
             <transformation>
                 <translate x="9.225" y="0" z="25.818" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="16.75" y="1" z="1" />cube
+                <scale x="16.75" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
