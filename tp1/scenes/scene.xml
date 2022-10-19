@@ -1,7 +1,7 @@
 <sxs>
     <scene root="feup" axis_length="0.00001"/>
 
-    <views default="perspective3">
+    <views default="perspective1">
         <perspective id="perspective1" near="0.1" far="500" angle="45">
             <from x="40" y="40" z="40" />
             <to x="0" y="0" z="0" />
@@ -21,6 +21,10 @@
         <perspective id="perspective5" near="0.1" far="100" angle="90">
             <from x="13" y="5" z="18" />
             <to x="30" y="4" z="18" />
+        </perspective>
+        <perspective id="test1" near="0.1" far="500" angle="60">
+            <from x="-3" y="5" z="28" />
+            <to x="4" y="4" z="22" />
         </perspective>
         <ortho id="ortho1" near="0.1" far="500" left="-2" right="40" top="10" bottom="-5">
             <from x="0" y="0" z="60" />
@@ -1797,9 +1801,9 @@
         </component>
         <component id="backRailFront">
             <transformation>
-                <translate x="9.3" y="0" z="27" />
+                <translate x="9.225" y="0" z="25.818" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="18" y="1" z="1" />cube
+                <scale x="16.75" y="1" z="1" />cube
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1811,7 +1815,7 @@
         </component>
         <component id="backRailRightLeg">
             <transformation>
-                <translate x="18.3" y="0" z="28.265" />
+                <translate x="17.5" y="0" z="26.976" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1824,7 +1828,7 @@
         </component>
         <component id="backRailLeftLeg">
             <transformation>
-                <translate x="0.4" y="0" z="25.75" />
+                <translate x="0.95" y="0" z="24.65" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1837,7 +1841,7 @@
         </component>
         <component id="backRailMiddleLeg">
             <transformation>
-                <translate x="9.3" y="0" z="27" />
+                <translate x="9.225" y="0" z="25.813" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1851,9 +1855,9 @@
         
         <component id="rightRail">
             <transformation>
-                <translate x="18" y="0" z="23.4" />
+                <translate x="18.025" y="0" z="23.275" />
                 <rotate axis="y" angle="-98"/>
-                <scale x="8" y="1" z="1" />
+                <scale x="7.5" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1865,7 +1869,7 @@
         </component>
         <component id="rightRailLeg">
             <transformation>
-                <translate x="18.3835" y="0" z="20.538" />
+                <translate x="18.54" y="0" z="19.585" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1879,9 +1883,9 @@
         
         <component id="leftRail">
             <transformation>
-                <translate x="0.465" y="0" z="21.82" />
+                <translate x="0.95" y="0" z="20.951" />
                 <rotate axis="y" angle="-90"/>
-                <scale x="8" y="1" z="1" />
+                <scale x="7.455" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1893,8 +1897,7 @@
         </component>
         <component id="leftRailLeg">
             <transformation>
-                <translate x="0.5335" y="0" z="17.925" />
-                <rotate axis="y" angle="-1"/>
+                <translate x="0.95" y="0" z="17.25" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1924,9 +1927,9 @@
         </component>
         <component id="frontRailBack">
             <transformation>
-                <translate x="-6.89" y="0" z="27.2" />
+                <translate x="-7.81" y="0" z="27.35" />
                 <rotate axis="y" angle="-98"/>
-                <scale x="1.5" y="1" z="1" />
+                <scale x="2.05" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1938,7 +1941,7 @@
         </component>
         <component id="frontRailBackLeg">
             <transformation>
-                <translate x="-6.8" y="0" z="26.55" />
+                <translate x="-7.673" y="0" z="26.36" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1951,9 +1954,9 @@
         </component>
         <component id="frontRailUp">
             <transformation>
-                <translate x="7.35" y="0" z="30" />
+                <translate x="6.88" y="0" z="30.435" />
                 <rotate axis="y" angle="-8"/>
-                <scale x="29" y="1" z="1" />
+                <scale x="30" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -1965,7 +1968,7 @@
         </component>
         <component id="frontRailLeftLeg">
             <transformation>
-                <translate x="-7" y="0" z="27.98" />
+                <translate x="-7.95" y="0" z="28.35" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1978,7 +1981,7 @@
         </component>
         <component id="frontRailMiddleLeg">
             <transformation>
-                <translate x="7" y="0" z="29.95" />
+                <translate x="6.025" y="0" z="30.314" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -1991,7 +1994,7 @@
         </component>
         <component id="frontRailRightLeg">
             <transformation>
-                <translate x="20" y="0" z="31.78" />
+                <translate x="20" y="0" z="32.278" />
                 <rotate axis="y" angle="-8"/>
             </transformation>
             <materials>
@@ -2002,9 +2005,10 @@
                 <componentref id="railLeg" />
             </children>
         </component>
+
         <component id="railLeg">
             <transformation>
-                <translate x="0" y="3.4" z="0" />
+                <translate x="0" y="3.5" z="0" />
                 <scale x="0.05" y="1" z="0.05" />
             </transformation>
             <materials>
@@ -2017,7 +2021,7 @@
         </component>
         <component id="railTop">
             <transformation>
-                <translate x="0" y="3.95" z="0" />
+                <translate x="0" y="4.02" z="0" />
                 <scale x="1" y="0.05" z="0.05" />
             </transformation>
             <materials>
