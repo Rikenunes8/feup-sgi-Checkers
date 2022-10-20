@@ -378,6 +378,7 @@
             </transformation>
             <materials>
                 <material id="glass" />
+                <material id="light" />
             </materials>
             <texture id="frosted_glass"/>
             <children>
