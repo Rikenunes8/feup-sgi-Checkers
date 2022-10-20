@@ -852,23 +852,23 @@ export class MySceneGraph {
             this.reader.getFloat(node, 'z3', false)
         ];
         
-        if (pos1[0] == null || isNaN(pos1[0]) || pos1[0] < 0)
+        if (pos1[0] == null || isNaN(pos1[0]))
             return "You must specify x1 position on Triangle primitive " + primitiveId;
-        else if (pos1[1] == null || isNaN(pos1[1]) || pos1[1] < 0)
+        else if (pos1[1] == null || isNaN(pos1[1]))
             return "You must specify y1 position on Triangle primitive " + primitiveId;
-        else if (pos1[2] == null || isNaN(pos1[2]) || pos1[2] < 0)
+        else if (pos1[2] == null || isNaN(pos1[2]))
             return "You must specify z1 position on Triangle primitive " + primitiveId;
-        else if (pos2[0] == null || isNaN(pos2[0]) || pos2[0] < 0)
+        else if (pos2[0] == null || isNaN(pos2[0]))
             return "You must specify x2 position on Triangle primitive " + primitiveId;
-        else if (pos2[1] == null || isNaN(pos2[1]) || pos2[1] < 0)
+        else if (pos2[1] == null || isNaN(pos2[1]))
             return "You must specify y2 position on Triangle primitive " + primitiveId;
-        else if (pos2[2] == null || isNaN(pos2[2]) || pos2[2] < 0)
+        else if (pos2[2] == null || isNaN(pos2[2]))
             return "You must specify z2 position on Triangle primitive " + primitiveId;
-        else if (pos3[0] == null || isNaN(pos3[0]) || pos3[0] < 0)
+        else if (pos3[0] == null || isNaN(pos3[0]))
             return "You must specify x3 position on Triangle primitive " + primitiveId;
-        else if (pos3[1] == null || isNaN(pos3[1]) || pos3[1] < 0)
+        else if (pos3[1] == null || isNaN(pos3[1]))
             return "You must specify y3 position on Triangle primitive " + primitiveId;
-        else if (pos3[2] == null || isNaN(pos3[2]) || pos3[2] < 0)
+        else if (pos3[2] == null || isNaN(pos3[2]))
             return "You must specify z3 position on Triangle primitive " + primitiveId;
 
         this.primitives[primitiveId] = new MyTriangle(this.scene, primitiveId, pos1, pos2, pos3);
