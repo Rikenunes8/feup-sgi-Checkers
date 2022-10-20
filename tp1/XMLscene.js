@@ -36,7 +36,6 @@ export class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(100);
 
         this.displayNormals = false; // TODO testing
         this.displayLights = false;
@@ -142,11 +141,9 @@ export class XMLscene extends CGFscene {
         }
     }
 
-    update(t) {
-        if (this.gui.isKeyPressed("KeyM")) {
-            for (let key in this.graph.components) {
-                this.graph.components[key].nextMaterial();
-            }
+    updateMaterials() {
+        for (let key in this.graph.components) {
+            this.graph.components[key].nextMaterial();
         }
     }
 
