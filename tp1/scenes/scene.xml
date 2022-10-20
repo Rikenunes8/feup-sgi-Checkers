@@ -184,8 +184,8 @@
     </materials>
 
     <transformations>
-        <transformation id="demoTransform">
-            <scale x="1" y="1" z="1" />
+        <transformation id="stairsStep">
+            <translate x="0" y="1" z="-1" />
         </transformation>
     </transformations>
 
@@ -922,110 +922,110 @@
         </component>
         <component id="step2">
             <transformation>
-                <translate x="0" y="1" z="-1" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step1" />
             </children>
         </component>
         <component id="step3">
             <transformation>
-                <translate x="0" y="2" z="-2" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step2" />
             </children>
         </component>
         <component id="step4">
             <transformation>
-                <translate x="0" y="3" z="-3" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step3" />
             </children>
         </component>
         <component id="step5">
             <transformation>
-                <translate x="0" y="4" z="-4" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step4" />
             </children>
         </component>
         <component id="step6">
             <transformation>
-                <translate x="0" y="5" z="-5" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step5" />
             </children>
         </component>
         <component id="step7">
             <transformation>
-                <translate x="0" y="6" z="-6" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step6" />
             </children>
         </component>
         <component id="step8">
             <transformation>
-                <translate x="0" y="7" z="-7" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step7" />
             </children>
         </component>
         <component id="step9">
             <transformation>
-                <translate x="0" y="8" z="-8" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step8" />
             </children>
         </component>
         <component id="step10">
             <transformation>
-                <translate x="0" y="9" z="-9" />
+                <transformationref id="stairsStep"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="step9" />
             </children>
         </component>
 
