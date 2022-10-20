@@ -145,11 +145,17 @@
             <diffuse r="0.3" g="0.2" b="0.05" a="1.0" />
             <specular r="0.85" g="0.64" b="0.125" a="1.0" />
         </material>
-        <material id="brown" shininess="10">
+        <material id="darkWood" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.4" g="0.21" b="0.06" a="1.0" />
             <diffuse r="0.4" g="0.21" b="0.06" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
+        <material id="lightWood" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.871" g="0.722" b="0.529" a="1.0" />
+            <specular r="0.435" g="0.361" b="0.265" a="1.0" />
         </material>
         <material id="light" shininess="500">
             <emission r="0.5" g="0.5" b="0.5" a="1.0" />
@@ -157,7 +163,24 @@
             <diffuse r="0.46" g="0.54" b="0.59" a="1.0" />
             <specular r="0.23" g="0.27" b="0.30" a="1.0" />
         </material>
-        
+        <material id="orange" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.05" g="0.05" b="0.05" a="1" />
+            <diffuse r="1.0" g="0.647" b="0.0" a="1.0" />
+            <specular r="0.5" g="0.323" b="0.0" a="1.0" />
+        </material>
+        <material id="purple" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.05" g="0.05" b="0.05" a="1" />
+            <diffuse r="0.58" g="0.0" b="0.827" a="1.0" />
+            <specular r="0.29" g="0.0" b="0.413" a="1.0" />
+        </material>
+        <material id="blue" shininess="1">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.05" g="0.05" b="0.05" a="1" />
+            <diffuse r="0.6" g="0.741" b="0.875" a="1.0" />
+            <specular r="0.3" g="0.37" b="0.437" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -178,6 +201,9 @@
         </primitive>
         <primitive id="torus">
             <torus inner="0.25" outer="2" slices="16" loops="40" />
+        </primitive>
+        <primitive id="torusCondensed">
+            <torus inner="0.15" outer="0.3" slices="8" loops="20" />
         </primitive>
         <primitive id="adjustCornerTriangle">
             <triangle x1="0" y1="0" z1="0" x2="0" y2="0" z2="1" x3="1" y3="0" z3="0" />
@@ -216,6 +242,7 @@
                 <componentref id="bigCircularBench" />
                 <componentref id="lamps" />
                 <componentref id="moon" />
+                <componentref id="puffs" />
 
                 <componentref id="holePlugBack" />
                 <componentref id="holePlugBottom" />
@@ -242,8 +269,7 @@
                 <rotate axis="x" angle="90"/>
             </transformation>
             <materials>
-                <material id="brown" />
-                <material id="gold" />
+                <material id="darkWood" />
                 <material id="darkGreen" />
             </materials>
             <texture id="trunk"/>
@@ -260,7 +286,6 @@
             <materials>
                 <material id="gray" />
                 <material id="darkGray" />
-                <material id="gold" />
             </materials>
             <texture id="none" />
             <children>
@@ -365,7 +390,7 @@
             </transformation>
             <materials>
                 <material id="gardenBank" />
-                <material id="brown" />
+                <material id="lightWood" />
             </materials>
             <texture id="bank"/>
             <children>
@@ -545,7 +570,7 @@
             </materials>
             <texture id="floor" length_s="0.1" length_t="0.4"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
         <component id="bridgePilars">
@@ -621,7 +646,7 @@
             </materials>
             <texture id="floor" length_s="2" length_t="0.2"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
         <component id="stairsRightWall">
@@ -635,7 +660,7 @@
             </materials>
             <texture id="floor" length_s="0.5" length_t="0.2"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
 
@@ -650,7 +675,7 @@
             </materials>
             <texture id="floor" length_s="0.1" length_t="0.04"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
         <component id="rightFloor">
@@ -664,7 +689,7 @@
             </materials>
             <texture id="floor" length_s="1" length_t="0.05" />
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
         <component id="buildingBFloor">
@@ -678,10 +703,82 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
 
+        <component id="puffs">
+            <transformation>
+                <translate x="13" y="3.2" z="12" />
+            </transformation>
+            <materials>
+                <material id="darkGray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="puff1" />
+                <componentref id="puff2" />
+                <componentref id="puff3" />
+            </children>
+        </component>
+        <component id="puff1">
+            <transformation>
+                <rotate axis="y" angle="-60"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="orange" />
+                <material id="blue" />
+                <material id="purple" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="puff" />
+            </children>
+        </component>
+        <component id="puff2">
+            <transformation>
+                <translate x="-3" y="0" z="0" />
+                <rotate axis="y" angle="60"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="purple" />
+                <material id="orange" />
+                <material id="blue" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="puff" />
+            </children>
+        </component>
+        <component id="puff3">
+            <transformation>
+                <translate x="-1.5" y="0" z="-1.5" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+                <material id="blue" />
+                <material id="purple" />
+                <material id="orange" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="puff" />
+            </children>
+        </component>
+        <component id="puff">
+            <transformation>
+                <rotate axis="x" angle="-75"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="torusCondensed" />
+            </children>
+        </component>
 
         <component id="garden">
             <transformation>
@@ -699,8 +796,8 @@
         </component>
         <component id="garden1">
             <transformation>
-                <translate x="20.55" y="2.99" z="-25" />
-                <scale x="6.2" y="1" z="44" />
+                <translate x="20.553" y="2.99" z="-25" />
+                <scale x="6.35" y="1" z="44" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -787,7 +884,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="cube" />
+                <componentref id="cubeTopTextured" />
             </children>
         </component>
         <component id="stairs11">
@@ -1524,7 +1621,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -1537,7 +1634,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -1550,7 +1647,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -1562,7 +1659,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
             </children>
@@ -1575,9 +1672,35 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangle" />
+            </children>
+        </component>
+        <component id="cubeWithoutTopTextured">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cubeDownFace"/>
+                <componentref id="cubeLeftFace"/>
+                <componentref id="cubeRightFace"/>
+                <componentref id="cubeFrontFace"/>
+                <componentref id="cubeBackFace"/>
+            </children>
+        </component>
+        <component id="cubeWithoutTopNotTextured">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cubeWithoutTopTextured"/>
             </children>
         </component>
         <component id="cube">
@@ -1589,13 +1712,24 @@
             <texture id="inherit"/>
             <children>
                 <componentref id="cubeUpFace"/>
-                <componentref id="cubeDownFace"/>
-                <componentref id="cubeLeftFace"/>
-                <componentref id="cubeRightFace"/>
-                <componentref id="cubeFrontFace"/>
-                <componentref id="cubeBackFace"/>
+                <componentref id="cubeWithoutTopTextured"/>
             </children>
         </component>
+        <component id="cubeTopTextured">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="cubeUpFace"/>
+                <componentref id="cubeWithoutTopNotTextured"/>
+            </children>
+        </component>
+
+
+
 
         <component id="holePlugBack">
             <transformation>
