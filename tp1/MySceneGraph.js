@@ -1033,18 +1033,21 @@ export class MySceneGraph {
     }
 
     verifyComponentsRefsExistence() {
-        return  this.verifyComponentsRefsExistenceRec([false, this.idRoot]);
+        return  this.verifyComponentsRefsExistenceRec([false, this.idRoot], new Set());
     }
-    verifyComponentsRefsExistenceRec(node) {
+    verifyComponentsRefsExistenceRec(node, visited) {
         const isPrimitive = node[0];
-        const nodeId = node[1] 
+        const nodeId = node[1]
         if (!isPrimitive) {
             const component = this.components[nodeId];
             if (component == null) return "component " + nodeId + " is not defined";
+            if (visited.has(nodeId)) return "cyclic reference detected in component " + nodeId;
+            visited.add(nodeId);
             for (let child of this.components[nodeId].children) {
-                const error = this.verifyComponentsRefsExistenceRec(child);
+                const error = this.verifyComponentsRefsExistenceRec(child, visited);
                 if (error != null) return error;
             }
+            visited.delete(nodeId);
         }
         return null;
     }
