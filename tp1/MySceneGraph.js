@@ -1031,10 +1031,19 @@ export class MySceneGraph {
 
         return [...componentChildren];
     }
-
+    /**
+     * Go through the graph in depht first search and check for the component reference existence and if there are cycles
+     * @returns {string} String with the error or null if no error
+     */
     verifyComponentsRefsExistence() {
         return  this.verifyComponentsRefsExistenceRec([false, this.idRoot], new Set());
     }
+    /**
+     * Recursive version of verifyComponentsRefsExistence
+     * @param {[boolean, string]} node 
+     * @param {*} visited Array of visited nodes
+     * @returns {string} String with the error or null if no error
+     */
     verifyComponentsRefsExistenceRec(node, visited) {
         const isPrimitive = node[0];
         const nodeId = node[1]
