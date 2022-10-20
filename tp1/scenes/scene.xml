@@ -150,8 +150,8 @@
         <material id="gold" shininess="100">
             <emission r="0" g="0" b="0" a="1.0" />
             <ambient r="0.6375" g="0.48" b="0.09375" a="1.0" />
-            <diffuse r="0.3" g="0.2" b="0.05" a="1.0" />
-            <specular r="0.85" g="0.64" b="0.125" a="1.0" />
+            <diffuse r="0.6375" g="0.48" b="0.09375" a="1.0" />
+            <specular r="0.6375" g="0.48" b="0.09375" a="1.0" />
         </material>
         <material id="darkWood" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -1777,6 +1777,8 @@
             </transformation>
             <materials>
                 <material id="darkGray" />
+                <material id="gold" />
+                <material id="gray" />
             </materials>
             <texture id="none"/>
             <children>
