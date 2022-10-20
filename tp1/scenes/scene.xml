@@ -268,7 +268,7 @@
             <materials>
                 <material id="moon" />
             </materials>
-            <texture id="moon"/>
+            <texture id="moon" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="sphere" />
             </children>
@@ -283,7 +283,7 @@
                 <material id="darkWood" />
                 <material id="darkGreen" />
             </materials>
-            <texture id="trunk"/>
+            <texture id="trunk" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="torus" />
             </children>
@@ -391,7 +391,7 @@
                 <material id="glass" />
                 <material id="light" />
             </materials>
-            <texture id="frosted_glass"/>
+            <texture id="frosted_glass" length_s="1" length_t="1"/>
             <children>
                 <primitiveref id="sphere" />
             </children>
@@ -404,7 +404,7 @@
                 <material id="gardenBank" />
                 <material id="lightWood" />
             </materials>
-            <texture id="bank"/>
+            <texture id="bank" length_s="1" length_t="1"/>
             <children>
                 <componentref id="benchSet1" />
                 <componentref id="benchSet2" />
@@ -1109,7 +1109,7 @@
             <materials>
                 <material id="glass" />
             </materials>
-            <texture id="glass"/>
+            <texture id="glass" length_s="1" length_t="1"/>
             <children>
                 <componentref id="northBuildingWindowsColumn1" />
                 <componentref id="northBuildingWindowsColumn2" />
@@ -1426,7 +1426,7 @@
             <materials>
                 <material id="glass" />
             </materials>
-            <texture id="glass"/>
+            <texture id="glass" length_s="1" length_t="1"/>
             <children>
                 <componentref id="blockWindow1" />
                 <componentref id="blockWindow2" />
@@ -1591,7 +1591,7 @@
             <materials>
                 <material id="gray"/>
             </materials>
-            <texture id="insideDoor"/>
+            <texture id="insideDoor" length_s="1" length_t="1"/>
             <children>
                <primitiveref id="rectangle"/> 
             </children>
