@@ -1,38 +1,42 @@
 <sxs>
     <scene root="feup" axis_length="0.00001"/>
 
-    <views default="perspective1">
-        <perspective id="perspective1" near="0.1" far="500" angle="45">
+    <views default="FEUP">
+        <perspective id="FEUP" near="0.1" far="500" angle="45">
             <from x="40" y="40" z="40" />
             <to x="0" y="0" z="0" />
         </perspective>
-        <perspective id="perspective2" near="0.1" far="500" angle="45">
+        <perspective id="Stairs" near="0.1" far="500" angle="45">
             <from x="15" y="5" z="60" />
             <to x="10" y="0" z="0" />
         </perspective>
-        <perspective id="perspective3" near="0.1" far="500" angle="90">
+        <perspective id="Garden Front" near="0.1" far="500" angle="90">
             <from x="15" y="7" z="20" />
             <to x="10" y="5" z="0" />
         </perspective>
-        <perspective id="perspective4" near="0.1" far="500" angle="90">
+        <perspective id="Garden Back" near="0.1" far="500" angle="90">
             <from x="2" y="4" z="-20" />
             <to x="10" y="5" z="0" />
         </perspective>
-        <perspective id="perspective5" near="0.1" far="100" angle="90">
+        <perspective id="Door" near="0.1" far="100" angle="90">
             <from x="13" y="5" z="18" />
             <to x="30" y="4" z="18" />
         </perspective>
-        <perspective id="perspective6" near="0.1" far="500" angle="60">
+        <perspective id="Bridge Top" near="0.1" far="500" angle="60">
             <from x="-3" y="5" z="28" />
             <to x="4" y="4" z="22" />
         </perspective>
-        <ortho id="ortho1" near="0.1" far="500" left="-2" right="40" top="10" bottom="-5">
+        <ortho id="FEUP Front" near="0.1" far="500" left="-5" right="25" top="10" bottom="-5">
             <from x="0" y="0" z="60" />
             <to x="0" y="0" z="0" />
         </ortho>
-        <ortho id="ortho2" near="0.1" far="500" left="-10" right="10" top="5" bottom="-2">
+        <ortho id="FEUP Inside Left" near="0.1" far="500" left="-10" right="10" top="5" bottom="-2">
             <from x="25" y="4" z="-3" />
             <to x="0" y="4" z="-3" />
+        </ortho>
+        <ortho id="FEUP Top" near="5" far="500" left="-35" right="35" top="40" bottom="-30">
+            <from x="15" y="50" z="3" />
+            <to x="14" y="3" z="3" />
         </ortho>
     </views>
 
@@ -42,28 +46,28 @@
     </ambient>
 
     <lights>
-        <omni id="moon" enabled="1">
+        <omni id="Moon" enabled="1">
             <location x="30" y="25" z="40" w="1.0" />
             <ambient r="0.4" g="0.36" b="0.32" a="1.0" />
             <diffuse r="1.0" g="0.9" b="0.8" a="1.0" />
             <specular r="0.5" g="0.45" b="0.4" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 1" enabled="0">
+        <omni id="Garden Lamp 1" enabled="0">
             <location x="15" y="6" z="-10" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
             <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 2" enabled="0">
+        <omni id="Garden Lamp 2" enabled="0">
             <location x="5.0" y="6" z="5.0" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
             <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
-        <omni id="Lamp 3" enabled="0">
+        <omni id="Garden Lamp 3" enabled="0">
             <location x="22" y="6" z="0" w="1.0"/>
             <ambient r="0.05" g="0.05" b="0.05" a="1.0" />
             <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
@@ -71,7 +75,7 @@
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
         
-        <spot id="doorLight" enabled="1" angle="70" exponent="1">
+        <spot id="Door" enabled="1" angle="70" exponent="1">
             <location x="23.1" y="5.5" z="19.6" w="1.0" />
             <target x="20" y="0" z="19.6" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
