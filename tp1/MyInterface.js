@@ -58,10 +58,17 @@ export class MyInterface extends CGFinterface {
         return this.activeKeys[keyCode] || false;
     }
 
+    /**
+     * Add cameras folder with all cameras to the interface so we can swap between cameras
+     */
     addCameras() {
         const f0 = this.gui.addFolder('Cameras');
         f0.add(this.scene, 'currCam', this.scene.cameras).name("Current Camera").onChange(this.scene.setCamera);
     }
+
+    /**
+     * Add lights folder to interface so we can enable or disable them
+     */
     addLights() {
         const folder = this.gui.addFolder('Lights');
         for (let c = 0; c < Object.keys(this.scene.graph.lights).length; c++) {

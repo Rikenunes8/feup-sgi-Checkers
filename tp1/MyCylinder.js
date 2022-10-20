@@ -67,6 +67,11 @@ export class MyCylinder extends CGFobject {
 		
 	}
 
+    /**
+     * Converts degrees angle to radians.
+     * @param {*} angle 
+     * @returns angle in radians
+     */
     toRad(angle) {
         return angle * Math.PI / 180;
     }

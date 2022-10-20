@@ -61,6 +61,11 @@ export class MyTorus extends CGFobject {
         this.initGLBuffers();
     }
 
+    /**
+     * return the sines and cossines of n partitions of a circle
+     * @param {*} n 
+     * @returns [sines, cossines], where sines and cossines are arrays
+     */
     getCosinesAndSines(n) {
         let angle = 0;
         let angleIncrement = (2*Math.PI) / n;

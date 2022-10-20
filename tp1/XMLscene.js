@@ -80,9 +80,15 @@ export class XMLscene extends CGFscene {
                 this.lights[i].setQuadraticAttenuation(light[6][2]);
 
                 if (light[1] == "spot") {
+                    let direction = [light[9][0] - light[2][0], light[9][1] - light[2][1], light[9][2] - light[2][2]];
+                    // const normalize = Math.sqrt(direction[0] * direction[0] + direction[1] * direction[1] + direction[2] * direction[2]);
+                    // direction = [direction[0] / normalize, direction[1] / normalize, direction[2] / normalize];
+
                     this.lights[i].setSpotCutOff(light[7]);
                     this.lights[i].setSpotExponent(light[8]);
-                    this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
+
+                    //this.lights[i].setSpotDirection(light[9][0], light[9][1], light[9][2]);
+                    this.lights[i].setSpotDirection(direction[0], direction[1], direction[2]);
                 }
 
                 this.lights[i].setVisible(this.displayLights);
@@ -133,7 +139,6 @@ export class XMLscene extends CGFscene {
         this.camera = this.graph.views[cam];
         this.interface.setActiveCamera(this.camera);
     }
-
 
     updateAllLights() {
         for (let light of this.lights) {
