@@ -1041,7 +1041,7 @@ export class MySceneGraph {
      * Parses textures for a component
      * @param {*} texture 
      * @param {*} componentID 
-     * @returns list with all the component textures 
+     * @returns list with the component texture id and its length_s and length_t 
      */
     parseComponentTexture(texture, componentID) {
         let componentTexture = undefined;
@@ -1073,7 +1073,8 @@ export class MySceneGraph {
      * Parses the children of a component
      * @param {*} children 
      * @param {*} componentID 
-     * @returns array with the children of the component
+     * @returns array with the children of the component (primitives and components)
+     *         each child is represented by an array with the child type and its id
      */
     parseComponentChildren(children, componentID) {
         let componentChildren = [];
