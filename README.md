@@ -12,10 +12,21 @@
 
 ### [TP1 - Scene Graph](tp1)
 
-- (items briefly describing main strong points)
+- Individual and documented functions for each step of the parser, where each one of them is responsible for parsing each XML tag
+- Error display and warnings when missing values or properties of elements of the XML file
+- All the primitives were implemented with the required vertices, faces, and normals. Also have texture implementation on those primitives, except the re-dimension of the textures coordinates on Sphere, Torus, and Cylinder.
+- Implementation of inheritance of components transformations, passing the transformation matrix of a node (Ma) to the respective children nodes and applying the transformations of the children node (Mp) after the transformations of the parent (M=Ma*Mp). We also apply a transformation referenced by the transformationref tag. Reporting errors when wrong transformation specifications or invalid transformationref id property (not defined before)
+- Implementation of inheritance of components materials, passing to the children material the parent material (if the material of the children is "inherit") or applying the respective material defined. Report errors when wrong material specification or invalid material id property introduced (not defined before)
+- Implementation of inheritance of components texture, passing to the children texture the parent texture (if the texture of the children is inherit) or applying the respective texture (none or the texture defined, with the respective lengths). Warning in the console when no length_s or/and no length_t are introduced in texture (in that case we use length_s and length_t with value 1). 
+- Verification of non-existent component references giving an error when the reference is not found
+- Verification of components graph cycles giving an error when there is a cycle
+- Implementation of a graphic interface with the following options:
+  - display normal (shows components/objects normals)
+  - display lights (shows the defined lights on the scene)
+  - a folder with all the cameras, where you can select the one that you want to have your view on
+  - a folder with all the lights in the scene, where you can select for each one if they are enabled or disabled
 - Scene
-  - Campus of Feup, with some trees and buildings (Brief description of the created scene)
-  - [Scene Image](images/feupScene.jpg) (relative link to the scene)
+  - The [scene](tp1/screenshots/feup.png) consists of the main [garden](tp1/screenshots/garden.png) of the FEUP Campus. This scene includes part of the corridor next to the different departments with windows and supporting columns, the bridge between building B and the others, and the [staircase](tp1/screenshots/front.png) under this bridge. The bridge is supported by circular pillars and has [rails](tp1/screenshots/rails.png) above it. In the garden are the [legacy seats](tp1/screenshots/bench.png) and some colorful [poufs](tp1/screenshots/poufs.png), as well as three [lamps](tp1/screenshots/lamp.png), one of them surrounded by an innovative [circular wood seat](tp1/screenshots/circular_bench.png). The scene also contains buildings F and G next to the corridor on the left side of the stairs and building B on the right. Building B also contains a [door](tp1/screenshots/door_off.png) with a [light](tp1/screenshots/door_on.png) on top of it, illuminating its entry. To complete the scene there is a [moon](tp1/screenshots/garden_back.png) illuminating the all scene.
 
 -----
 
