@@ -31,7 +31,7 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/feupScene.jpg" />
+        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
     </textures>
 
     <materials>
