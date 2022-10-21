@@ -250,7 +250,7 @@
                 <componentref id="bigCircularBench" />
                 <componentref id="lamps" />
                 <componentref id="moon" />
-                <componentref id="puffs" />
+                <componentref id="poufs" />
 
                 <componentref id="holePlugBack" />
                 <componentref id="holePlugBottom" />
@@ -600,7 +600,7 @@
         </component>
         <component id="bridgePilar1">
             <transformation>
-                <translate x="13" y="-1.25" z="27.75" />
+                <translate x="13" y="-1.4" z="27.75" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -612,7 +612,7 @@
         </component>
         <component id="bridgePilar2">
             <transformation>
-                <translate x="13" y="-1.25" z="30.5" />
+                <translate x="13" y="-1.4" z="30.5" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -624,7 +624,7 @@
         </component>
         <component id="bridgePilar3">
             <transformation>
-                <translate x="0.5" y="-1.25" z="28.75" />
+                <translate x="0.5" y="-1.4" z="28.75" />
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -719,7 +719,7 @@
             </children>
         </component>
 
-        <component id="puffs">
+        <component id="poufs">
             <transformation>
                 <translate x="13" y="3.2" z="12" />
             </transformation>
@@ -728,12 +728,12 @@
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="puff1" />
-                <componentref id="puff2" />
-                <componentref id="puff3" />
+                <componentref id="pouf1" />
+                <componentref id="pouf2" />
+                <componentref id="pouf3" />
             </children>
         </component>
-        <component id="puff1">
+        <component id="pouf1">
             <transformation>
                 <rotate axis="y" angle="-60"/>
             </transformation>
@@ -745,10 +745,10 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="puff" />
+                <componentref id="pouf" />
             </children>
         </component>
-        <component id="puff2">
+        <component id="pouf2">
             <transformation>
                 <translate x="-3" y="0" z="0" />
                 <rotate axis="y" angle="60"/>
@@ -761,10 +761,10 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="puff" />
+                <componentref id="pouf" />
             </children>
         </component>
-        <component id="puff3">
+        <component id="pouf3">
             <transformation>
                 <translate x="-1.5" y="0" z="-1.5" />
             </transformation>
@@ -776,10 +776,10 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="puff" />
+                <componentref id="pouf" />
             </children>
         </component>
-        <component id="puff">
+        <component id="pouf">
             <transformation>
                 <rotate axis="x" angle="-75"/>
             </transformation>
