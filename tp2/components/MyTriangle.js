@@ -1,4 +1,4 @@
-import {CGFobject} from "../lib/CGF.js";
+import {CGFobject} from "../../lib/CGF.js";
 
 export class MyTriangle extends CGFobject{
     constructor(scene, id, pos1, pos2, pos3){

@@ -1,10 +1,10 @@
 import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
-import { MyCylinder } from './MyCylinder.js';
-import { MyRectangle } from './MyRectangle.js';
-import { MyComponent } from './MyComponent.js';
-import { MySphere } from './MySphere.js';
-import { MyTorus } from './MyTorus.js';
-import { MyTriangle } from './MyTriangle.js';
+import { MyCylinder } from './components/MyCylinder.js';
+import { MyRectangle } from './components/MyRectangle.js';
+import { MyComponent } from './components/MyComponent.js';
+import { MySphere } from './components/MySphere.js';
+import { MyTorus } from './components/MyTorus.js';
+import { MyTriangle } from './components/MyTriangle.js';
 
 export var DEGREE_TO_RAD = Math.PI / 180;
 

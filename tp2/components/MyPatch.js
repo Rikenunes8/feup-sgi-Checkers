@@ -1,4 +1,4 @@
-import { CGFnurbsObject, CGFnurbsSurface, CGFobject } from '../lib/CGF.js';
+import { CGFnurbsObject, CGFnurbsSurface, CGFobject } from '../../lib/CGF.js';
 /**
  * MyRectangle
  * @constructor
