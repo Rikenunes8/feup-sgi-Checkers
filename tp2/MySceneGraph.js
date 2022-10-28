@@ -16,13 +16,7 @@ export class MySceneGraph {
         scene.graph = this;
 
         this.nodes = [];
-
         this.idRoot = null;                    // The id of the root element.
-
-        this.axisCoords = [];
-        this.axisCoords['x'] = [1, 0, 0];
-        this.axisCoords['y'] = [0, 1, 0];
-        this.axisCoords['z'] = [0, 0, 1];
 
         this.displayNormals = false;
 
