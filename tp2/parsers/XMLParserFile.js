@@ -8,6 +8,7 @@ import {XMLParserTextures} from './XMLParserTextures.js';
 import {XMLParserMaterials} from './XMLParserMaterials.js';
 import {XMLParserTransformations} from './XMLParserTransformations.js';
 import {XMLParserPrimitives} from './XMLParserPrimitives.js';
+import {XMLParserAnimations} from './XMLParserAnimations.js';
 import {XMLParserComponents} from './XMLParserComponents.js';
 
 // Order of the groups in the XML document.
@@ -19,7 +20,8 @@ var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATION_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 export class XMLParserFile extends XMLParser {
     constructor(scene) {
@@ -48,6 +50,7 @@ export class XMLParserFile extends XMLParser {
             'textures': {'index': TEXTURES_INDEX, 'parser': new XMLParserTextures(this.scene)},
             'transformations': {'index': TRANSFORMATIONS_INDEX, 'parser': new XMLParserTransformations(this.scene)},
             'primitives': {'index': PRIMITIVES_INDEX, 'parser': new XMLParserPrimitives(this.scene)},
+            'animations': {'index': ANIMATION_INDEX, 'parser': new XMLParserAnimations(this.scene)},
             'components': {'index': COMPONENTS_INDEX, 'parser': new XMLParserComponents(this.scene)},
         }
         
