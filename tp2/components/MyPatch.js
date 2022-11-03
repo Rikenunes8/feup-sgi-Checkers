@@ -16,15 +16,14 @@ export class MyPatch extends CGFobject {
 		this.parts_v = parts_v;
 		this.controlPoints = controlPoints;
 
-		this.initBuffers();
+		this.init();
 	}
 
-	/*initBuffers() {
-		this.surface = null;
 
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();
-	}*/
+	init() {
+		let nurbsSurface = new CGFnurbsSurface(this.degree_u, this.degree_v, this.controlPoints);
+		this.obj = new CGFnurbsObject(this.scene, this.parts_u, this.parts_v, nurbsSurface);
+	}
 
 
 	/**
@@ -41,14 +40,9 @@ export class MyPatch extends CGFobject {
 		return this.controlPoints;
 	}
 
-	makeSurface(translation) {
-			
-		var nurbsSurface = new CGFnurbsSurface(this.degree_u, this.degree_v, this.controlPoints);
-
-		var obj = new CGFnurbsObject(this, this.parts_u, this.parts_v, nurbsSurface); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
-
-		this.surface = obj;	
-		this.translations.push(translation);
+	display() {
+		this.obj.display();
 	}
+
 }
 

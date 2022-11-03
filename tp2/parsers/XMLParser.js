@@ -92,13 +92,14 @@ export class XMLParser {
         return color;
     }
 
-    onXMLerror() {
-        this.scene.graph.onXMLerror();
+    onXMLerror(message) {
+        console.error("XML Loading Error: " + message);
+        this.scene.graph.loadedOk = false;
     }
-    onXMLMinorError() {
-        this.scene.graph.onXMLMinorError();
+    onXMLMinorError(message) {
+        console.warn("Warning: " + message);
     }
-    log(message) {
-        console.log("   ", message);
+    log() {
+        console.log();
     }
 }

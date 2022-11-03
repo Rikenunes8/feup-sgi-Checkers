@@ -67,14 +67,12 @@ export class XMLParserPrimitives extends XMLParser {
             } else if (primitiveType == 'patch') {
                 error = this.parsePrimitivePatch(grandChildren[0], primitiveId);
             } else {
-                console.warn("Primitive " + primitiveType + " not implemented.");
+                this.onXMLMinorError("Primitive " + primitiveType + " not implemented.");
                 continue;
             }
             if (error != null) return error;
         }   
 
-
-        this.log(this.scene.primitives["patch"].controlPoints);
         
         this.log("Parsed primitives");
         return null;
@@ -253,35 +251,37 @@ export class XMLParserPrimitives extends XMLParser {
         }
 
         const children = node.children;
-
-        if (children.length < 1) 
-            return "You must specify at least one control vertex on primitive " + primitiveId;
-
-        for (let i = 0; i < children.length; i++) {
-            const grandChildren = children[i];
-            if (grandChildren.nodeName != "controlpoint") 
-                return 'Unknown node on children ' + i + ' of primitive patch with id ' + primitiveId + ". Provided name: " + children[i].nodeName;
-
-            const controlPoint = [
-                this.reader.getFloat(grandChildren, 'x', false),
-                this.reader.getFloat(grandChildren, 'y', false),
-                this.reader.getFloat(grandChildren, 'z', false),
-            ];
-    
-            if (controlPoint[0] == null || isNaN(controlPoint[0])) {
-                return 'You must specify x position on control point ' + i + ' of primitive ' + primitiveId;
-            } else if (controlPoint[1] == null || isNaN(controlPoint[1])) {
-                return 'You must specify y position on control point ' + i + ' of primitive ' + primitiveId;
-            } else if (controlPoint[2] == null || isNaN(controlPoint[2])) {
-                return 'You must specify z position on control point ' + i + ' of primitive ' + primitiveId;
-            }
-
-            controlPoints.push(controlPoint);
-        }
-
         const numControlPoints = (degree_u + 1) * (degree_v + 1);
-        if (controlPoints.length != numControlPoints)
-            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId;
+        if (children.length < numControlPoints) 
+            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId + ". Given " + controlPoints.length;
+
+        for (let u = 0; u < degree_u + 1; u++) {
+            let pointsU = [];
+            for (let v = 0; v < degree_v + 1; v++) {
+                const vertex = children[u * (degree_v + 1) + v];
+                if (vertex.nodeName != 'controlpoint') {
+                    return 'You must specify controlpoint on patch of primitive ' + primitiveId;
+                }
+
+                const x = this.reader.getFloat(vertex, 'x', false);
+                const y = this.reader.getFloat(vertex, 'y', false);
+                const z = this.reader.getFloat(vertex, 'z', false);
+                const w = this.reader.getFloat(vertex, 'w', false);
+
+                if (x == null || isNaN(x)) {
+                    return 'You must specify x on controlpoint of primitive ' + primitiveId;
+                } else if (y == null || isNaN(y)) {
+                    return 'You must specify y on controlpoint of primitive ' + primitiveId;
+                } else if (z == null || isNaN(z)) {
+                    return 'You must specify z on controlpoint of primitive ' + primitiveId;
+                } else if (w == null || isNaN(w)) {
+                    return 'You must specify w on controlpoint of primitive ' + primitiveId;
+                }
+
+                pointsU.push([x, y, z, w]);
+            }
+            controlPoints.push(pointsU);
+        }
 
         this.scene.primitives[primitiveId] = new MyPatch(this.scene.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, controlPoints);
     }
