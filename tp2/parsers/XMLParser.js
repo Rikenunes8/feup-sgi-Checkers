@@ -93,13 +93,13 @@ export class XMLParser {
     }
 
     onXMLerror(message) {
-        console.error("XML Loading Error: " + message);
-        this.scene.graph.loadedOk = false;
+        this.scene.onXMLerror( message);
+        this.scene.loadedOk = false;
     }
     onXMLMinorError(message) {
-        console.warn("Warning: " + message);
+        this.scene.onXMLMinorError(message);
     }
-    log() {
-        console.log();
+    log(message) {
+        this.scene.log(message);
     }
 }

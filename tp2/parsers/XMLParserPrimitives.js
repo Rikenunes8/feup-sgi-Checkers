@@ -263,10 +263,10 @@ export class XMLParserPrimitives extends XMLParser {
                     return 'You must specify controlpoint on patch of primitive ' + primitiveId;
                 }
 
-                const x = this.reader.getFloat(vertex, 'x', false);
-                const y = this.reader.getFloat(vertex, 'y', false);
-                const z = this.reader.getFloat(vertex, 'z', false);
-                const w = this.reader.getFloat(vertex, 'w', false);
+                let x = this.reader.getFloat(vertex, 'x', false);
+                let y = this.reader.getFloat(vertex, 'y', false);
+                let z = this.reader.getFloat(vertex, 'z', false);
+                let w = this.reader.getFloat(vertex, 'w', false);
 
                 if (x == null || isNaN(x)) {
                     return 'You must specify x on controlpoint of primitive ' + primitiveId;
@@ -275,7 +275,9 @@ export class XMLParserPrimitives extends XMLParser {
                 } else if (z == null || isNaN(z)) {
                     return 'You must specify z on controlpoint of primitive ' + primitiveId;
                 } else if (w == null || isNaN(w)) {
-                    return 'You must specify w on controlpoint of primitive ' + primitiveId;
+                    w = 1.0; // Assuming w = 1.0 if not specified
+                    this.scene.onXMLMinorError('You must specify w on controlpoint of primitive ' + primitiveId + '. Assuming w = 1.0');
+                    //return 'You must specify w on controlpoint of primitive ' + primitiveId;
                 }
 
                 pointsU.push([x, y, z, w]);
