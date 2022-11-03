@@ -4,6 +4,7 @@ import { MyRectangle } from '../components/MyRectangle.js';
 import { MySphere } from '../components/MySphere.js';
 import { MyTorus } from '../components/MyTorus.js';
 import { MyTriangle } from '../components/MyTriangle.js';
+import { MyPatch } from '../components/MyPatch.js';
 
 export class XMLParserPrimitives extends XMLParser {
     constructor(scene) {
@@ -44,7 +45,7 @@ export class XMLParserPrimitives extends XMLParser {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
+                    grandChildren[0].nodeName != 'torus') && grandChildren[0].nodeName != 'patch') {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
             }
 
@@ -63,13 +64,18 @@ export class XMLParserPrimitives extends XMLParser {
                 error = this.parsePrimitiveTorus(grandChildren[0], primitiveId);
             } else if (primitiveType == 'triangle') {
                 error = this.parsePrimitiveTriangle(grandChildren[0], primitiveId);
+            } else if (primitiveType == 'patch') {
+                error = this.parsePrimitivePatch(grandChildren[0], primitiveId);
             } else {
                 console.warn("Primitive " + primitiveType + " not implemented.");
                 continue;
             }
             if (error != null) return error;
-        }
+        }   
 
+
+        this.log(this.scene.primitives["patch"].controlPoints);
+        
         this.log("Parsed primitives");
         return null;
     }
@@ -222,4 +228,62 @@ export class XMLParserPrimitives extends XMLParser {
 
         this.scene.primitives[primitiveId] = new MyTriangle(this.scene.scene, primitiveId, pos1, pos2, pos3);
     }
+
+    /**
+     * parses control vertexes of a patch primitive
+     * @param {*} node
+     * @returns array with control vertexes (an array with [x, y, z] for each vertex) if success, null otherwise
+     */
+    parsePrimitivePatch(node, primitiveId) {
+        const controlPoints = [];
+
+        const degree_u = this.reader.getInteger(node, 'degree_u', false);
+        const parts_u = this.reader.getInteger(node, 'parts_u', false);
+        const degree_v = this.reader.getInteger(node, 'degree_v', false);
+        const parts_v = this.reader.getInteger(node, 'parts_v', false);
+
+        if (degree_u == null || isNaN(degree_u)) {
+            return 'You must specify degree_u on patch of primitive ' + primitiveId;
+        } else if (parts_u == null || isNaN(parts_u)) {
+            return 'You must specify parts_u on patch of primitive ' + primitiveId;
+        } else if (degree_v == null || isNaN(degree_v)) {
+            return 'You must specify degree_v on patch of primitive ' + primitiveId;
+        } else if (parts_v == null || isNaN(parts_v)) {
+            return 'You must specify parts_v on patch of primitive ' + primitiveId;
+        }
+
+        const children = node.children;
+
+        if (children.length < 1) 
+            return "You must specify at least one control vertex on primitive " + primitiveId;
+
+        for (let i = 0; i < children.length; i++) {
+            const grandChildren = children[i];
+            if (grandChildren.nodeName != "controlpoint") 
+                return 'Unknown node on children ' + i + ' of primitive patch with id ' + primitiveId + ". Provided name: " + children[i].nodeName;
+
+            const controlPoint = [
+                this.reader.getFloat(grandChildren, 'x', false),
+                this.reader.getFloat(grandChildren, 'y', false),
+                this.reader.getFloat(grandChildren, 'z', false),
+            ];
+    
+            if (controlPoint[0] == null || isNaN(controlPoint[0])) {
+                return 'You must specify x position on control point ' + i + ' of primitive ' + primitiveId;
+            } else if (controlPoint[1] == null || isNaN(controlPoint[1])) {
+                return 'You must specify y position on control point ' + i + ' of primitive ' + primitiveId;
+            } else if (controlPoint[2] == null || isNaN(controlPoint[2])) {
+                return 'You must specify z position on control point ' + i + ' of primitive ' + primitiveId;
+            }
+
+            controlPoints.push(controlPoint);
+        }
+
+        const numControlPoints = (degree_u + 1) * (degree_v + 1);
+        if (controlPoints.length != numControlPoints)
+            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId;
+
+        this.scene.primitives[primitiveId] = new MyPatch(this.scene.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, controlPoints);
+    }
+
 }

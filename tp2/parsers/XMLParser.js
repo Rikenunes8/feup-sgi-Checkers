@@ -93,12 +93,12 @@ export class XMLParser {
     }
 
     onXMLerror() {
-        this.scene.onXMLerror();
+        this.scene.graph.onXMLerror();
     }
     onXMLMinorError() {
-        this.scene.onXMLMinorError();
+        this.scene.graph.onXMLMinorError();
     }
-    log() {
-        this.scene.log();
+    log(message) {
+        console.log("   ", message);
     }
 }
