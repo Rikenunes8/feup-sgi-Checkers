@@ -4,6 +4,7 @@ import { MyRectangle } from '../components/MyRectangle.js';
 import { MySphere } from '../components/MySphere.js';
 import { MyTorus } from '../components/MyTorus.js';
 import { MyTriangle } from '../components/MyTriangle.js';
+import { MyPatch } from '../components/MyPatch.js';
 
 export class XMLParserPrimitives extends XMLParser {
     constructor(scene) {
@@ -44,7 +45,7 @@ export class XMLParserPrimitives extends XMLParser {
             if (grandChildren.length != 1 ||
                 (grandChildren[0].nodeName != 'rectangle' && grandChildren[0].nodeName != 'triangle' &&
                     grandChildren[0].nodeName != 'cylinder' && grandChildren[0].nodeName != 'sphere' &&
-                    grandChildren[0].nodeName != 'torus')) {
+                    grandChildren[0].nodeName != 'torus') && grandChildren[0].nodeName != 'patch') {
                 return "There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus)"
             }
 
@@ -63,13 +64,16 @@ export class XMLParserPrimitives extends XMLParser {
                 error = this.parsePrimitiveTorus(grandChildren[0], primitiveId);
             } else if (primitiveType == 'triangle') {
                 error = this.parsePrimitiveTriangle(grandChildren[0], primitiveId);
+            } else if (primitiveType == 'patch') {
+                error = this.parsePrimitivePatch(grandChildren[0], primitiveId);
             } else {
-                console.warn("Primitive " + primitiveType + " not implemented.");
+                this.onXMLMinorError("Primitive " + primitiveType + " not implemented.");
                 continue;
             }
             if (error != null) return error;
-        }
+        }   
 
+        
         this.log("Parsed primitives");
         return null;
     }
@@ -222,4 +226,66 @@ export class XMLParserPrimitives extends XMLParser {
 
         this.scene.primitives[primitiveId] = new MyTriangle(this.scene.scene, primitiveId, pos1, pos2, pos3);
     }
+
+    /**
+     * parses control vertexes of a patch primitive
+     * @param {*} node
+     * @returns array with control vertexes (an array with [x, y, z] for each vertex) if success, null otherwise
+     */
+    parsePrimitivePatch(node, primitiveId) {
+        const controlPoints = [];
+
+        const degree_u = this.reader.getInteger(node, 'degree_u', false);
+        const parts_u = this.reader.getInteger(node, 'parts_u', false);
+        const degree_v = this.reader.getInteger(node, 'degree_v', false);
+        const parts_v = this.reader.getInteger(node, 'parts_v', false);
+
+        if (degree_u == null || isNaN(degree_u)) {
+            return 'You must specify degree_u on patch of primitive ' + primitiveId;
+        } else if (parts_u == null || isNaN(parts_u)) {
+            return 'You must specify parts_u on patch of primitive ' + primitiveId;
+        } else if (degree_v == null || isNaN(degree_v)) {
+            return 'You must specify degree_v on patch of primitive ' + primitiveId;
+        } else if (parts_v == null || isNaN(parts_v)) {
+            return 'You must specify parts_v on patch of primitive ' + primitiveId;
+        }
+
+        const children = node.children;
+        const numControlPoints = (degree_u + 1) * (degree_v + 1);
+        if (children.length < numControlPoints) 
+            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId + ". Given " + controlPoints.length;
+
+        for (let u = 0; u < degree_u + 1; u++) {
+            let pointsU = [];
+            for (let v = 0; v < degree_v + 1; v++) {
+                const vertex = children[u * (degree_v + 1) + v];
+                if (vertex.nodeName != 'controlpoint') {
+                    return 'You must specify controlpoint on patch of primitive ' + primitiveId;
+                }
+
+                let x = this.reader.getFloat(vertex, 'x', false);
+                let y = this.reader.getFloat(vertex, 'y', false);
+                let z = this.reader.getFloat(vertex, 'z', false);
+                let w = this.reader.getFloat(vertex, 'w', false);
+
+                if (x == null || isNaN(x)) {
+                    return 'You must specify x on controlpoint of primitive ' + primitiveId;
+                } else if (y == null || isNaN(y)) {
+                    return 'You must specify y on controlpoint of primitive ' + primitiveId;
+                } else if (z == null || isNaN(z)) {
+                    return 'You must specify z on controlpoint of primitive ' + primitiveId;
+                } else if (w == null || isNaN(w)) {
+                    w = 1.0; // Assuming w = 1.0 if not specified
+                    this.scene.onXMLMinorError('You must specify w on controlpoint of primitive ' + primitiveId + '. Assuming w = 1.0');
+                    //return 'You must specify w on controlpoint of primitive ' + primitiveId;
+                }
+
+                pointsU.push([x, y, z, w]);
+            }
+            controlPoints.push(pointsU);
+        }
+
+        this.scene.primitives[primitiveId] = new MyPatch(this.scene.scene, primitiveId, degree_u, parts_u, degree_v, parts_v, controlPoints);
+    }
+
 }

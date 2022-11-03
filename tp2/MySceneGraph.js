@@ -95,6 +95,7 @@ export class MySceneGraph {
         // this.primitives['demoCylinder'].display();
         // this.primitives['demoSphere'].display();
         // this.primitives['demoTorus'].display();
+        // this.primitives['patch'].display();
     }
 
     /**

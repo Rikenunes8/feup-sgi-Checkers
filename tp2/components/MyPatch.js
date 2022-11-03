@@ -7,22 +7,22 @@ import { CGFnurbsObject, CGFnurbsSurface, CGFobject } from '../../lib/CGF.js';
  * @param y - Scale of rectangle in Y
  */
 export class MyPatch extends CGFobject {
-  constructor(scene, id, degree_u, parts_u, degree_v, parts_v) {
+  constructor(scene, id, degree_u, parts_u, degree_v, parts_v, controlPoints) {
 
 		super(scene);
 		this.degree_u = degree_u;
 		this.parts_u = parts_u;
 		this.degree_v = degree_v;
 		this.parts_v = parts_v;
+		this.controlPoints = controlPoints;
 
-		this.initBuffers();
+		this.init();
 	}
 
-	initBuffers() {
-		this.surface = null;
 
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();
+	init() {
+		let nurbsSurface = new CGFnurbsSurface(this.degree_u, this.degree_v, this.controlPoints);
+		this.obj = new CGFnurbsObject(this.scene, this.parts_u, this.parts_v, nurbsSurface);
 	}
 
 
@@ -36,15 +36,13 @@ export class MyPatch extends CGFobject {
 		this.updateTexCoordsGLBuffers();
 	}
 
-	makeSurface(degree1, degree2, controlvertexes, translation) {
-			
-		var nurbsSurface = new CGFnurbsSurface(degree1, degree2, controlvertexes);
-
-		var obj = new CGFnurbsObject(this, 20, 20, nurbsSurface ); // must provide an object with the function getPoint(u, v) (CGFnurbsSurface has it)
-		
-		this.surface = obj;	
-		this.translations.push(translation);
-
+	getControlPoints() {
+		return this.controlPoints;
 	}
+
+	display() {
+		this.obj.display();
+	}
+
 }
 

@@ -92,13 +92,14 @@ export class XMLParser {
         return color;
     }
 
-    onXMLerror() {
-        this.scene.onXMLerror();
+    onXMLerror(message) {
+        this.scene.onXMLerror( message);
+        this.scene.loadedOk = false;
     }
-    onXMLMinorError() {
-        this.scene.onXMLMinorError();
+    onXMLMinorError(message) {
+        this.scene.onXMLMinorError(message);
     }
-    log() {
-        this.scene.log();
+    log(message) {
+        this.scene.log(message);
     }
 }
