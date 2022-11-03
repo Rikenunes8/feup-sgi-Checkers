@@ -118,35 +118,39 @@
       </primitive>
 
       <primitive id="barrelSide">
-        <patch degree_u="2" parts_u="10" degree_v="3" parts_v="10" >
-          <controlpoint x="-1" y="1" z="0" w="1.0"/>
-          <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
-          <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
-          <controlpoint x="1" y="1" z="0.0" w="1.0"/>
-
-          <controlpoint x="-1.33333" y="0" z="0" w="1.0"/>
-          <controlpoint x="-1.33333" y="0" z="2.33333" w="1.0"/>
-          <controlpoint x="1.33333" y="0" z="2.33333" w="1.0"/>
-          <controlpoint x="1.33333" y="0" z="0.0" w="1.0"/>
-
+        <patch degree_u="3" parts_u="10" degree_v="2" parts_v="10" >
           <controlpoint x="-1" y="-1" z="0" w="1.0"/>
+          <controlpoint x="-1.5" y="0" z="0" w="1.0"/>
+          <controlpoint x="-1" y="1" z="0" w="1.0"/>
+
           <controlpoint x="-1" y="-1" z="1.33333" w="1.0"/>
+          <controlpoint x="-1.5" y="0" z="2" w="1.0"/>
+          <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
+
           <controlpoint x="1" y="-1" z="1.33333" w="1.0"/>
+          <controlpoint x="1.5" y="0" z="2" w="1.0"/>
+          <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
+
           <controlpoint x="1" y="-1" z="0.0" w="1.0"/>
+          <controlpoint x="1.5" y="0" z="0.0" w="1.0"/>
+          <controlpoint x="1" y="1" z="0.0" w="1.0"/>
         </patch>
       </primitive>
 
       <primitive id="circleNurb">
-        <patch degree_u="1" parts_u="10" degree_v="3" parts_v="10" >
-            <controlpoint x="1" y="1" z="0.00001" w="1.0"/>
-            <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
-            <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
+        <patch degree_u="3" parts_u="10" degree_v="1" parts_v="10" >
             <controlpoint x="-1" y="1" z="0.00001" w="1.0"/>
-
-            <controlpoint x="1" y="1" z="-0.00001" w="1.0"/>
-            <controlpoint x="1" y="1" z="-1.33333" w="1.0"/>
-            <controlpoint x="-1" y="1" z="-1.33333" w="1.0"/>
             <controlpoint x="-1" y="1" z="-0.00001" w="1.0"/>
+
+            <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
+            <controlpoint x="-1" y="1" z="-1.33333" w="1.0"/>
+            
+            <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
+            <controlpoint x="1" y="1" z="-1.33333" w="1.0"/>
+
+            <controlpoint x="1" y="1" z="0.00001" w="1.0"/>
+            <controlpoint x="1" y="1" z="-0.00001" w="1.0"/>
+
         </patch>
       </primitive>
       
