@@ -198,14 +198,6 @@
     </transformations>
 
     <primitives>
-        <primitive id="patch">
-            <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20" >
-                <controlpoint x="-2.0" y="-2.0" z="0.0" />
-                <controlpoint x="-2.0" y="2.0" z="0.0" />
-                <controlpoint x="2.0" y="-2.0" z="0.0" />
-                <controlpoint x="2.0" y="2.0" z="0.0" />
-            </patch>
-        </primitive>
         <primitive id="rectangle">
             <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
         </primitive>

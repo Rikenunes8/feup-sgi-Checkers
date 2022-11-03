@@ -253,7 +253,7 @@ export class XMLParserPrimitives extends XMLParser {
         const children = node.children;
         const numControlPoints = (degree_u + 1) * (degree_v + 1);
         if (children.length < numControlPoints) 
-            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId + ". Given " + controlPoints.length;
+            return "You must specify " + numControlPoints + " control points on primitive " + primitiveId + ". Given " + children.length;
 
         for (let u = 0; u < degree_u + 1; u++) {
             let pointsU = [];
