@@ -1,5 +1,5 @@
 <sxs>
-    <scene root="feup" axis_length="1"/>
+    <scene root="feup" axis_length="10"/>
     <views default="FEUP">
       <perspective id="FEUP" near="0.1" far="500" angle="45">
         <from x="20" y="20" z="30" />
@@ -96,6 +96,63 @@
             <controlpoint x="2.0" y="2.0" z="1.0" w="1.0"/>
         </patch>
       </primitive>
+
+      <primitive id="rectangleNurb">
+        <patch degree_u="1" parts_u="10" degree_v="1" parts_v="10" >
+            <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
+            <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
+            <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
+            <controlpoint x="0.5" y="0.5" z="0.0" w="1.0"/>
+        </patch>
+      </primitive>
+
+      <primitive id="tentNurb">
+        <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+            <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
+            <controlpoint x="-0.5" y="0" z="1.5" w="1.0"/>
+            <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
+            <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
+            <controlpoint x="0.5" y="0" z="1.5" w="1.0"/>
+            <controlpoint x="0.5" y="0.5" z="0.0" w="1.0"/>
+        </patch>
+      </primitive>
+
+      <primitive id="barrelSide">
+        <patch degree_u="3" parts_u="10" degree_v="2" parts_v="10" >
+          <controlpoint x="-1" y="-1" z="0" w="1.0"/>
+          <controlpoint x="-1.5" y="0" z="0" w="1.0"/>
+          <controlpoint x="-1" y="1" z="0" w="1.0"/>
+
+          <controlpoint x="-1" y="-1" z="1.33333" w="1.0"/>
+          <controlpoint x="-1.5" y="0" z="2" w="1.0"/>
+          <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
+
+          <controlpoint x="1" y="-1" z="1.33333" w="1.0"/>
+          <controlpoint x="1.5" y="0" z="2" w="1.0"/>
+          <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
+
+          <controlpoint x="1" y="-1" z="0.0" w="1.0"/>
+          <controlpoint x="1.5" y="0" z="0.0" w="1.0"/>
+          <controlpoint x="1" y="1" z="0.0" w="1.0"/>
+        </patch>
+      </primitive>
+
+      <primitive id="circleNurb">
+        <patch degree_u="3" parts_u="10" degree_v="1" parts_v="10" >
+            <controlpoint x="-1" y="1" z="0.00001" w="1.0"/>
+            <controlpoint x="-1" y="1" z="-0.00001" w="1.0"/>
+
+            <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
+            <controlpoint x="-1" y="1" z="-1.33333" w="1.0"/>
+            
+            <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
+            <controlpoint x="1" y="1" z="-1.33333" w="1.0"/>
+
+            <controlpoint x="1" y="1" z="0.00001" w="1.0"/>
+            <controlpoint x="1" y="1" z="-0.00001" w="1.0"/>
+
+        </patch>
+      </primitive>
       
       <primitive id="rectangle">
           <rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
@@ -135,7 +192,50 @@
               <!--<primitiveref id="patch1" />-->
               <!--<primitiveref id="patch2" />-->
               <!--<primitiveref id="patch3" />-->
-              <primitiveref id="patch4" />
+              <!--<primitiveref id="patch4" />-->
+              <!--<primitiveref id="barrelSide" />-->
+              <componentref id="barrel"/>
+          </children>
+      </component>
+
+      <component id="topBarrel">
+          <transformation>
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+          <texture id="inherit"/>
+          <children>
+              <!--<primitiveref id="patch1" />-->
+              <!--<primitiveref id="patch2" />-->
+              <!--<primitiveref id="patch3" />-->
+              <!--<primitiveref id="patch4" />-->
+              <primitiveref id="barrelSide"/>
+              <primitiveref id="circleNurb"/>
+          </children>
+      </component>
+      <component id="bottomBarrel">
+          <transformation>
+            <rotate axis="x" angle="180" />
+          </transformation>
+        <materials>
+          <material id="inherit" />
+        </materials>
+        <texture id="inherit" />
+        <children>
+          <componentref id="topBarrel"/>
+        </children>
+      </component>
+      <component id="barrel">
+          <transformation>
+          </transformation>
+          <materials>
+              <material id="moon" />
+          </materials>
+          <texture id="test"/>
+          <children>
+            <componentref id="topBarrel"/>
+            <componentref id="bottomBarrel"/>
           </children>
       </component>
     </components>
