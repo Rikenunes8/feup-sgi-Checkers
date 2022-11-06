@@ -86,9 +86,13 @@ export class MySceneGraph {
                 this.primitives[id].enableNormalViz();
             else
                 this.primitives[id].disableNormalViz();
-        }
+        }  
 
-        this.displayNode([false, this.idRoot], this.components[this.idRoot].getMaterial());
+        const rootComponent = this.components[this.idRoot]
+        this.displayNode([false, this.idRoot], 
+            rootComponent.getMaterial(), 
+            rootComponent.getTexture(), 
+            rootComponent.getHighlighted());
 
         //To test the parsing/creation of the primitives, call the display function directly
         // this.primitives['demoRectangle'].display();
@@ -104,10 +108,14 @@ export class MySceneGraph {
      * @param {*} prevMaterial 
      * @param {*} prevTexture 
      */
-    displayNode(node, prevMaterial, prevTexture) {
+    displayNode(node, prevMaterial, prevTexture, prevHighlighted) {
         const isPrimitive = node[0];
         const nodeId = node[1];
         if (isPrimitive) {
+            if (prevHighlighted != null)
+                this.scene.setActiveShader(this.scene.highlightedShader);
+            else if (this.scene.activeShader != this.scene.defaultShader)
+                this.scene.setActiveShader(this.scene.defaultShader);
             this.primitives[nodeId].updateTexCoords(prevTexture.slice(-2))
             this.primitives[nodeId].display();
         }
@@ -115,6 +123,7 @@ export class MySceneGraph {
             const component = this.components[nodeId];
             let material = component.getMaterial();
             let texture = component.getTexture();
+            let highlighted = component.getHighlighted();
 
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
@@ -127,7 +136,7 @@ export class MySceneGraph {
                 material.setTextureWrap('REPEAT', 'REPEAT');
                 material.apply();
 
-                this.displayNode(child, material, texture);
+                this.displayNode(child, material, texture, highlighted);
             }
             this.scene.popMatrix();
         }

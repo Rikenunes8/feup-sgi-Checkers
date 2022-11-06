@@ -1,5 +1,5 @@
 import { CGFscene } from '../lib/CGF.js';
-import { CGFaxis,CGFcamera } from '../lib/CGF.js';
+import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -43,6 +43,8 @@ export class XMLscene extends CGFscene {
 
         this.cameras = [];
         this.currCam = 0;
+
+        this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
     }
 
     /**

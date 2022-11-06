@@ -45,4 +45,8 @@ export class MyComponent extends CGFobject {
     getTexture() {
         return this.texture;
     }
+    
+    getHighlighted() {
+        return this.highlighted;
+    }
 }
