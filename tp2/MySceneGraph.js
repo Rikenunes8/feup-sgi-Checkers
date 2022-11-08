@@ -112,10 +112,13 @@ export class MySceneGraph {
         const isPrimitive = node[0];
         const nodeId = node[1];
         if (isPrimitive) {
-            if (prevHighlighted != null)
+            if (prevHighlighted != null) {
+                this.scene.highlightedShader.setUniformsValues({ scale: prevHighlighted[3] });
                 this.scene.setActiveShader(this.scene.highlightedShader);
-            else if (this.scene.activeShader != this.scene.defaultShader)
+            }
+            else if (this.scene.activeShader != this.scene.defaultShader) {
                 this.scene.setActiveShader(this.scene.defaultShader);
+            }
             this.primitives[nodeId].updateTexCoords(prevTexture.slice(-2))
             this.primitives[nodeId].display();
         }

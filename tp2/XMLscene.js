@@ -45,6 +45,8 @@ export class XMLscene extends CGFscene {
         this.currCam = 0;
 
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
+        this.highlightedShader.setUniformsValues({ timeFactor: 0 });
+		this.setUpdatePeriod(50);
     }
 
     /**
@@ -154,6 +156,14 @@ export class XMLscene extends CGFscene {
         }
     }
 
+    // called periodically (as per setUpdatePeriod() in init())
+	update(t) {		
+        // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
+        // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
+        // ( so the loop period of timeFactor is 100 times 100 ms = 10s ; the actual animation loop depends on how timeFactor is used in the shader )
+        this.highlightedShader.setUniformsValues({ timeFactor: t / 100 % 100});
+	}
+
     /**
      * Displays the scene.
      */
@@ -189,6 +199,7 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals; // TODO testing
             this.graph.displayScene();
+            if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();

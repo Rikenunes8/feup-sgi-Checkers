@@ -6,7 +6,11 @@ uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform mat4 uNMatrix;
 
+uniform float timeFactor;
+uniform float scale;
 
 void main() {
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+	vec3 offset = aVertexNormal*scale*sin(timeFactor*0.1);
+
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }
