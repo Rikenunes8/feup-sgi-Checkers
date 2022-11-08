@@ -114,6 +114,7 @@ export class MySceneGraph {
         if (isPrimitive) {
             if (prevHighlighted != null) {
                 this.scene.highlightedShader.setUniformsValues({ scale: prevHighlighted[3] });
+                this.scene.highlightedShader.setUniformsValues({ color: vec3.fromValues(prevHighlighted[0], prevHighlighted[1], prevHighlighted[2]) });
                 this.scene.setActiveShader(this.scene.highlightedShader);
             }
             else if (this.scene.activeShader != this.scene.defaultShader) {

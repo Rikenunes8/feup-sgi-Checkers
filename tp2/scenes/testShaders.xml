@@ -78,8 +78,62 @@
           <texture id="test"/>
           <children>
               <primitiveref id="sphere"/>
+              <componentref id="wall1"/>
+              <componentref id="wall2"/>
+              <componentref id="wall3"/>
+              <componentref id="wall4"/>
           </children>
-          <highlighted r="1.0" g="0.0" b="0.0" scale_h="2.0" />
+          <highlighted r="1.0" g="0.0" b="0.0" scale_h="5.0" />
+      </component>
+      <component id="wall1">
+          <transformation>
+            <translate x="0" y="0" z="5" />
+          </transformation>
+          <materials>
+              <material id="moon" />
+          </materials>
+          <texture id="none"/>
+          <children>
+              <primitiveref id="rectangle"/>
+          </children>
+      </component>
+      <component id="wall2">
+          <transformation>
+            <translate x="5" y="0" z="0" />
+            <rotate axis="y" angle="90"/>
+          </transformation>
+          <materials>
+              <material id="moon" />
+          </materials>
+          <texture id="none"/>
+          <children>
+              <primitiveref id="rectangle"/>
+          </children>
+      </component>
+      <component id="wall3">
+          <transformation>
+            <translate x="0" y="0" z="1" />
+          </transformation>
+          <materials>
+              <material id="moon" />
+          </materials>
+          <texture id="none"/>
+          <children>
+              <primitiveref id="rectangle"/>
+          </children>
+      </component>
+      <component id="wall4">
+          <transformation>
+            <translate x="1" y="0" z="0" />
+            <rotate axis="y" angle="90"/>
+          </transformation>
+          <materials>
+              <material id="moon" />
+          </materials>
+          <texture id="none"/>
+          <children>
+              <primitiveref id="rectangle"/>
+          </children>
       </component>
     </components>
 </sxs>

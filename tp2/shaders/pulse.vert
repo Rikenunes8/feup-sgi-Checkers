@@ -10,7 +10,8 @@ uniform float timeFactor;
 uniform float scale;
 
 void main() {
-	vec3 offset = aVertexNormal*scale*sin(timeFactor*0.1);
+    // TODO aVertexNormal is not normalized
+	vec3 offset = aVertexNormal*scale*(sin(timeFactor*0.1)*0.5+0.5);
 
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition+offset, 1.0);
 }
