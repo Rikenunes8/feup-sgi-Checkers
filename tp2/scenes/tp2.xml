@@ -253,7 +253,7 @@
           </patch>
         </primitive>
         <primitive id="rectangleNurb">
-          <patch degree_u="1" parts_u="20" degree_v="1" parts_v="20" >
+          <patch degree_u="1" parts_u="10" degree_v="1" parts_v="10" >
               <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
               <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
               <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
@@ -921,10 +921,8 @@
                 <material id="inherit" />
             </materials>
             <texture id="inherit"/>
-            <!--<texture id="none"/>-->
             <children>
-              <primitiveref id="rectangle" />
-                <!--<primitiveref id="rectangleNurb"/>-->
+                <primitiveref id="rectangleNurb"/>
             </children>
         </component>
 
