@@ -55,8 +55,7 @@ export class MySphere extends CGFobject {
                         this.indices.push(curr, next + 1, next);
                     }
                 }
-                const norme = Math.sqrt(x * x + y * y + z * z); 
-                this.normals.push(x/norme, y/norme, z/norme);
+                this.normals.push(x/this.radius, y/this.radius, z/this.radius);
                 this.texCoords.push(- j / this.slices, i / this.stacks)
             }
         }

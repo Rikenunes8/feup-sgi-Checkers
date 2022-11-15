@@ -27,12 +27,6 @@ export class MyPatch extends CGFobject {
 
 	initBuffers() {
 		this.obj.initBuffers();
-		this.vertices = this.obj.vertices;
-		this.faceNormals = this.obj.faceNormals;
-		this.texCoords = this.obj.texCoords;
-		this.colors = this.obj.colors;
-		this.indices = this.obj.indices;
-		this.faces = this.obj.faces;
 	}
 	
 
