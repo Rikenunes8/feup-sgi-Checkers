@@ -17,14 +17,18 @@ export class MyPatch extends CGFobject {
 		this.controlPoints = controlPoints;
 
 		this.init();
+		this.initBuffers();
 	}
-
 
 	init() {
 		let nurbsSurface = new CGFnurbsSurface(this.degree_u, this.degree_v, this.controlPoints);
 		this.obj = new CGFnurbsObject(this.scene, this.parts_u, this.parts_v, nurbsSurface);
 	}
 
+	initBuffers() {
+		this.obj.initBuffers();
+	}
+	
 
 	/**
 	 * @method updateTexCoords
@@ -32,8 +36,6 @@ export class MyPatch extends CGFobject {
 	 * @param {Array} coords - Array of texture coordinates
 	 */
 	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
 	}
 
 	getControlPoints() {
@@ -43,6 +45,15 @@ export class MyPatch extends CGFobject {
 	display() {
 		this.obj.display();
 	}
+
+	enableNormalViz() {
+		this.obj.enableNormalViz();
+	}
+
+	disableNormalViz() {
+		this.obj.disableNormalViz();
+	}
+
 
 }
 
