@@ -44,6 +44,8 @@ export class XMLscene extends CGFscene {
         this.cameras = [];
         this.currCam = 0;
 
+        this.highlightedComponents = {};
+
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
 		this.setUpdatePeriod(10);
@@ -133,6 +135,7 @@ export class XMLscene extends CGFscene {
         
         this.interface.addCameras();
         this.interface.addLights();
+        this.interface.addHighlighted();
 
         this.sceneInited = true;
     }

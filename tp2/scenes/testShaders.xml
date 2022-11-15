@@ -96,6 +96,7 @@
           <children>
               <primitiveref id="rectangle"/>
           </children>
+          <highlighted r="1.0" g="0.0" b="0.0" scale_h="5.0" />
       </component>
       <component id="wall2">
           <transformation>

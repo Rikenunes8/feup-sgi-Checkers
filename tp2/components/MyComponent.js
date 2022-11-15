@@ -19,7 +19,7 @@ export class MyComponent extends CGFobject {
         this.children = [...children];
 
         this.highlighted = highlighted != null ? [...highlighted] : null; // [r="ff" g="ff" b="ff" scale_h="ff"]
-
+        this.isHighlighted = highlighted ? true : false;
         this.material = 0;
     }
 
@@ -47,6 +47,8 @@ export class MyComponent extends CGFobject {
     }
     
     getHighlighted() {
-        return this.highlighted;
+        if (this.isHighlighted) {
+            return this.highlighted;
+        }
     }
 }
