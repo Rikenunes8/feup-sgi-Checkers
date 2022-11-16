@@ -12,12 +12,13 @@ export class XMLParserAnimations extends XMLParser {
             const animation = animations[i]
             if (animation.nodeName != "keyframeanim") {
                 this.onXMLMinorError("unknown tag <" + animation.nodeName + ">");
-                return;
+                continue;
             }
             const error = this.parseKeyframeanim(myAnimations, animation);
             if (error != null) return error;
         }
-
+        
+        this.scene.animations = {...myAnimations};
     }
 
     parseKeyframeanim(myAnimations, animation) {
@@ -32,7 +33,7 @@ export class XMLParserAnimations extends XMLParser {
         for (let i = 0; i < keyframes.length; i++) {
             if (keyframes[i].nodeName != "keyframe") {
                 this.onXMLMinorError("unknown tag <" + keyframes[i].nodeName + ">");
-                return;
+                continue;
             }
             const error = this.parseKeyframe(myKeyframeAnimation, keyframes[i], animationId);
             if (error != null) return error;

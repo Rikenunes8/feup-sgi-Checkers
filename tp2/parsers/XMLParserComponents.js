@@ -47,6 +47,7 @@ export class XMLParserComponents extends XMLParser {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            var animationIndex = nodeNames.indexOf("animation");
             var highlightedIndex = nodeNames.indexOf("highlighted");
 
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
@@ -58,13 +59,18 @@ export class XMLParserComponents extends XMLParser {
             let componentMaterials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID);
             let componentTexture = this.parseComponentTexture(grandChildren[textureIndex], componentID);
             let componentChildren = this.parseComponentChildren(grandChildren[childrenIndex].children, componentID);
+            let componentAnimation = animationIndex != -1 ? this.parseComponentAnimation(grandChildren[animationIndex], componentID) : null;
             let componentHighlighted = highlightedIndex != -1 ? this.parseComponentHighlighted(grandChildren[highlightedIndex], componentID) : null;
+
 
             if (!Array.isArray(componentTransfMatrix)) return componentTransfMatrix;
             if (!Array.isArray(componentMaterials)) return componentMaterials;
             if (!Array.isArray(componentTexture) && componentTexture != 'none' && componentTexture != 'inherit') return componentTexture;
             if (!Array.isArray(componentChildren)) return componentChildren;
+            if (componentAnimation != null && !Array.isArray(componentAnimation)) return componentAnimation;
             if (componentHighlighted != null && !Array.isArray(componentHighlighted)) return componentHighlighted;
+
+
             
             let newComponent = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentHighlighted);
             this.scene.components[componentID] = newComponent;
@@ -242,6 +248,20 @@ export class XMLParserComponents extends XMLParser {
         return [...componentChildren];
     }
 
+    /**
+     * Parses textures for a component
+     * @param {*} animation 
+     * @param {*} componentID 
+     * @returns list with the component animation id and its length_s and length_t 
+     */
+    parseComponentAnimation(animation, componentID) {
+        const animationId = this.reader.getString(animation, 'id', false);
+        if (animationId == null) return "no ID defined for animation defined in component " + componentID;
+
+        if (this.scene.animations[animationId] == null) return "no animation defined with id " + animationId + " in " + componentID;
+        return componentTexture;
+    }
+
     parseComponentHighlighted(highlighted, componentID) {
         const r = this.reader.getFloat(highlighted, 'r', false);
         const g = this.reader.getFloat(highlighted, 'g', false);
@@ -255,4 +275,5 @@ export class XMLParserComponents extends XMLParser {
 
         return [r, g, b, h];
     }
+    
 }
