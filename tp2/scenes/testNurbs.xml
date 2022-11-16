@@ -213,6 +213,7 @@
               <primitiveref id="barrelSide"/>
               <primitiveref id="circleNurb"/>
           </children>
+          <highlighted r="1" g="0" b="0" scale_h="2"/>
       </component>
       <component id="bottomBarrel">
           <transformation>

@@ -15,7 +15,7 @@ export class XMLParserComponents extends XMLParser {
 
         // object with id of component associated with its properties
         this.scene.components = {};
-
+        this.scene.highlightedComponents = [];
         var grandChildren = [];
         var nodeNames = [];
 
@@ -66,7 +66,11 @@ export class XMLParserComponents extends XMLParser {
             if (!Array.isArray(componentChildren)) return componentChildren;
             if (componentHighlighted != null && !Array.isArray(componentHighlighted)) return componentHighlighted;
             
-            this.scene.components[componentID] = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentHighlighted);
+            let newComponent = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentHighlighted);
+            this.scene.components[componentID] = newComponent;
+            if (componentHighlighted) {
+                this.scene.highlightedComponents.push(newComponent);
+            }
         }
 
         this.log("Parsed components");
