@@ -29,7 +29,7 @@
 
     <materials>
       <material id="moon" shininess="1000">
-        <emission r="1.0" g="1.0" b="1.0" a="1.0" />
+        <emission r="0.0" g="0.0" b="1.0" a="1.0" />
         <ambient r="1.0" g="1.0" b="1.0" a="1" />
         <diffuse r="1.0" g="1.0" b="1.0" a="1.0" />
         <specular r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -96,7 +96,6 @@
           <children>
               <primitiveref id="rectangle"/>
           </children>
-          <highlighted r="1.0" g="0.0" b="0.0" scale_h="5.0" />
       </component>
       <component id="wall2">
           <transformation>
