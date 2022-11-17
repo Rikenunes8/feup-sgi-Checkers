@@ -21,19 +21,26 @@ export class MyKeyframeAnimation extends MyAnimation {
         // MyKeyframe
         const nextKeyframe = this.keyframes[keyframeIndex + 1];
 
-        const instant = time - keyframe[0];
-        const duration = nextKeyframe[0] - keyframe[0];
+        const instant = time - keyframe.instant;
+        const duration = nextKeyframe.instant - keyframe.instant;
         const percentage = instant / duration;
-        
+
+        let translate = vec3.create();
+        let rotate = vec3.create();
+        let scale = vec3.create();
+
         // interpolate keyframes
-        vec3.lerp(keyframe, nextKeyframe, percentage);
+        vec3.lerp(translate, keyframe.translate, nextKeyframe.translate, percentage);
+        vec3.lerp(rotate, [keyframe.rotateX, keyframe.rotateY, keyframe.rotateZ], [nextKeyframe.rotateX, nextKeyframe.rotateY, nextKeyframe.rotateZ], percentage);
+        vec3.lerp(scale, keyframe.scale, nextKeyframe.scale, percentage);      
 
         // construct animation matrix
-        mat4.fromTranslation(this.animationMatrix, keyframe.translate);
-        mat4.rotateZ(this.animationMatrix, this.animationMatrix, keyframe.rotateZ);
-        mat4.rotateY(this.animationMatrix, this.animationMatrix, keyframe.rotateY);
-        mat4.rotateX(this.animationMatrix, this.animationMatrix, keyframe.rotateX);
-        mat4.scale(this.animationMatrix, this.animationMatrix, keyframe.scale);
+        this.animationMatrix = mat4.create();
+        this.animationMatrix = mat4.translate(this.animationMatrix, this.animationMatrix, translate);
+        this.animationMatrix = mat4.rotateZ(this.animationMatrix, this.animationMatrix, rotate[2]);
+        this.animationMatrix = mat4.rotateY(this.animationMatrix, this.animationMatrix, rotate[1]);
+        this.animationMatrix = mat4.rotateX(this.animationMatrix, this.animationMatrix, rotate[0]);
+        this.animationMatrix = mat4.scale(this.animationMatrix, this.animationMatrix, scale);
 
         return true;
     }

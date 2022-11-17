@@ -48,6 +48,8 @@ export class XMLscene extends CGFscene {
 
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
+
+        this.startTime = null;
 		this.setUpdatePeriod(10);
     }
 
@@ -164,7 +166,7 @@ export class XMLscene extends CGFscene {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = t;
             for (let anim in this.graph.animations) {
-                this.graph.animations[anim].update(t - this.startTime);
+                this.graph.animations[anim].update((t - this.startTime)/1000);
             }
         }
         // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).

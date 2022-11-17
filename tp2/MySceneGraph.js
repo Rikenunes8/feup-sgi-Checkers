@@ -128,12 +128,16 @@ export class MySceneGraph {
             let material = component.getMaterial();
             let texture = component.getTexture();
             let highlighted = component.getHighlighted();
+            let animationId = component.animationId;
 
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
 
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
+            if (animationId !== null) {
+                this.scene.multMatrix(this.animations[animationId].animationMatrix);
+            }
             for (let child of component.children) {
                 if (texture[0] === 'none') material.setTexture(null);
                 else material.setTexture(this.textures[texture[0]]);
