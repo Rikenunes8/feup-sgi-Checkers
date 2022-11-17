@@ -15,7 +15,7 @@ export class XMLParserComponents extends XMLParser {
 
         // object with id of component associated with its properties
         this.scene.components = {};
-
+        this.scene.highlightedComponents = [];
         var grandChildren = [];
         var nodeNames = [];
 
@@ -47,6 +47,7 @@ export class XMLParserComponents extends XMLParser {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            var highlightedIndex = nodeNames.indexOf("highlighted");
 
             if (transformationIndex == -1) return "missing tranformation definition in component " + componentID;
             if (materialsIndex == -1) return "missing materials definition in component " + componentID;
@@ -57,13 +58,19 @@ export class XMLParserComponents extends XMLParser {
             let componentMaterials = this.parseComponentMaterials(grandChildren[materialsIndex].children, componentID);
             let componentTexture = this.parseComponentTexture(grandChildren[textureIndex], componentID);
             let componentChildren = this.parseComponentChildren(grandChildren[childrenIndex].children, componentID);
+            let componentHighlighted = highlightedIndex != -1 ? this.parseComponentHighlighted(grandChildren[highlightedIndex], componentID) : null;
 
             if (!Array.isArray(componentTransfMatrix)) return componentTransfMatrix;
             if (!Array.isArray(componentMaterials)) return componentMaterials;
             if (!Array.isArray(componentTexture) && componentTexture != 'none' && componentTexture != 'inherit') return componentTexture;
             if (!Array.isArray(componentChildren)) return componentChildren;
+            if (componentHighlighted != null && !Array.isArray(componentHighlighted)) return componentHighlighted;
             
-            this.scene.components[componentID] = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren);
+            let newComponent = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentHighlighted);
+            this.scene.components[componentID] = newComponent;
+            if (componentHighlighted) {
+                this.scene.highlightedComponents.push(newComponent);
+            }
         }
 
         this.log("Parsed components");
@@ -233,5 +240,19 @@ export class XMLParserComponents extends XMLParser {
             return "must exists at least one children declaration for component " + componentID;
 
         return [...componentChildren];
+    }
+
+    parseComponentHighlighted(highlighted, componentID) {
+        const r = this.reader.getFloat(highlighted, 'r', false);
+        const g = this.reader.getFloat(highlighted, 'g', false);
+        const b = this.reader.getFloat(highlighted, 'b', false);
+        const h = this.reader.getFloat(highlighted, 'scale_h', false);
+
+        if (r == null) return "no r defined for highlighted color in component " + componentID;
+        if (g == null) return "no g defined for highlighted color in component " + componentID;
+        if (b == null) return "no b defined for highlighted color in component " + componentID;
+        if (h == null) return "no scale_h defined for highlighted color in component " + componentID;
+
+        return [r, g, b, h];
     }
 }
