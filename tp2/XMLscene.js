@@ -161,6 +161,12 @@ export class XMLscene extends CGFscene {
 
     // called periodically (as per setUpdatePeriod() in init())
 	update(t) {		
+        if (this.sceneInited) {
+            if (this.startTime === null) this.startTime = t;
+            for (let anim of this.graph.animations) {
+                anim.update(t - this.startTime);
+            }
+        }
         // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
         // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
         // ( so the loop period of timeFactor is 100 times 100 ms = 10s ; the actual animation loop depends on how timeFactor is used in the shader )

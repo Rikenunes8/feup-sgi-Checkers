@@ -56,35 +56,28 @@ export class XMLParserAnimations extends XMLParser {
             if (transformations[k].nodeName != transformationNames[k]) return "keyframe must have a " + transformationNames[k] + " transformation in index " + k;
         }
 
-        let transfMatrix = mat4.create();
-
-        var coordinates = this.parseCoordinates3D(transformations[0], "translate transformation for animation ID " + animationId);
-        if (!Array.isArray(coordinates)) return coordinates;
-        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+        const translate = this.parseCoordinates3D(transformations[0], "translate transformation for animation ID " + animationId);
+        if (!Array.isArray(translate)) return translate;
 
         const axisZ = this.reader.getString(transformations[1], 'axis', false);
         if (axisZ == null || axisZ != "z") return "unable to parse axis of the rotate z transformation for animation ID " + animationId;
         const angleZ = this.reader.getFloat(transformations[1], 'angle', false);
         if (!(angleZ != null && !isNaN(angleZ))) return "unable to parse angle of the rotate z transformation for animation ID " + animationId;
-        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angleZ*DEGREE_TO_RAD, [0, 0, 1]);
         
         const axisY = this.reader.getString(transformations[2], 'axis', false);
         if (axisY == null || axisY != "y") return "unable to parse axis of the rotate y transformation for animation ID " + animationId;
         const angleY = this.reader.getFloat(transformations[2], 'angle', false);
         if (!(angleY != null && !isNaN(angleY))) return "unable to parse angle of the rotate y transformation for animation ID " + animationId;
-        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angleY*DEGREE_TO_RAD, [0, 1, 0]);
 
         const axisX = this.reader.getString(transformations[3], 'axis', false);
         if (axisX == null || axisX != "x") return "unable to parse axis of the rotate x transformation for animation ID " + animationId;
         const angleX = this.reader.getFloat(transformations[3], 'angle', false);
         if (!(angleX != null && !isNaN(angleX))) return "unable to parse angle of the rotate x transformation for animation ID " + animationId;
-        transfMatrix = mat4.rotate(transfMatrix, transfMatrix, angleX*DEGREE_TO_RAD, [0, 1, 0]);
 
-        coordinates = this.parseCoordinates3D(transformations[4], "scale transformation for animation ID " + animationId, ["sx", "sy", "sz"]);
-        if (!Array.isArray(coordinates)) return coordinates;
-        transfMatrix = mat4.scale(transfMatrix, transfMatrix, coordinates);
+        const scale = this.parseCoordinates3D(transformations[4], "scale transformation for animation ID " + animationId, ["sx", "sy", "sz"]);
+        if (!Array.isArray(scale)) return scale;
 
-        myKeyframeAnimation.addKeyframe(instant, transfMatrix);
+        myKeyframeAnimation.addKeyframe(new MyKeyframe(instant, translate, angleZ * DEGREE_TO_RAD, angleY * DEGREE_TO_RAD, angleX * DEGREE_TO_RAD, scale));
     }
 
 }
