@@ -1,5 +1,6 @@
 import { XMLParser, DEGREE_TO_RAD } from "./XMLParser.js";
 import { MyKeyframeAnimation } from "../components/MyKeyframeAnimation.js";
+import { MyKeyframe } from "../components/MyKeyframe.js";
 
 export class XMLParserAnimations extends XMLParser {
     constructor(scene) {

@@ -1,4 +1,4 @@
-class MyKeyframe {
+export class MyKeyframe {
     constructor(instant, translate, rotateZ, rotateY, rotateX, scale) {
         this.instant = instant;
         this.translate = translate;

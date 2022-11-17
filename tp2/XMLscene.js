@@ -160,11 +160,11 @@ export class XMLscene extends CGFscene {
     }
 
     // called periodically (as per setUpdatePeriod() in init())
-	update(t) {		
+	update(t) {
         if (this.sceneInited) {
             if (this.startTime === null) this.startTime = t;
-            for (let anim of this.graph.animations) {
-                anim.update(t - this.startTime);
+            for (let anim in this.graph.animations) {
+                this.graph.animations[anim].update(t - this.startTime);
             }
         }
         // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).

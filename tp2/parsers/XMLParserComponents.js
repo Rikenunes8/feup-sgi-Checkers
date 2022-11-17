@@ -62,7 +62,6 @@ export class XMLParserComponents extends XMLParser {
             let componentAnimation = animationIndex != -1 ? this.parseComponentAnimation(grandChildren[animationIndex], componentID) : null;
             let componentHighlighted = highlightedIndex != -1 ? this.parseComponentHighlighted(grandChildren[highlightedIndex], componentID) : null;
 
-
             if (!Array.isArray(componentTransfMatrix)) return componentTransfMatrix;
             if (!Array.isArray(componentMaterials)) return componentMaterials;
             if (!Array.isArray(componentTexture) && componentTexture != 'none' && componentTexture != 'inherit') return componentTexture;
@@ -70,9 +69,7 @@ export class XMLParserComponents extends XMLParser {
             if (componentAnimation != null && !Array.isArray(componentAnimation)) return componentAnimation;
             if (componentHighlighted != null && !Array.isArray(componentHighlighted)) return componentHighlighted;
 
-
-            
-            let newComponent = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentHighlighted);
+            let newComponent = new MyComponent(this.scene.scene, componentID, componentTransfMatrix, componentMaterials, componentTexture, componentChildren, componentAnimation, componentHighlighted);
             this.scene.components[componentID] = newComponent;
             if (componentHighlighted) {
                 this.scene.highlightedComponents.push(newComponent);
@@ -259,7 +256,7 @@ export class XMLParserComponents extends XMLParser {
         if (animationId == null) return "no ID defined for animation defined in component " + componentID;
 
         if (this.scene.animations[animationId] == null) return "no animation defined with id " + animationId + " in " + componentID;
-        return componentTexture;
+        return [animationId];
     }
 
     parseComponentHighlighted(highlighted, componentID) {

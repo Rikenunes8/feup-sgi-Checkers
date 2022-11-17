@@ -78,7 +78,6 @@ export class MyInterface extends CGFinterface {
 
     addHighlighted() {
         const folder = this.gui.addFolder('Highlighted');
-        console.log("this.scene.highlighted: " + this.scene.graph.highlightedComponents);
         for (let c = 0; c < Object.keys(this.scene.graph.highlightedComponents).length; c++) {
             folder.add(this.scene.graph.highlightedComponents[c], 'isHighlighted').name(this.scene.graph.highlightedComponents[c].id).onChange();
         }

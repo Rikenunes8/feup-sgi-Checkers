@@ -3,7 +3,7 @@ import { CGFobject } from '../../lib/CGF.js';
 
 export class MyComponent extends CGFobject {
 
-    constructor(scene, id, transfMatrix, materials, texture, children, highlighted) {
+    constructor(scene, id, transfMatrix, materials, texture, children, animation, highlighted) {
         super(scene);
         this.id = id;
 
@@ -17,6 +17,8 @@ export class MyComponent extends CGFobject {
 
         // children = [isPrimitive, id] => isPrimitive = bool; id = children component string
         this.children = [...children];
+
+        this.animationId = animation != null ? animation[0] : null;
 
         this.highlighted = highlighted != null ? [...highlighted] : null; // [r="ff" g="ff" b="ff" scale_h="ff"]
         this.isHighlighted = highlighted ? true : false;
