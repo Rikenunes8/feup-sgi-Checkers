@@ -38,7 +38,7 @@ export class XMLParserAnimations extends XMLParser {
             }
             const error = this.parseKeyframe(myKeyframeAnimation, keyframes[i], animationId);
             if (error != null) return error;
-            let inst = myKeyframeAnimation.keyframes[myKeyframeAnimation.keyframes.length-1][0];
+            let inst = myKeyframeAnimation.keyframes[myKeyframeAnimation.keyframes.length-1].instant;
             if (inst <= lastInstant) return "keyframes must be defined in ascending order";
             else lastInstant = inst;
         }
