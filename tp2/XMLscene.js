@@ -40,6 +40,7 @@ export class XMLscene extends CGFscene {
         this.displayNormals = false; // TODO testing
         this.displayLights = false;
         this.displayingLights = this.displayLights;
+        this.resetAnimations = true;
 
         this.cameras = [];
         this.currCam = 0;
@@ -159,6 +160,11 @@ export class XMLscene extends CGFscene {
         for (let key in this.graph.components) {
             this.graph.components[key].nextMaterial();
         }
+    }
+
+    resetAnims = () => {
+        this.startTime = null;
+        this.resetAnimations = true;
     }
 
     // called periodically (as per setUpdatePeriod() in init())

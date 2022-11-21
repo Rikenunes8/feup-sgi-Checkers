@@ -77,12 +77,26 @@
           <rotation axis="x" angle="0" />
           <scale sx="1" sy="1" sz="1" />
         </keyframe>
-        <keyframe instant="10">
+        <keyframe instant="5">
           <translation x="10" y="0" z="0" />
           <rotation axis="z" angle="0" />
           <rotation axis="y" angle="0" />
           <rotation axis="x" angle="0" />
           <scale sx="1" sy="1" sz="1" />
+        </keyframe>
+        <keyframe instant="10">
+          <translation x="5" y="0" z="0" />
+          <rotation axis="z" angle="0" />
+          <rotation axis="y" angle="180" />
+          <rotation axis="x" angle="90" />
+          <scale sx="2" sy="2" sz="2" />
+        </keyframe>
+        <keyframe instant="12">
+          <translation x="5" y="0" z="0" />
+          <rotation axis="z" angle="360" />
+          <rotation axis="y" angle="180" />
+          <rotation axis="x" angle="90" />
+          <scale sx="2" sy="2" sz="2" />
         </keyframe>
       </keyframeanim>
     </animations>
@@ -103,6 +117,7 @@
               <componentref id="wall4"/>
           </children>
           <animation id="bola"/>
+          <highlighted r="0.0" g="1.0" b="0.0" scale_h="1.0" />
       </component>
       <component id="wall1">
           <transformation>
