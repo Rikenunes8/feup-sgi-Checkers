@@ -70,7 +70,7 @@
 
     <animations>
       <keyframeanim id="bola">
-        <keyframe instant="0">
+        <keyframe instant="3">
           <translation x="0" y="0" z="0" />
           <rotation axis="z" angle="0" />
           <rotation axis="y" angle="0" />

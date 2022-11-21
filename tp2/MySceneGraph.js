@@ -132,11 +132,15 @@ export class MySceneGraph {
 
             if (material === 'inherit') material = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
-
+            
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
+
             if (animationId !== null) {
-                this.scene.multMatrix(this.animations[animationId].animationMatrix);
+                if (!this.animations[animationId].apply()) {
+                    this.scene.popMatrix();
+                    return;
+                }
             }
             for (let child of component.children) {
                 if (texture[0] === 'none') material.setTexture(null);
