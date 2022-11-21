@@ -295,24 +295,24 @@
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="2.5">
-                <translation x="0" y="0" z="0.5" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="0" />
-                <rotation axis="x" angle="45" />
+                <translation x="-0.5" y="0" z="0.5" />
+                <rotation axis="z" angle="45" />
+                <rotation axis="y" angle="-20" />
+                <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="4">
-                <translation x="0" y="0" z="3" />
-                <rotation axis="z" angle="0" />
+                <translation x="-0.6" y="0" z="3" />
+                <rotation axis="z" angle="90" />
                 <rotation axis="y" angle="-90" />
-                <rotation axis="x" angle="90" />
+                <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             <keyframe instant="8">
-                <translation x="0" y="0" z="10" />
-                <rotation axis="z" angle="0" />
-                <rotation axis="y" angle="-90" />
-                <rotation axis="x" angle="90" />
+                <translation x="-0.8" y="0" z="10" />
+                <rotation axis="z" angle="90" />
+                <rotation axis="y" angle="-270" />
+                <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
             
