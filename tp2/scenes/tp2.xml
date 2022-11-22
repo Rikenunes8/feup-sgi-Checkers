@@ -287,35 +287,92 @@
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="2">
+            <keyframe instant="3">
                 <translation x="0" y="0" z="0" />
                 <rotation axis="z" angle="0" />
                 <rotation axis="y" angle="0" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="2.5">
+            <keyframe instant="3.5">
                 <translation x="-0.5" y="0" z="0.5" />
                 <rotation axis="z" angle="45" />
                 <rotation axis="y" angle="-20" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="4">
+            <keyframe instant="5">
                 <translation x="-0.6" y="0" z="3" />
                 <rotation axis="z" angle="90" />
                 <rotation axis="y" angle="-90" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            <keyframe instant="8">
-                <translation x="-0.8" y="0" z="10" />
+            <keyframe instant="11">
+                <translation x="-0.8" y="0" z="13" />
                 <rotation axis="z" angle="90" />
-                <rotation axis="y" angle="-270" />
+                <rotation axis="y" angle="-350" />
                 <rotation axis="x" angle="0" />
                 <scale sx="1" sy="1" sz="1" />
             </keyframe>
-            
+            <keyframe instant="14">
+                <translation x="-0.8" y="-5.4" z="21.5" />
+                <rotation axis="z" angle="90" />
+                <rotation axis="y" angle="-600" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="16">
+                <translation x="-0.8" y="-5.4" z="25.5" />
+                <rotation axis="z" angle="90" />
+                <rotation axis="y" angle="-800" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="18">
+                <translation x="-0.8" y="-10.8" z="34" />
+                <rotation axis="z" angle="90" />
+                <rotation axis="y" angle="-1050" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+            <keyframe instant="38">
+                <translation x="-0.8" y="-400" z="34" />
+                <rotation axis="z" angle="90" />
+                <rotation axis="y" angle="-1800" />
+                <rotation axis="x" angle="0" />
+                <scale sx="1" sy="1" sz="1" />
+            </keyframe>
+        </keyframeanim>
+        <keyframeanim id="ovni">
+            <keyframe instant="2">
+                <translation x="0.3" y="8" z="0" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="0.1" sz="0.1" />
+            </keyframe>
+            <keyframe instant="3">
+                <translation x="11.5" y="3.6" z="13" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="0.1" sz="0.1" />
+            </keyframe>
+            <keyframe instant="4.5">
+                <translation x="25" y="8" z="6" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="0.1" sz="0.1" />
+            </keyframe>
+            <keyframe instant="5.5">
+                <translation x="24" y="2.95" z="4" />
+                <rotation axis="z" angle="0" />
+                <rotation axis="y" angle="0" />
+                <rotation axis="x" angle="0" />
+                <scale sx="0.1" sy="0.1" sz="0.1" />
+            </keyframe>
         </keyframeanim>
     </animations>
 
@@ -350,10 +407,24 @@
                 <componentref id="barrel" />
                 <componentref id="tent" />
 
+                <componentref id="ovni" />
                 <componentref id="holePlugBack" />
                 <componentref id="holePlugBottom" />
 
             </children>
+        </component>
+        
+        <component id="ovni">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="gold" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="sphere" />
+            </children>
+            <animation id="ovni" />
         </component>
 
         <component id="moon">
