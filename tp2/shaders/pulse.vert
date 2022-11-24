@@ -115,7 +115,7 @@ out vec3 fcolor; 		// TP2
 out float ftimeFactor; 	// TP2
 
 void main() {
-	vec3 offset = aVertexNormal*scale*(sin(timeFactor*0.1)*0.5+0.5); 	// TP2
+	vec3 offset = aVertexNormal*(scale-1.0)*(sin(timeFactor*0.1)*0.5+0.5); 	// TP2
 	vec3 position = aVertexPosition+offset; 							// TP2
 
     // Transformed Vertex position

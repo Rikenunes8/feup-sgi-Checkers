@@ -572,7 +572,7 @@
             <children>
                 <componentref id="lampBase" />
                 <componentref id="lampStick" />
-                <componentref id="lampSphere" />
+                <componentref id="Lamp" />
             </children>
         </component>
         <component id="lampBase">
@@ -602,7 +602,7 @@
                 <primitiveref id="frustum_smooth" />
             </children>
         </component>
-        <component id="lampSphere">
+        <component id="Lamp">
             <transformation>
                 <translate x="0" y="2.75" z="0"/>
                 <rotate axis="x" angle="-90" />
@@ -970,7 +970,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="pouf" />
+                <componentref id="Pouf" />
             </children>
         </component>
         <component id="pouf2">
@@ -986,7 +986,7 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="pouf" />
+                <componentref id="Pouf" />
             </children>
         </component>
         <component id="pouf3">
@@ -1001,10 +1001,10 @@
             </materials>
             <texture id="inherit"/>
             <children>
-                <componentref id="pouf" />
+                <componentref id="Pouf" />
             </children>
         </component>
-        <component id="pouf">
+        <component id="Pouf">
             <transformation>
                 <rotate axis="x" angle="-75"/>
             </transformation>
@@ -1015,6 +1015,7 @@
             <children>
                 <primitiveref id="torusCondensed" />
             </children>
+            <highlighted r="0.4" g="0.21" b="0.06" scale_h="1.0" />
         </component>
 
         <component id="garden">
@@ -2365,7 +2366,7 @@
             </children>
         </component>
 
-      <component id="topBarrel">
+      <component id="Barrel">
         <transformation>
         </transformation>
         <materials>
@@ -2376,6 +2377,7 @@
             <primitiveref id="barrelSide"/>
             <primitiveref id="circleNurb"/>
         </children>
+        <highlighted r="0.2" g="0.2" b="0.2" scale_h="2.0"/>
       </component>
       <component id="bottomBarrel">
           <transformation>
@@ -2386,7 +2388,7 @@
         </materials>
         <texture id="inherit" />
         <children>
-          <componentref id="topBarrel"/>
+          <componentref id="Barrel"/>
         </children>
       </component>
       <component id="barrel">
@@ -2399,7 +2401,7 @@
           </materials>
           <texture id="trunk"/>
           <children>
-            <componentref id="topBarrel"/>
+            <componentref id="Barrel"/>
             <componentref id="bottomBarrel"/>
           </children>
           <animation id="barrelFallen"/>
