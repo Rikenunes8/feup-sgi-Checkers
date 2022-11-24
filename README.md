@@ -30,9 +30,22 @@
 
 -----
 
-### [TP2 - ...](tp2)
-- (items briefly describing main strong points)
-
+### [TP2 - Nurbs, Shaders and Animations](tp2)
+- Better files organization (parsers extracted to classes in separated files and put associated files in directories)
+- The feature to add nurbs to the scene was implemented and some nurbs were added to the xml file
+  - Rectangle (replace previous garden rectangle by a nurb rectangle)
+  - Tent (it was placed a tent in the garden next to the circular bench)
+  - Barrel and Circle (it was placed a barrel and its tops next to the poufs)
+  - Tent Inverted (to improve the tent design it was made the nerb to the inside part of the tent)
+- The feature to highlight the components was implemented using the original illumination, material and texture of a component combined to interpolate with the color defined in the highlighted property on xml in a pulsatile way. The scale pulse was also implemented. Since the [requisites](https://docs.google.com/document/d/e/2PACX-1vR3Kcs0m6RvpJPr3B4FW650bO7dHRbt_V0AcObRK7f3udrcLSR0KJ5hBs84DQ4ZkMALYuRisWO_3vdI/pub) to this feature were not clear and even after some tries it was not entirely clarify, we assumed that the desired behaviour was to apply an offset to the original vertices of (scale - 1.0) in the vertex normal direction. Examples: 
+  - Sphere of radius 1 and scale_h=1 -> in maximum pulse sphere of radius 1;
+  - Sphere of radius 1 and scale_h=5 -> in maximum pulse sphere of radius 5;
+  - Sphere of radius 2 and scale_h=5 -> in maximum pulse sphere of radius 6;
+  - Rectangle and scale_h=5 -> in maximum pulse translation of 4 in Zs;
+- The feature to animate the components was implemented with the defined behaviour and specification. It were added to the xml scene elements to demonstrate it
+  - Barrel falling
+  - Ball thrown from the window
+- It was added to the interface the possibility to turn on/off the highlighted property of the components and a button to reset the scene animation
 ----
 
 ### [TP3 - ...](tp3)
