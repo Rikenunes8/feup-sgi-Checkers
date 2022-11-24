@@ -14,7 +14,7 @@ uniform sampler2D uSampler;
 uniform bool uUseTexture;
 
 void main() {
-    float frac = sin(ftimeFactor*0.1)*0.5+0.5; // TP2
+    float frac = ftimeFactor; // TP2
 	
 	// Branching should be reduced to a minimal. 
 	// When based on a non-changing uniform, it is usually optimized.

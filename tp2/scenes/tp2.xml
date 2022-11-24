@@ -471,7 +471,7 @@
 
         <component id="tent">
           <transformation>
-            <translate x="15" y="3.25" z="-15"/>
+            <translate x="15" y="3" z="-15"/>
             <rotate axis="y" angle="90"/>
             <rotate axis="x" angle="-90"/>
             <scale x="3" y="3" z="3"/>
