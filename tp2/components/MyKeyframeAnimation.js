@@ -1,6 +1,12 @@
 import { MyAnimation } from "./MyAnimation.js";
 
 export class MyKeyframeAnimation extends MyAnimation {
+
+    /**
+     * Stores the keyframes of the animation.
+     * @param {*} scene
+     * @param {*} keyframes
+     */
     constructor(scene, keyframes = []) {
         super(scene);
         this.keyframes = keyframes;
@@ -48,6 +54,7 @@ export class MyKeyframeAnimation extends MyAnimation {
     }
 
     apply() {
+        // if the animation didn't change then use the same matrix as before
         if (this.changed) {
             // construct animation matrix
             this.animationMatrix = mat4.create();

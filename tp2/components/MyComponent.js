@@ -48,6 +48,11 @@ export class MyComponent extends CGFobject {
         return this.texture;
     }
     
+
+    /**
+     * Get highlighted property
+     * @returns highlighted property
+     */
     getHighlighted() {
         if (this.isHighlighted) {
             return this.highlighted;

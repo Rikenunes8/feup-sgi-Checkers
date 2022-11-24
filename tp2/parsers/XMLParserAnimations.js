@@ -6,6 +6,11 @@ export class XMLParserAnimations extends XMLParser {
     constructor(scene) {
         super(scene);
     }
+
+    /**
+     * Parses the animations
+     * @param {*} node 
+     */
     parse(node) {
         const myAnimations = {};
         const animations = node.children;
@@ -22,6 +27,12 @@ export class XMLParserAnimations extends XMLParser {
         this.scene.animations = {...myAnimations};
     }
 
+    /**
+     * Parse the keyframesanimation
+     * @param {*} myAnimations 
+     * @param {*} animation 
+     * @returns 
+     */
     parseKeyframeanim(myAnimations, animation) {
         const animationId = this.reader.getString(animation, 'id', false);
         if (animationId == null) return "no ID defined for animation";
@@ -46,6 +57,13 @@ export class XMLParserAnimations extends XMLParser {
 
         myAnimations[animationId] = myKeyframeAnimation;
     }
+
+    /**
+     * Parses the keyframe of a keyframeanimation
+     * @param {*} myKeyframeAnimation 
+     * @param {*} keyframeNode 
+     * @param {*} animationId 
+     */
     parseKeyframe(myKeyframeAnimation, keyframeNode, animationId) {
         const instant = this.reader.getFloat(keyframeNode, 'instant', false);
         if (instant == null) return "no instant defined for keyframe";
