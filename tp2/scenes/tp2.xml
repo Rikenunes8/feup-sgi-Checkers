@@ -93,6 +93,7 @@
         <texture id="bank" file="scenes/images/bank.jpg" />
         <texture id="moon" file="scenes/images/moon.png" />
         <texture id="grass" file="scenes/images/leaves.jpg" />
+        <texture id="grassMult" file="scenes/images/leavesMult.png" />
         <texture id="buildingBGlass" file="scenes/images/glass.jpg" />
         <texture id="insideDoor" file="scenes/images/insideDoor.jpg" />
         <texture id="trunk" file="scenes/images/trunk.jpg" />
@@ -920,7 +921,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="grassMult"/>
             <children>
                 <primitiveref id="rectangleNurb"/>
             </children>
