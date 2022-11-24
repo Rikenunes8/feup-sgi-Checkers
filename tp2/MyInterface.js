@@ -26,6 +26,7 @@ export class MyInterface extends CGFinterface {
         // add a group of controls (and open/expand by defult)
         this.gui.add(this.scene, 'displayNormals').name("Display normals");
         this.gui.add(this.scene, 'displayLights').name("Display lights");
+        this.gui.add(this.scene, 'resetAnimations').name("Reset Anims").onChange(this.scene.resetAnims);
 
         // a folder for grouping parameters for one of the lights
 
@@ -78,7 +79,6 @@ export class MyInterface extends CGFinterface {
 
     addHighlighted() {
         const folder = this.gui.addFolder('Highlighted');
-        console.log("this.scene.highlighted: " + this.scene.graph.highlightedComponents);
         for (let c = 0; c < Object.keys(this.scene.graph.highlightedComponents).length; c++) {
             folder.add(this.scene.graph.highlightedComponents[c], 'isHighlighted').name(this.scene.graph.highlightedComponents[c].id).onChange();
         }
