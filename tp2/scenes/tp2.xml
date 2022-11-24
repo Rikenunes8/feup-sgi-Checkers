@@ -248,7 +248,7 @@
               <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
               <controlpoint x="-0.5" y="0" z="1.5" w="1.0"/>
               <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
-              
+
               <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
               <controlpoint x="0.5" y="0" z="1.5" w="1.0"/>
               <controlpoint x="0.5" y="0.5" z="0.0" w="1.0"/>
@@ -617,7 +617,11 @@
             <children>
                 <primitiveref id="sphere" />
             </children>
+<<<<<<< HEAD
             <highlighted r="0.2" g="0.2" b="0.2" scale_h="2.0" />
+=======
+            <highlighted r="0.2" g="0.2" b="0.2" scale_h="2"/>
+>>>>>>> 8907ca9 (Highlighteds start off)
         </component>
 
         <component id="benches">
@@ -2407,6 +2411,5 @@
           </children>
           <animation id="barrelFallen"/>
       </component>
-
     </components>
 </sxs>
