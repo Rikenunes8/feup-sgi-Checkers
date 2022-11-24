@@ -248,8 +248,20 @@
               <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
               <controlpoint x="-0.5" y="0" z="1.5" w="1.0"/>
               <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
+
               <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
               <controlpoint x="0.5" y="0" z="1.5" w="1.0"/>
+              <controlpoint x="0.5" y="0.5" z="0.0" w="1.0"/>
+          </patch>
+        </primitive>
+        <primitive id="tentInvertedNurb">
+          <patch degree_u="1" parts_u="10" degree_v="2" parts_v="10" >
+              <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
+              <controlpoint x="-0.5" y="0" z="-1.5" w="1.0"/>
+              <controlpoint x="-0.5" y="0.5" z="0.0" w="1.0"/>
+
+              <controlpoint x="0.5" y="-0.5" z="0.0" w="1.0"/>
+              <controlpoint x="0.5" y="0" z="-1.5" w="1.0"/>
               <controlpoint x="0.5" y="0.5" z="0.0" w="1.0"/>
           </patch>
         </primitive>
@@ -470,7 +482,31 @@
           </materials>
           <texture id="none"/>
           <children>
+              <componentref id="tentOutside" />
+              <componentref id="tentInside" />
+          </children>
+        </component>
+        <component id="tentOutside">
+          <transformation>
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+          <texture id="inherit"/>
+          <children>
               <primitiveref id="tentNurb" />
+          </children>
+        </component>
+        <component id="tentInside">
+          <transformation>
+            <rotate axis="y" angle="180"/>
+          </transformation>
+          <materials>
+              <material id="inherit" />
+          </materials>
+          <texture id="inherit"/>
+          <children>
+              <primitiveref id="tentInvertedNurb" />
           </children>
         </component>
 
@@ -580,6 +616,7 @@
             <children>
                 <primitiveref id="sphere" />
             </children>
+            <highlighted r="0.2" g="0.2" b="0.2" scale_h="2.0" />
         </component>
 
         <component id="benches">

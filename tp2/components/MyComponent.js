@@ -21,7 +21,7 @@ export class MyComponent extends CGFobject {
         this.animationId = animation != null ? animation[0] : null;
 
         this.highlighted = highlighted != null ? [...highlighted] : null; // [r="ff" g="ff" b="ff" scale_h="ff"]
-        this.isHighlighted = highlighted ? true : false;
+        this.isHighlighted = false;
         this.material = 0;
     }
 
