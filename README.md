@@ -34,7 +34,7 @@
 - Better files organization (parsers extracted to classes in separated files and put associated files in directories) (same on components)
 - The feature to add nurbs to the scene was implemented and some nurbs were added to the xml file
   - Rectangle (replace previous garden rectangle by a nurb rectangle)
-    - Can visualize it by turning the garden lights on 
+    - Can visualize it by turning the garden lights on <br> ![garden](tp2/screenshots/garden_light.png)
   - Tent (it was placed a tent in the garden next to the circular bench) <br> ![tent](tp2/screenshots/normalTent.png)
   - Barrel and Circle (it was placed a barrel and its tops next to the poufs) ![barrel](tp2/screenshots/barrelPoufs.png)
   - Tent Inverted (to improve the tent design it was made the nerb to the inside part of the tent) ![intertedTent](tp2/screenshots/invertedTent.png)
@@ -43,9 +43,12 @@
   - Sphere of radius 1 and scale_h=1 -> in maximum pulse sphere of radius 1;
   - Sphere of radius 1 and scale_h=5 -> in maximum pulse sphere of radius 5;
   - Sphere of radius 2 and scale_h=5 -> in maximum pulse sphere of radius 6;
+![lamp pulse](tp2/screenshots/Lamp.gif) <br>
+![pouf pulse](tp2/screenshots/Pouf.gif) <br>
+![barrel pulse](tp2/screenshots/BarrelPulse.gif) <br>
 - The feature to animate the components was implemented with the defined behaviour and specification. It were added to the xml scene elements to demonstrate it
-  - Barrel falling
-  - Ball thrown from the window
+  - Barrel falling <br>![barrel fallen](tp2/screenshots/BarrelFallen.gif)
+  - Ball thrown from the window <br> ![ovni](tp2/screenshots/Ovni.gif)
 - It was added to the interface the possibility to turn on/off the highlighted property of the components and a button to reset the scene animation
 ----
 
