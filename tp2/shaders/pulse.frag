@@ -13,6 +13,9 @@ uniform sampler2D uSampler;
 
 uniform bool uUseTexture;
 
+// NOTE: This file was based on lib/CGF/shaders/Gouraud/textured/fragment.glsl file from the CGF library.
+//       The changes made to the original shader are marked with the comment "TP2".
+
 void main() {
     float frac = ftimeFactor; // TP2
 	
@@ -27,5 +30,4 @@ void main() {
 		fragColor = vFinalColor;
     
     fragColor = mix(fragColor, vec4(fcolor, 1.0), frac); // TP2
-
 }

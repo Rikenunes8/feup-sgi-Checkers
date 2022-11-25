@@ -114,6 +114,9 @@ uniform float scale; 		// TP2
 out vec3 fcolor; 		// TP2
 out float ftimeFactor; 	// TP2
 
+// NOTE: This file was based on lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl file from the CGF library.
+//       The changes made to the original shader are marked with the comment "TP2".
+
 void main() {
 	vec3 offset = aVertexNormal*(scale-1.0)*timeFactor; // TP2
 	vec3 position = aVertexPosition+offset; 			// TP2
@@ -138,4 +141,3 @@ void main() {
 	ftimeFactor = timeFactor;
 
 }
-
