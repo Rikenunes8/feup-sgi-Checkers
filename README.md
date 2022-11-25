@@ -31,7 +31,7 @@
 -----
 
 ### [TP2 - Nurbs, Shaders and Animations](tp2)
-- Better files organization (parsers extracted to classes in separated files and put associated files in directories) (same on components)
+- Better files organization (organize files (parsers, components and primitives, shaders, ..) in directories; parsers extracted to classes in separated files)
 - The feature to add nurbs to the scene was implemented and some nurbs were added to the xml file
   - Rectangle (replace previous garden rectangle by a nurb rectangle)
     - Can visualize it by turning the garden lights on <br> ![garden](tp2/screenshots/garden_light.png)
