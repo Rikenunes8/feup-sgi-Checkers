@@ -125,14 +125,16 @@ export class MySceneGraph {
         }
         else {
             const component = this.components[nodeId];
-            let material = component.getMaterial();
+            let materialId = component.getMaterial();
             let texture = component.getTexture();
-            let highlighted = component.getHighlighted();
-            let animationId = component.animationId;
+            const highlighted = component.getHighlighted();
+            const animationId = component.animationId;
 
-            if (material === 'inherit') material = prevMaterial;
+            if (materialId === 'inherit') materialId = prevMaterial;
             if (texture[0] === 'inherit') texture = [...prevTexture]
             
+            const material = this.materials[materialId];
+
             this.scene.pushMatrix();
             this.scene.multMatrix(component.transfMatrix);
 
@@ -148,7 +150,7 @@ export class MySceneGraph {
                 material.setTextureWrap('REPEAT', 'REPEAT');
                 material.apply();
 
-                this.displayNode(child, material, texture, highlighted);
+                this.displayNode(child, materialId, texture, highlighted);
             }
             this.scene.popMatrix();
         }

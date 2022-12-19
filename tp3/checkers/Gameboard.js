@@ -62,7 +62,7 @@ export class Gameboard {
             mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), 1, this.diff(2)));
             mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
         }
-        const sideMaterial = this.scene.materials[this.boardWallsMaterialId];
+        const sideMaterial = this.boardWallsMaterialId;
         const sideTexture = ['none', 1, 1];
         this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [sideMaterial], sideTexture, [[true, primitiveId]], null, null);
     }
@@ -78,7 +78,7 @@ export class Gameboard {
                 mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0] + this.diff(0)/16 + j * this.diff(0) / 8, this.p2[1], this.p1[2] - this.diff(2) / 16 - i * this.diff(2) / 8));
                 mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0) / 8, 1, this.diff(2) / 8));
                 mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
-                const tileMaterial = (i + j) % 2 != 0 ? this.scene.materials[this.lightTileMaterialId] : this.scene.materials[this.darkTileMaterialId];
+                const tileMaterial = (i + j) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
                 let tileTexture = ['none', 1, 1];
                 this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [tileMaterial], tileTexture, [[true, primitiveId]], null, null);
             }
@@ -91,7 +91,7 @@ export class Gameboard {
         for (let id of this.componentsIds) {
             childs.push([false, id]);
         }
-        this.scene.components['checkers-mainboard'] = new MyComponent(this.scene.scene, 'checkers-mainboard', mat4.create(), [this.scene.materials['lightWood']], ['none', 1, 1], childs, null, null);
+        this.scene.components['checkers-mainboard'] = new MyComponent(this.scene.scene, 'checkers-mainboard', mat4.create(), ['lightWood'], ['none', 1, 1], childs, null, null);
     }
 
 }
