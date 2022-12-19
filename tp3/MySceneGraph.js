@@ -153,12 +153,4 @@ export class MySceneGraph {
             this.scene.popMatrix();
         }
     }
-
-    /**
-     * Displays the checkers game.
-     */
-    displayCheckers() {
-        if (this.checkers != null)
-            this.checkers.display();
-    }
 }

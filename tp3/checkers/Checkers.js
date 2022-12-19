@@ -3,8 +3,4 @@ export class Checkers {
         this.scene = scene;
         this.mainboard = mainboard;
     }
-
-    display() {
-        this.mainboard.display();
-    }
 }

@@ -218,7 +218,6 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
             this.graph.displayScene();
-            this.graph.displayCheckers();
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
