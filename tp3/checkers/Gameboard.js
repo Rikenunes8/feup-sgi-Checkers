@@ -2,10 +2,13 @@ import { MyComponent } from "../components/MyComponent.js";
 import { MyRectangle } from '../components/MyRectangle.js';
 
 export class Gameboard {
-    constructor(scene, p1, p2) {
+    constructor(scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
         this.scene = scene;
         this.p1 = p1;
         this.p2 = p2;
+        this.lightTileMaterialId = lightTileMaterialId;
+        this.darkTileMaterialId = darkTileMaterialId;
+        this.boardWallsMaterialId = boardWallsMaterialId;
         this.componentsIds = [];
         const rectangleId = this.buildBoardSideRectangle();
         this.buildFace(rectangleId, 'front');
@@ -59,7 +62,7 @@ export class Gameboard {
             mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), 1, this.diff(2)));
             mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
         }
-        const sideMaterial = this.scene.materials['lightWood'];
+        const sideMaterial = this.scene.materials[this.boardWallsMaterialId];
         const sideTexture = ['none', 1, 1];
         this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [sideMaterial], sideTexture, [[true, primitiveId]], null, null);
     }
@@ -75,7 +78,7 @@ export class Gameboard {
                 mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0] + this.diff(0)/16 + j * this.diff(0) / 8, this.p2[1], this.p1[2] - this.diff(2) / 16 - i * this.diff(2) / 8));
                 mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0) / 8, 1, this.diff(2) / 8));
                 mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
-                const tileMaterial = (i + j) % 2 != 0 ? this.scene.materials['white'] : this.scene.materials['black'];
+                const tileMaterial = (i + j) % 2 != 0 ? this.scene.materials[this.lightTileMaterialId] : this.scene.materials[this.darkTileMaterialId];
                 let tileTexture = ['none', 1, 1];
                 this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [tileMaterial], tileTexture, [[true, primitiveId]], null, null);
             }

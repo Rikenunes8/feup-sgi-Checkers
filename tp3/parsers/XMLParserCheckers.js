@@ -30,6 +30,29 @@ export class XMLParserCheckers extends XMLParser {
         if (!Array.isArray(p1)) return p1;
         if (!Array.isArray(p2)) return p2;
 
-        return new Gameboard(this.scene, p1, p2);
+        var materials = mainboard.children;
+        let nodeNames = [];
+        for (var i = 0; i < materials.length; i++) {
+            nodeNames.push(materials[i].nodeName);
+        }
+
+        const lightTileIndex = nodeNames.indexOf("lightTile");
+        const darkTileIndex = nodeNames.indexOf("darkTile");
+        const boardWallsIndex = nodeNames.indexOf("boardWalls");
+
+        if (lightTileIndex == -1) return "missing light tile definition in mainboard";
+        if (darkTileIndex == -1) return "missing dark tile definition in mainboard";
+        if (boardWallsIndex == -1) return "missing board walls definition in mainboard";
+
+        const lightTileMaterialId = this.reader.getString(materials[lightTileIndex], 'id', false);
+        const darkTileMaterialId = this.reader.getString(materials[darkTileIndex], 'id', false);
+        const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
+
+
+        if (this.scene.materials[lightTileMaterialId] == null) return "no material defined with ID " + lightTileMaterialId;
+        if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
+        if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
+
+        return new Gameboard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
     }
 }
