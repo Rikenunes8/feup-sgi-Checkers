@@ -153,4 +153,13 @@ export class MySceneGraph {
             this.scene.popMatrix();
         }
     }
+
+    /**
+     * Displays the checkers game.
+     */
+    displayCheckers() {
+        if (this.checkers != null) {
+            this.displayNode([false, 'checkers-mainboard'], this.materials['lightWood'], [ "none", 1, 1 ], null);
+        }
+    }
 }
