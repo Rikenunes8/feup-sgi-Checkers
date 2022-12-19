@@ -186,5 +186,9 @@
             <darkTile id="black" />
             <boardWalls id="lightWood" />
         </mainboard>
+        <pieces>
+            <type1 id="lightWood" />
+            <type2 id="darkWood" />
+        </pieces>
     </checkers>
 </sxs>
