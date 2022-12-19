@@ -10,6 +10,7 @@ import {XMLParserTransformations} from './XMLParserTransformations.js';
 import {XMLParserPrimitives} from './XMLParserPrimitives.js';
 import {XMLParserAnimations} from './XMLParserAnimations.js';
 import {XMLParserComponents} from './XMLParserComponents.js';
+import {XMLParserCheckers} from './XMLParserCheckers.js';
 
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
@@ -22,6 +23,7 @@ var TRANSFORMATIONS_INDEX = 6;
 var PRIMITIVES_INDEX = 7;
 var ANIMATION_INDEX = 8;
 var COMPONENTS_INDEX = 9;
+var CHECKERS_INDEX = 10;
 
 export class XMLParserFile extends XMLParser {
     constructor(scene) {
@@ -52,6 +54,7 @@ export class XMLParserFile extends XMLParser {
             'primitives': {'index': PRIMITIVES_INDEX, 'parser': new XMLParserPrimitives(this.scene)},
             'animations': {'index': ANIMATION_INDEX, 'parser': new XMLParserAnimations(this.scene)},
             'components': {'index': COMPONENTS_INDEX, 'parser': new XMLParserComponents(this.scene)},
+            'checkers': {'index': CHECKERS_INDEX, 'parser': new XMLParserCheckers(this.scene)},
         }
         
         // Processes each node, verifying errors.
@@ -69,8 +72,10 @@ export class XMLParserFile extends XMLParser {
     
     parseMainElement(data, nodeNames, nodes, name) {
         var index;
-        if ((index = nodeNames.indexOf(name)) == -1)
+        if ((index = nodeNames.indexOf(name)) == -1) {
+            if (name == 'checkers') return null;
             return "tag <" + name + "> missing";
+        }
         else {
             if (index != data[name]['index'])
                 this.onXMLMinorError("tag <" + name + "> out of order " + index);

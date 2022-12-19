@@ -16,7 +16,7 @@ export class MySceneGraph {
         scene.graph = this;
 
         this.nodes = [];
-        this.idRoot = null;                    // The id of the root element.
+        this.idRoot = null; // The id of the root element.
 
         this.displayNormals = false;
 
@@ -152,5 +152,13 @@ export class MySceneGraph {
             }
             this.scene.popMatrix();
         }
+    }
+
+    /**
+     * Displays the checkers game.
+     */
+    displayCheckers() {
+        if (this.checkers != null)
+            this.checkers.display();
     }
 }
