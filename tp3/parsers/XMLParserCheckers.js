@@ -1,6 +1,7 @@
 import { XMLParser } from "./XMLParser.js";
 import { Gameboard } from "../checkers/Gameboard.js";
 import { Checkers } from "../checkers/Checkers.js";
+import { GameMenu } from "../checkers/GameMenu.js";
 
 export class XMLParserCheckers extends XMLParser {
     constructor(scene) {
@@ -81,5 +82,14 @@ export class XMLParserCheckers extends XMLParser {
         if (this.scene.materials[type2MaterialId] == null) return "no material defined with ID " + type2MaterialId;
 
         return [type1MaterialId, type2MaterialId];
+    }
+
+    parseGameMenu(gameMenu) {
+        let p1 = this.parseCoordinates3D(gameMenu, "gameMenu bottom left corner not defined", ['x1', 'y1', 'z1']);
+        let p2 = this.parseCoordinates3D(gameMenu, "gameMenu top right corner not defined", ['x2', 'y2', 'z2']);
+        if (!Array.isArray(p1)) return p1;
+        if (!Array.isArray(p2)) return p2;
+
+        return new GameMenu(this.scene, p1, p2);
     }
 }

@@ -1,4 +1,6 @@
-import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFshader, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { Menu } from './checkers/Menu.js';
+import { MyQuad } from './components/MyQuad.js';
 import { XMLParserFile } from './parsers/XMLParserFile.js';
 
 /**
@@ -80,6 +82,10 @@ export class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
+
+        // Display Menu
+        //const menu = new Menu(this.scene, [0, 0], [10, 10]);
+        //menu.display();
 
         for (let id in this.primitives) { 
             if (this.displayNormals)
