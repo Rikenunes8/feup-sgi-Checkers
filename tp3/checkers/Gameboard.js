@@ -7,63 +7,63 @@ export class Gameboard {
         this.p1 = p1;
         this.p2 = p2;
         this.componentsIds = [];
-        this.buildFrontFace();
-        this.buildBackFace();
-        this.buildLeftFace();
-        this.buildRightFace();
-        this.buildBottomFace();
+        const sideRectangleId = this.buildBoardSideRectangle();
+        this.buildFace(sideRectangleId, 'front');
+        this.buildFace(sideRectangleId, 'back');
+        this.buildFace(sideRectangleId, 'left');
+        this.buildFace(sideRectangleId, 'right');
+        this.buildFace(sideRectangleId, 'bottom');
         // this.buildTopFace();
         this.buildBoard();
     }
 
-    buildFrontFace() {
-        const id = 'checkers-board-front-face';
-        this.componentsIds.push(id);
-        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, this.p1[0], this.p2[0], this.p1[1], this.p2[1]);
-        let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, this.p1[2]));
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [this.scene.materials['lightWood']], ['none', 1, 1], [[true, id]], null, null);
+    buildBoardSideRectangle() {
+        const id = 'checkers-rectangle';
+        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, -0.5, 0.5, -0.5, 0.5);
+        return id;
     }
 
-    buildBackFace() {
-        const id = 'checkers-board-back-face';
-        this.componentsIds.push(id);
-        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, this.p1[0], this.p2[0], this.p1[1], this.p2[1]);
-        let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, this.p2[2]));
-        mat4.rotateY(transfMatrix, transfMatrix, Math.PI);
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [this.scene.materials['lightWood']], ['none', 1, 1], [[true, id]], null, null);
+    med(coord) {
+        return (this.p2[coord]+this.p1[coord])/2;
     }
 
-    buildLeftFace() {
-        const id = 'checkers-board-left-face';
-        this.componentsIds.push(id);
-        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, this.p1[2], this.p2[2], this.p1[1], this.p2[1]);
-        let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0], 0, 0));
-        mat4.rotateY(transfMatrix, transfMatrix, Math.PI / 2);
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [this.scene.materials['lightWood']], ['none', 1, 1], [[true, id]], null, null);
+    diff(coord) {
+        return Math.abs(this.p2[coord]-this.p1[coord]);
     }
 
-    buildRightFace() {
-        const id = 'checkers-board-right-face';
+    buildFace(primitiveId, side) {
+        const id = `checkers-board-${side}-face`;
         this.componentsIds.push(id);
-        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, this.p1[2], this.p2[2], this.p1[1], this.p2[1]);
         let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p2[0], 0, 0));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [this.scene.materials['lightWood']], ['none', 1, 1], [[true, id]], null, null);
+        if (side == 'front') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.med(0), this.med(1), this.p1[2]));
+            mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), this.diff(1), 1));
+        }
+        else if (side == 'back') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.med(0), this.med(1), this.p2[2]));
+            mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), this.diff(1), 1));
+            mat4.rotateY(transfMatrix, transfMatrix, Math.PI);
+        }
+        else if (side == 'left') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0], this.med(1), this.med(2)));
+            mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(1, this.diff(1), this.diff(2)));
+            mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        }
+        else if (side == 'right') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p2[0], this.med(1), this.med(2)));
+            mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(1, this.diff(1), this.diff(2)));
+            mat4.rotateY(transfMatrix, transfMatrix, Math.PI / 2);
+        }
+        else if (side == 'bottom') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.med(0), this.p1[1], this.med(2)));
+            mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), 1, this.diff(2)));
+            mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
+        }
+        const sideMaterial = this.scene.materials['lightWood'];
+        const sideTexture = ['none', 1, 1];
+        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [sideMaterial], sideTexture, [[true, primitiveId]], null, null);
     }
 
-    buildBottomFace() {
-        const id = 'checkers-board-bottom-face';
-        this.componentsIds.push(id);
-        this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, this.p1[0], this.p2[0], this.p1[2], this.p2[2]);
-        let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, this.p1[1], 0));
-        mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [this.scene.materials['lightWood']], ['none', 1, 1], [[true, id]], null, null);
-    }
 
 
     buildBoard() {
@@ -71,7 +71,7 @@ export class Gameboard {
         for (let id of this.componentsIds) {
             childs.push([false, id]);
         }
-        this.scene.components['checkers-mainboard'] = new MyComponent(this.scene.scene, 'checkers-board', mat4.create(), [this.scene.materials['lightWood']], ['none', 1, 1], childs, null, null);
+        this.scene.components['checkers-mainboard'] = new MyComponent(this.scene.scene, 'checkers-mainboard', mat4.create(), [this.scene.materials['lightWood']], ['none', 1, 1], childs, null, null);
     }
 
 }

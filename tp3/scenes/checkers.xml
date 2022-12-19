@@ -14,9 +14,9 @@
     </ambient>
 
     <lights>
-        <omni id="light" enabled="0">
-            <location x="0" y="10" z="0" w="1.0"/>
-            <ambient r="0.3" g="0.3" b="0.3" a="1.0" />
+        <omni id="light" enabled="1">
+            <location x="10" y="4" z="10" w="1.0"/>
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
             <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
             <specular r="0.2" g="0.2" b="0.2" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
