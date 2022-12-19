@@ -7,13 +7,13 @@ export class Gameboard {
         this.p1 = p1;
         this.p2 = p2;
         this.componentsIds = [];
-        const sideRectangleId = this.buildBoardSideRectangle();
-        this.buildFace(sideRectangleId, 'front');
-        this.buildFace(sideRectangleId, 'back');
-        this.buildFace(sideRectangleId, 'left');
-        this.buildFace(sideRectangleId, 'right');
-        this.buildFace(sideRectangleId, 'bottom');
-        // this.buildTopFace();
+        const rectangleId = this.buildBoardSideRectangle();
+        this.buildFace(rectangleId, 'front');
+        this.buildFace(rectangleId, 'back');
+        this.buildFace(rectangleId, 'left');
+        this.buildFace(rectangleId, 'right');
+        this.buildFace(rectangleId, 'bottom');
+        this.buildTopFace(rectangleId);
         this.buildBoard();
     }
 
@@ -64,6 +64,23 @@ export class Gameboard {
         this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [sideMaterial], sideTexture, [[true, primitiveId]], null, null);
     }
 
+    buildTopFace(primitiveId) {
+        const vCoord = 'a,b,c,d,e,f,g,h'.split(',');
+        const hCoord = '1,2,3,4,5,6,7,8'.split(',');
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
+                const id = `checkers-board-top-face-${vCoord[i]}${hCoord[j]}`;
+                this.componentsIds.push(id);
+                let transfMatrix = mat4.create();
+                mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0] + this.diff(0)/16 + j * this.diff(0) / 8, this.p2[1], this.p1[2] - this.diff(2) / 16 - i * this.diff(2) / 8));
+                mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0) / 8, 1, this.diff(2) / 8));
+                mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
+                const tileMaterial = (i + j) % 2 != 0 ? this.scene.materials['white'] : this.scene.materials['black'];
+                let tileTexture = ['none', 1, 1];
+                this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [tileMaterial], tileTexture, [[true, primitiveId]], null, null);
+            }
+        }
+    }
 
 
     buildBoard() {
