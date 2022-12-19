@@ -1,26 +1,29 @@
 import { MyComponent } from "../components/MyComponent.js";
 import { MyRectangle } from '../components/MyRectangle.js';
+import { GameboardTile } from './GameboardTile.js';
 
 export class Gameboard {
     constructor(scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
         this.scene = scene;
+        this.id = 'checkers-mainboard';
         this.p1 = p1;
         this.p2 = p2;
-        this.lightTileMaterialId = lightTileMaterialId;
-        this.darkTileMaterialId = darkTileMaterialId;
-        this.boardWallsMaterialId = boardWallsMaterialId;
+        
         this.componentsIds = [];
-        const rectangleId = this.buildBoardSideRectangle();
+
+        this.gameboardTiles = [];
+        
+        const rectangleId = this.buildCheckersRectangle();
         this.buildFace(rectangleId, 'front');
         this.buildFace(rectangleId, 'back');
         this.buildFace(rectangleId, 'left');
         this.buildFace(rectangleId, 'right');
         this.buildFace(rectangleId, 'bottom');
-        this.buildTopFace(rectangleId);
-        this.buildBoard();
+        this.buildTopFace(rectangleId, lightTileMaterialId, darkTileMaterialId);
+        this.buildBoard(boardWallsMaterialId);
     }
 
-    buildBoardSideRectangle() {
+    buildCheckersRectangle() {
         const id = 'checkers-rectangle';
         this.scene.primitives[id] = new MyRectangle(this.scene.scene, id, -0.5, 0.5, -0.5, 0.5);
         return id;
@@ -62,36 +65,29 @@ export class Gameboard {
             mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0), 1, this.diff(2)));
             mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
         }
-        const sideMaterial = this.boardWallsMaterialId;
         const sideTexture = ['none', 1, 1];
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [sideMaterial], sideTexture, [[true, primitiveId]], null, null);
+        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
     }
 
-    buildTopFace(primitiveId) {
-        const vCoord = 'a,b,c,d,e,f,g,h'.split(',');
-        const hCoord = '1,2,3,4,5,6,7,8'.split(',');
+    buildTopFace(primitiveId, lightTileMaterialId, darkTileMaterialId) {
         for (let i = 0; i < 8; i++) {
             for (let j = 0; j < 8; j++) {
-                const id = `checkers-board-top-face-${vCoord[i]}${hCoord[j]}`;
-                this.componentsIds.push(id);
-                let transfMatrix = mat4.create();
-                mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.p1[0] + this.diff(0)/16 + j * this.diff(0) / 8, this.p2[1], this.p1[2] - this.diff(2) / 16 - i * this.diff(2) / 8));
-                mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0) / 8, 1, this.diff(2) / 8));
-                mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
-                const tileMaterial = (i + j) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
-                let tileTexture = ['none', 1, 1];
-                this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, [tileMaterial], tileTexture, [[true, primitiveId]], null, null);
+                const tileMaterial = (i + j) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
+                this.gameboardTiles.push(new GameboardTile(this.scene, j, i, primitiveId, tileMaterial, this.p1, this.p2));
             }
         }
     }
 
 
-    buildBoard() {
+    buildBoard(materialId) {
         let childs = [];
         for (let id of this.componentsIds) {
             childs.push([false, id]);
         }
-        this.scene.components['checkers-mainboard'] = new MyComponent(this.scene.scene, 'checkers-mainboard', mat4.create(), ['lightWood'], ['none', 1, 1], childs, null, null);
+        for (let tile of this.gameboardTiles) {
+            childs.push([false, tile.id]);
+        }
+        this.scene.components[this.id] = new MyComponent(this.scene.scene, this.id, mat4.create(), [materialId], ['none', 1, 1], childs, null, null);
     }
 
 }
