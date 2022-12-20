@@ -75,8 +75,8 @@ export class XMLscene extends CGFscene {
         this.info = {
             initialMenu: true,
         }
-        this.menu = new Menu(this, [0, 0], [10, 10]);
 
+        this.menu = new Menu(this, [0, 0], [10, 10]);
     }
 
     /**
@@ -257,9 +257,8 @@ export class XMLscene extends CGFscene {
                     this.checkers.display();
                 this.graph.displayScene();
             }
-            
-            if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
 
+            if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();

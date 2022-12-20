@@ -15,18 +15,22 @@ export class Menu {
         this.p1 = p1;
 		this.p2 = p2;
 
+		// TODO: create these functions for each button
 		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
-		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, () => console.log("Ola"));
-		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, () => console.log("Ola"));
-		this.gameTimeBtn = new MyButton(scene, 'checkers-menu-gameTime-button', p1, p2, true, () => console.log("Ola"));
-		this.theme1Button = new MyButton(scene, 'checkers-menu-theme1-button', p1, p2, true, () => console.log("Ola"));
-		this.theme2Button = new MyButton(scene, 'checkers-menu-theme2-button', p1, p2, true, () => console.log("Ola"));
-		this.theme3Button = new MyButton(scene, 'checkers-menu-theme3-button', p1, p2, true, () => console.log("Ola"));
+		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, 1000, this.initBtnOnPick);
+		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, 1001, () => this.selectTheme(1));
+		this.gameTimeBtn = new MyButton(scene, 'checkers-menu-gameTime-button', p1, p2, true, 1002, () => console.log("Ola"));
+		this.theme1Button = new MyButton(scene, 'checkers-menu-theme1-button', p1, p2, true, 1003, () => this.selectTheme(1));
+		this.theme2Button = new MyButton(scene, 'checkers-menu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2));
+		this.theme3Button = new MyButton(scene, 'checkers-menu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3));
 		this.backgroundAppearance = new CGFappearance(scene);
 		this.backgroundAppearance.setAmbient(0.937, 0.905, 0.86, 1);
 
 		this.buttonAppearance = new CGFappearance(scene);
 		this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+
+		this.selectedBtnAppearance = new CGFappearance(scene);
+		this.selectedBtnAppearance.setAmbient(0.776, 0.71, 0.655, 1);
     }
 
 	/**
@@ -52,6 +56,7 @@ export class Menu {
 	 * Display the buttons of the menu
 	 */
 	displayButtons() {
+
 		// draw background
 		this.scene.pushMatrix();
 		this.scene.loadIdentity();
@@ -77,8 +82,10 @@ export class Menu {
 		this.scene.scale(0.8, 0.25, 1);
 		this.scene.translate(-20, -5, -50);
 		this.theme1Button.display();
+		
 		this.scene.translate(15, 0, 0);
 		this.theme2Button.display();
+
 		this.scene.translate(15, 0, 0);
 		this.theme3Button.display();
 		this.scene.popMatrix();
@@ -128,6 +135,14 @@ export class Menu {
 
 		this.scene.translate(8.5, 0, 0);
 		writeText(this.scene, 'GAME MAX TIME:' + 's');
+	}
+
+	initBtnOnPick = () => {
+		this.scene.info.initialMenu = false;
+	}
+
+	selectTheme = (num) => {
+		this.scene.info.theme = num;
 	}
 	
 }

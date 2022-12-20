@@ -4,7 +4,7 @@ import { displayGraph } from "./utils.js";
 
 export class GameboardTile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
-        super(pickId, true);
+        super(pickId, false);
         this.sceneGraph = sceneGraph;
         this.board = board;
         this.id = `checkers-tile-${v}${h}`;
@@ -15,7 +15,7 @@ export class GameboardTile extends Pickable {
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this);//, this.sceneGraph.components[this.id]);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
 
@@ -30,5 +30,10 @@ export class GameboardTile extends Pickable {
         mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
         let tileTexture = ['none', 1, 1];
         this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], tileTexture, [[true, primitiveId]], null, null);
+    }
+
+    onPick() {
+        // TODO implement
+        console.log("OLA");
     }
 }

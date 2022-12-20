@@ -15,6 +15,7 @@ export class Checkers {
         this.mainboard.display();
     }
 
+    // TODO remove this function
     onObjectSelected(obj, customId) {
         console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
         if (customId >= 0) {
@@ -34,11 +35,12 @@ export class Checkers {
     managePick(pickMode, pickResults) {
         if (pickMode == false) {
             if (pickResults != null && pickResults.length > 0) {
-                for (let i=0; i< pickResults.length; i++) {
+                for (let i = 0; i < pickResults.length; i++) {
                     const obj = pickResults[i][0];
                     if (obj) {
-                        const customId = pickResults[i][1];
-                        this.onObjectSelected(obj, customId);
+                        //const customId = pickResults[i][1];
+                        //this.onObjectSelected(obj, customId);
+                        obj.onPick();
                     }
                 }
                 pickResults.splice(0,pickResults.length);

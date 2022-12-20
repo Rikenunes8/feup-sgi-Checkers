@@ -4,7 +4,7 @@ import { Pickable } from './Pickable.js';
 
 export class Piece extends Pickable {
     constructor(sceneGraph, tile, type, materialId, componentref, pickId) {
-        super(pickId, false);
+        super(pickId, true);
         this.sceneGraph = sceneGraph;
         this.tile = tile;
         this.type = type;
@@ -15,7 +15,7 @@ export class Piece extends Pickable {
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this);//, this.sceneGraph.components[this.id]);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
     }
@@ -27,4 +27,8 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], texture, [[false, componentref]], null, null);
     }
 
+    onPick() {
+        // TODO implement
+        console.log("OIOI");
+    }
 }
