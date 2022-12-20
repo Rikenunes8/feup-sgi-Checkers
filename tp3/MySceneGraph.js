@@ -79,24 +79,20 @@ export class MySceneGraph {
 
     /**
      * Displays the scene, processing each node, starting in the root node.
+     * Displays the menu in case the game is not started yet
      */
     displayScene() {
-
-        // Display Menu
-        const menu = new Menu(this.scene, [0, 0], [10, 10]);
-        menu.display();
-        
-        for (let id in this.primitives) { 
+        for (let id in this.primitives) {
             if (this.displayNormals)
                 this.primitives[id].enableNormalViz();
             else
                 this.primitives[id].disableNormalViz();
-        }  
+        }
 
         const rootComponent = this.components[this.idRoot]
-        this.displayNode([false, this.idRoot], 
-            rootComponent.getMaterial(), 
-            rootComponent.getTexture(), 
+        this.displayNode([false, this.idRoot],
+            rootComponent.getMaterial(),
+            rootComponent.getTexture(),
             rootComponent.getHighlighted());
     }
 

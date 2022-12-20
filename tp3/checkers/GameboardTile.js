@@ -1,10 +1,10 @@
 import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
-import { displayGraph, encode } from "./utils.js";
+import { displayGraph } from "./utils.js";
 
-export class GameboardTile extends Pickable{
+export class GameboardTile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
-        super(pickId, false);
+        super(pickId, true);
         this.sceneGraph = sceneGraph;
         this.board = board;
         this.id = `checkers-tile-${v}${h}`;

@@ -16,4 +16,8 @@ export class Pickable {
         }
     }
 
+    onPick() {
+        throw new Error("Method 'onPick()' must be implemented in subclasses.");
+    }
+    
 }

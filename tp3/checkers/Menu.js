@@ -1,10 +1,11 @@
 import { CGFappearance } from "../../lib/CGF.js";
+import { MyButton } from "../components/MyButton.js";
 import { MyRectangle } from "../components/MyRectangle.js";
 import { writeText } from "./utils.js";
 
 export class Menu {
     /**
-     * 
+     *
      * @param {*} scene 
      * @param {[x1, y1]} p1 
      * @param {[x2, y2]} p2 
@@ -13,15 +14,14 @@ export class Menu {
         this.scene = scene;
         this.p1 = p1;
 		this.p2 = p2;
-		
-		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
-		this.initButton = new MyRectangle(scene, 'checkers-menu-init-button', p1[0], p2[0], p1[1], p2[1]);
-		this.playerTimeBtn = new MyRectangle(scene, 'checkers-menu-playerTime-button', p1[0], p2[0], p1[1], p2[1]);
-		this.gameTimeBtn = new MyRectangle(scene, 'checkers-menu-gameTime-button', p1[0], p2[0], p1[1], p2[1]);
-		this.theme1Button = new MyRectangle(scene, 'checkers-menu-theme1-button', p1[0], p2[0], p1[1], p2[1]);
-		this.theme2Button = new MyRectangle(scene, 'checkers-menu-theme2-button', p1[0], p2[0], p1[1], p2[1]);
-		this.theme3Button = new MyRectangle(scene, 'checkers-menu-theme3-button', p1[0], p2[0], p1[1], p2[1]);
 
+		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
+		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, () => console.log("Ola"));
+		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, () => console.log("Ola"));
+		this.gameTimeBtn = new MyButton(scene, 'checkers-menu-gameTime-button', p1, p2, true, () => console.log("Ola"));
+		this.theme1Button = new MyButton(scene, 'checkers-menu-theme1-button', p1, p2, true, () => console.log("Ola"));
+		this.theme2Button = new MyButton(scene, 'checkers-menu-theme2-button', p1, p2, true, () => console.log("Ola"));
+		this.theme3Button = new MyButton(scene, 'checkers-menu-theme3-button', p1, p2, true, () => console.log("Ola"));
 		this.backgroundAppearance = new CGFappearance(scene);
 		this.backgroundAppearance.setAmbient(0.937, 0.905, 0.86, 1);
 
