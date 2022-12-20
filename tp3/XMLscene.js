@@ -54,8 +54,8 @@ export class XMLscene extends CGFscene {
         // font texture: 16 x 16 characters
 		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
 		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.trans.png");
-        this.appearance = new CGFappearance(this);
-        this.appearance.setTexture(this.fontTexture);
+        this.textAppearance = new CGFappearance(this);
+        this.textAppearance.setTexture(this.fontTexture);
 
 		// plane where texture character will be rendered
 		this.quad = new MyQuad(this);
@@ -65,7 +65,7 @@ export class XMLscene extends CGFscene {
 		this.textShader = new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
 
 		// set number of rows and columns in font texture
-		this.textShader.setUniformsValues({'dims': [16, 16]});
+        this.textShader.setUniformsValues({ 'dims': [16, 16] })//, 'textColor': vec3.fromValues(0.0, 0.0, 0.0)});
 
         this.startTime = null;
 		this.setUpdatePeriod(10);

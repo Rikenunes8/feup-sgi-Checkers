@@ -11,6 +11,9 @@ uniform vec2 charCoords;
 
 varying vec2 vTextureCoord;
 
+uniform vec3 textColor;
+//out vec3 fColor;
+
 void main() {
 
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
@@ -21,7 +24,7 @@ void main() {
 	//                            = charCoord[0] / dims[0] + aTextureCoord[0] * 1.0 / dims[0]
 	//                            = (charCoord[0] + aTextureCoord[0]) / dims[0]
 	// The same holds for the t coordinate, so:
-	
 	vTextureCoord = (charCoords + aTextureCoord) / dims;
+	//fColor = textColor;
 }
 

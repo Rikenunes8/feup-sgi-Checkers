@@ -85,7 +85,7 @@ export class MySceneGraph {
         // Display Menu
         const menu = new Menu(this.scene, [0, 0], [10, 10]);
         menu.display();
-
+        /*
         for (let id in this.primitives) { 
             if (this.displayNormals)
                 this.primitives[id].enableNormalViz();
@@ -97,7 +97,7 @@ export class MySceneGraph {
         this.displayNode([false, this.idRoot], 
             rootComponent.getMaterial(), 
             rootComponent.getTexture(), 
-            rootComponent.getHighlighted());
+            rootComponent.getHighlighted());*/
     }
 
     /**
