@@ -18,8 +18,8 @@ export class Menu {
 		// TODO: create these functions for each button
 		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
 		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, 1000, this.initBtnOnPick);
-		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, 1001, () => this.selectTheme(1));
-		this.gameTimeBtn = new MyButton(scene, 'checkers-menu-gameTime-button', p1, p2, true, 1002, () => console.log("Ola"));
+		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, 1001, this.playerTimeBtnOnPick);
+		this.gameTimeBtn = new MyButton(scene, 'checkers-menu-gameTime-button', p1, p2, true, 1002, this.gameTimeBtnOnPick);
 		this.theme1Button = new MyButton(scene, 'checkers-menu-theme1-button', p1, p2, true, 1003, () => this.selectTheme(1));
 		this.theme2Button = new MyButton(scene, 'checkers-menu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2));
 		this.theme3Button = new MyButton(scene, 'checkers-menu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3));
@@ -30,7 +30,7 @@ export class Menu {
 		this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
 
 		this.selectedBtnAppearance = new CGFappearance(scene);
-		this.selectedBtnAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+		this.selectedBtnAppearance.setAmbient(0.608, 0.404, 0.236, 1);
     }
 
 	/**
@@ -77,15 +77,26 @@ export class Menu {
 
 		// Draw Themes Buttons
 		this.scene.pushMatrix();
-		this.buttonAppearance.apply();
+		if (this.scene.info.selectedTheme == 1)
+			this.selectedBtnAppearance.apply();
+		else 
+			this.buttonAppearance.apply();
 		this.scene.loadIdentity();
 		this.scene.scale(0.8, 0.25, 1);
 		this.scene.translate(-20, -5, -50);
 		this.theme1Button.display();
 		
+		if (this.scene.info.selectedTheme == 2)
+			this.selectedBtnAppearance.apply();
+		else 
+			this.buttonAppearance.apply();
 		this.scene.translate(15, 0, 0);
 		this.theme2Button.display();
 
+		if (this.scene.info.selectedTheme == 3)
+			this.selectedBtnAppearance.apply();
+		else 
+			this.buttonAppearance.apply();
 		this.scene.translate(15, 0, 0);
 		this.theme3Button.display();
 		this.scene.popMatrix();
@@ -129,12 +140,14 @@ export class Menu {
 		this.scene.translate(7, 0, 0);
 		writeText(this.scene, 'THEME 3');
 		
-		this.scene.translate(-30.5, -6.7, 0);
+		this.scene.translate(-10.5, -6.7, 0);
+		writeText(this.scene, 'GAME MAX TIME:' + this.scene.info.gameMaxTime + 'm');
+	
+		this.scene.translate(-31.5, 0, 0);
 		// TODO: Add player time
-		writeText(this.scene, 'PLAYER MAX TIME:' + 's');
+		writeText(this.scene, 'PLAYER MAX TIME:' + this.scene.info.playerMaxTime + 's');
 
-		this.scene.translate(8.5, 0, 0);
-		writeText(this.scene, 'GAME MAX TIME:' + 's');
+
 	}
 
 	initBtnOnPick = () => {
@@ -142,7 +155,21 @@ export class Menu {
 	}
 
 	selectTheme = (num) => {
-		this.scene.info.theme = num;
+		this.scene.info.selectedTheme = num;
+	}
+
+	playerTimeBtnOnPick = () => {
+		if (this.scene.info.playerMaxTime == 60)
+			this.scene.info.playerMaxTime = 0;
+		else
+			this.scene.info.playerMaxTime += 20;
+	}
+
+	gameTimeBtnOnPick = () => {
+		if (this.scene.info.gameMaxTime == 5)
+			this.scene.info.gameMaxTime = 2;
+		else
+			this.scene.info.gameMaxTime += 1;
 	}
 	
 }

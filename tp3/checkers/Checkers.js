@@ -43,7 +43,7 @@ export class Checkers {
                         obj.onPick();
                     }
                 }
-                pickResults.splice(0,pickResults.length);
+                pickResults.splice(0, pickResults.length);
             }
         }
     }

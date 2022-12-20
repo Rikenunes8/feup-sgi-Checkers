@@ -4,7 +4,7 @@ import { Pickable } from './Pickable.js';
 
 export class Piece extends Pickable {
     constructor(sceneGraph, tile, type, materialId, componentref, pickId) {
-        super(pickId, true);
+        super(pickId, false);
         this.sceneGraph = sceneGraph;
         this.tile = tile;
         this.type = type;
