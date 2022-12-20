@@ -52,7 +52,24 @@ export class XMLscene extends CGFscene {
 
         this.startTime = null;
 		this.setUpdatePeriod(10);
+        this.setPickEnabled(true);
     }
+
+    logPicking() {
+		if (this.pickMode == false) {
+			// results can only be retrieved when picking mode is false
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (var i=0; i< this.pickResults.length; i++) {
+					var obj = this.pickResults[i][0];
+					if (obj) {
+						var customId = this.pickResults[i][1];				
+						console.log("Picked object: " + obj + ", with pick id " + customId);
+					}
+				}
+				this.pickResults.splice(0,this.pickResults.length);
+			}		
+		}
+	}
 
     /**
      * Initializes the scene cameras.
@@ -187,6 +204,10 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+        this.logPicking();
+
+        this.clearPickRegistration();
+
         // ---- BEGIN Background, camera and axis setup
 
         // Clear image and depth buffer everytime we update the scene
@@ -218,6 +239,7 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
             this.graph.displayScene();
+            this.graph.displayCheckers();
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 

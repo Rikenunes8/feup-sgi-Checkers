@@ -170,7 +170,7 @@ export class XMLParserComponents extends XMLParser {
                 componentMaterials.push('inherit');
             } else {
                 if (this.scene.materials[materialId] == null) return "no material defined with ID " + materialId;
-                componentMaterials.push(this.scene.materials[materialId]);
+                componentMaterials.push(materialId);
             }
         }
         if (componentMaterials.length === 0)

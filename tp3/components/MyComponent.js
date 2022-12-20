@@ -34,7 +34,7 @@ export class MyComponent extends CGFobject {
 
     /**
      * Gets the current material of the component.
-     * @returns {CGFappearance} The current material of the component.
+     * @returns {string} The current material id of the component.
      */
     getMaterial() {
         return this.materials[this.material];
