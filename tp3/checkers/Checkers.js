@@ -1,5 +1,7 @@
 import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
+import { CGFscene } from "../../lib/CGF.js";
+import { encode } from "./utils.js";
 
 export class Checkers {
     constructor (scene, mainboard, piecesMaterialsIds) {
@@ -12,6 +14,10 @@ export class Checkers {
     }
 
     display() {
+        // TODO: test purposes only
+        for (let piece of this.pieces) {
+            this.scene.scene.registerForPick(encode(piece.id), piece);
+        }
         this.mainboard.display();
     }
 

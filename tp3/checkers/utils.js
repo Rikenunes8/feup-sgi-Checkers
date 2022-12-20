@@ -24,3 +24,18 @@ export function displayGraph(scene, node, prevMaterial) {
 export function diff(p1, p2, coord) {
     return Math.abs(p2[coord] - p1[coord]);
 }
+
+export function encode(string) {
+    const splits = string.split('-');
+    if (splits.length !== 3) return -1;
+    let number = '';
+    if (splits[1].includes('tile')) {
+        number += '1';
+    }
+    else if (splits[1].includes('piece')) {
+        number += '2';
+    }
+    number += splits[2];
+
+    return parseInt(number);
+}
