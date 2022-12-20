@@ -22,7 +22,6 @@ export class Checkers {
         this.pieces = [];
         
         this.game = this.buildInitialGame();
-        this.printGame();
         
         const pieceComponentId = buildPieceComponent(this.scene);
         this.buildPieces(this.game, pieceComponentId, piecesMaterialsIds);
@@ -32,113 +31,135 @@ export class Checkers {
         this.changeState(GameState.WaitPiecePick);
     }
 
+    selectTile(id) {
+        console.log(`Selected tile: ${id}`);
+        if (this.game[id] == -1) {
+            const prevTileId = this.game.indexOf(this.selectedPieceId);
+            this.game[id] = this.game[prevTileId];
+            this.game[prevTileId] = -1;
+            this.selectedPieceId = null;
+            this.updateMainboard();
+            this.changeState(GameState.WaitPiecePick);
+        }
+        //this.mainboard.selectTile(id);
+    }
+    selectPiece(id) {
+        console.log(`Selected piece: ${id}`);
+        if (this.selectedPieceId != null) {
+            this.selectedPieceId = null;
+            this.changeState(GameState.WaitPiecePick);
+        } else {
+            this.selectedPieceId = id;
+            this.changeState(GameState.WaitTilePick);
+        }
+        //this.mainboard.selectPiece(id);
+    }
+
+    /**
+     * Update mainboard according to the game board.
+     * This function is called when the game board is updated.
+     * It updates the mainboard tiles and pieces.
+     * If a piece is not on the same tile as the piece in the mainboard, it is updated.
+     * If a piece is on the same tile as the piece in the mainboard, it is not updated.
+     * If a tile is not occupied by a piece, it is set to null.
+     */
+    updateMainboard() {
+        for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
+            const tileId = v*8+h;
+            const pieceId = this.game[tileId];
+            if (pieceId != -1) {
+                const piece = this.pieces[pieceId];
+                if (tileId !== piece.tile.pickId % 100) {
+                    piece.updateTile(this.mainboard.gameboardTiles[tileId]);
+                }
+            }
+            else {
+                this.mainboard.gameboardTiles[tileId].piece = null;
+            }
+        }
+    }
+
+    /**
+     * Call the handler of the new state.
+     * @param {GameState} newState New state to be set.
+     */
+    changeState(newState) {
+        if (newState == GameState.WaitPiecePick) {
+            this.changeStateToWaitPiecePick();
+        }
+        else if (newState == GameState.WaitTilePick) {
+            this.changeStateToWaitTilePick();
+        }
+    }
+
+    /**
+     * Changes the state to WaitPiecePick.
+     * This state is used when the player is waiting for a piece to be selected.
+     * All tiles are not pickable.
+     * If the player is P1, only pieces 0 to 11 are pickable.
+     * If the player is P2, only pieces 12 to 23 are pickable.
+     */
+    changeStateToWaitPiecePick() {
+        this.newState = GameState.WaitPiecePick;
+        this.mainboard.gameboardTiles.forEach(t => t.pickable = false);
+
+        for (let i = 0; i < this.pieces.length; i++) {
+            const isPickable = (this.turn == CurrentPlayer.P1 && i < 12) || (this.turn == CurrentPlayer.P2 && i >= 12);
+            this.pieces[i].pickable = isPickable;
+        }
+    }
+
+    /**
+     * Changes the state to WaitTilePick.
+     * This state is used when the player has selected a piece and is waiting for a tile to be selected.
+     * Only tiles that are empty and are adjacent to the selected piece are pickable.
+     * The selected piece is pickable.
+     * All other pieces are not pickable.
+     */
+    changeStateToWaitTilePick() {
+        this.newState = GameState.WaitTilePick;
+
+        this.pieces.forEach(p => p.pickable = false);
+        this.pieces[this.selectedPieceId].pickable = true;
+        for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
+            if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
+                this.mainboard.gameboardTiles[v*8+h].pickable = true;
+            }
+        }
+    }
+
+    /**
+     * Call the handler of the picked object.
+     * @param {Object} obj Object that was picked.
+     * @param {int} customId Pick id of the object.
+     * @returns 
+     */
+    managePick(obj, customId) {
+        console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
+        if (customId < 0) return;
+        // 100 is is a magic number, it is used to separate the type of the object from the id.
+        const type = Math.floor(customId / 100);
+        const id = customId % 100;
+        if (type == 1) {
+            this.selectTile(id);
+        } else if (type == 2) {
+            this.selectPiece(id);
+        }
+    }
+
+    /**
+     * Displays the checkers game.
+     */
     display() {
         this.mainboard.display();
     }
 
-    // TODO remove this function
-    onObjectSelected(obj, customId) {
-        console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
-        if (customId >= 0) {
-            const type = Math.floor(customId / 100);
-            const id = customId % 100;
-            if (type == 1) {
-                console.log(`Selected tile: ${id}`);
-                if (this.game[id] == -1) {
-                    const prevTileId = this.game.indexOf(this.selectedPieceId);
-                    this.game[id] = this.game[prevTileId];
-                    this.game[prevTileId] = -1;
-                    this.selectedPieceId = null;
-                    this.updateMainboard();
-                    this.changeState(GameState.WaitPiecePick);
-                }
-                //this.mainboard.selectTile(id);
-            }
-            else if (type == 2) {
-                console.log(`Selected piece: ${id}`);
-                if (this.selectedPieceId != null) {
-                    this.selectedPieceId = null;
-                    this.changeState(GameState.WaitPiecePick);
-                } else {
-                    this.selectedPieceId = id;
-                    this.changeState(GameState.WaitTilePick);
-                }
-                //this.mainboard.selectPiece(id);
-            }
-        }
-    }
 
-    updateMainboard() {
-        for (let v = 0; v < 8; v++) {
-            for (let h = 0; h < 8; h++) {
-                const tileId = v*8+h;
-                const pieceId = this.game[tileId];
-                if (pieceId != -1) {
-                    const piece = this.pieces[pieceId];
-                    if (tileId === piece.tile.pickId % 100) {
-                        continue;
-                    }
-                    else {
-                        piece.updateTile(this.mainboard.gameboardTiles[tileId]);
-                    }
-                }
-                else {
-                    this.mainboard.gameboardTiles[tileId].piece = null;
-                }
-            }
-        }
-    }
-
-    changeState(newState) {
-        this.state = newState;
-        switch (this.state) {
-            case GameState.Menu:
-                break;
-            case GameState.LoadScene:
-                break;
-            case GameState.WaitPiecePick:
-                this.mainboard.gameboardTiles.forEach(t => t.pickable = false);
-                this.pieces.forEach(p => p.pickable = false);
-
-                const start = this.turn == CurrentPlayer.P1 ? 0 : 12;
-                for (let i = start; i < start + 12; i++) {
-                    this.pieces[i].pickable = true;
-                }
-                break;
-            case GameState.WaitTilePick:
-                this.pieces.forEach(p => p.pickable = false);
-                this.pieces[this.selectedPieceId].pickable = true;
-                for (let v = 0; v < 8; v++) {
-                    for (let h = 0; h < 8; h++) {
-                        if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
-                            this.mainboard.gameboardTiles[v*8+h].pickable = true;
-                        }
-                    }
-                }
-                break;
-            case GameState.Moving:
-                break;
-            case GameState.EndGame:
-                break;
-        }
-    }
-
-    managePick(pickMode, pickResults) {
-        if (pickMode == false) {
-            if (pickResults != null && pickResults.length > 0) {
-                for (let i = 0; i < pickResults.length; i++) {
-                    const obj = pickResults[i][0];
-                    if (obj) {
-                        //const customId = pickResults[i][1];
-                        //this.onObjectSelected(obj, customId);
-                        obj.onPick();
-                    }
-                }
-                pickResults.splice(0, pickResults.length);
-            }
-        }
-    }
-
+    /**
+     * Builds the initial game board. -1 tiles are empty, and the rest are filled with pieces numbered from 0 until 23.
+     * Pieces under 12 are player 1 pieces, and the rest are player 2 pieces.
+     * @returns {Array} An array of 64 elements, representing the game board.
+     */
     buildInitialGame() {
         const game = new Array(8*8);
         let n = 0;
@@ -155,13 +176,12 @@ export class Checkers {
         return game;
     }
 
-    // TODO: remove this function
-    printGame() {
-        for (let v = 0; v < 8; v++) {
-            console.log(this.game.slice(v*8, v*8+8).join(" "));
-        }
-    }
-
+    /**
+     * Build the pieces for the game from the game matrix.
+     * @param {Array} game An array of 64 elements, representing the game board.
+     * @param {string} componentref Component that represents a piece.
+     * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
+     */
     buildPieces(game, componentref, piecesMaterialsIds) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
@@ -171,6 +191,13 @@ export class Checkers {
                 const pickId = game[i] + 200;
                 this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i], type, materialId, componentref, pickId));
             }
+        }
+    }
+
+    // TODO: remove this function
+    printGame() {
+        for (let v = 0; v < 8; v++) {
+            console.log(this.game.slice(v*8, v*8+8).join(" "));
         }
     }
 }

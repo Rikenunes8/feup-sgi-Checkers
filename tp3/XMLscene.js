@@ -203,6 +203,22 @@ export class XMLscene extends CGFscene {
         this.resetAnimations = true;
     }
 
+    managePick = (mode, results) => {
+        if (mode == false) {
+            if (results != null && results.length > 0) {
+                for (let i=0; i< results.length; i++) {
+                    const obj = results[i][0];
+                    if (obj) {
+                        //const customId = results[i][1];
+                        obj.onPick();
+                    }
+                }
+                results.splice(0,results.length);
+            }
+        }
+    }
+
+
     // called periodically (as per setUpdatePeriod() in init())
 	update(t) {
         if (this.sceneInited) {
@@ -223,10 +239,7 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-
-        // TODO: Add picking behavior to buttons of main menu
-        if (this.checkers != null)
-            this.checkers.managePick(this.pickMode, this.pickResults);
+        this.managePick(this.pickMode, this.pickResults);
 
         this.clearPickRegistration();
 
