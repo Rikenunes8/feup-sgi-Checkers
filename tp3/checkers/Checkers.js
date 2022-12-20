@@ -17,17 +17,18 @@ export class Checkers {
 
     onObjectSelected(obj, customId) {
         console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
-        /*const encoded = encode(customId);
-        if (encoded >= 0) {
-            const type = Math.floor(encoded / 100);
-            const id = encoded % 100;
+        if (customId >= 0) {
+            const type = Math.floor(customId / 100);
+            const id = customId % 100;
             if (type == 1) {
-                this.mainboard.selectTile(id);
+                console.log(`Selected tile: ${id}`);
+                //this.mainboard.selectTile(id);
             }
             else if (type == 2) {
-                this.mainboard.selectPiece(id);
+                console.log(`Selected piece: ${id}`);
+                //this.mainboard.selectPiece(id);
             }
-        }*/
+        }
     }
 
     managePick(pickMode, pickResults) {
@@ -50,12 +51,13 @@ export class Checkers {
         const isType1 = type == 1;
         const materialId = piecesMaterialsIds[type-1];
         let n = 0;
-        for (let i = isType1? 0:7 ; isType1? i<8:i>-1; isType1? i++:i--) {
-            for (let j = isType1? 0:7 ; isType1? j<8:j>-1; isType1? j++:j--) {
+        for (let v = isType1? 0:7 ; isType1? v<8:v>-1; isType1? v++:v--) {
+            for (let h = isType1? 0:7 ; isType1? h<8:h>-1; isType1? h++:h--) {
                 if (n == 12) return;
-                const isDarkTile = (i + j) % 2 == 0;
+                const isDarkTile = (v + h) % 2 == 0;
                 if (isDarkTile) {
-                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i*8+j], type, materialId, componentref));
+                    const pickId = this.pieces.length + 200;
+                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[v*8+h], type, materialId, componentref, pickId));
                     n++;
                 }
             }

@@ -74,7 +74,8 @@ export class Gameboard {
         for (let v = 0; v < 8; v++) {
             for (let h = 0; h < 8; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
-                this.gameboardTiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, this.p1, this.p2));
+                const pickId = (v * 8) + h + 100;
+                this.gameboardTiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }
     }

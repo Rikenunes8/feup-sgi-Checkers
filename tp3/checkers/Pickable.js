@@ -1,11 +1,12 @@
 export class Pickable {
-    constructor(pickable = false) {
+    constructor(pickId, pickable = false) {
+        this.pickId = pickId;
         this.pickable = pickable;
     }
 
-    registerPickable(scene, id, object) {
+    registerPickable(scene, object) {
         if (this.pickable) {
-            scene.registerForPick(id, object);
+            scene.registerForPick(this.pickId, object);
         }
     }
 

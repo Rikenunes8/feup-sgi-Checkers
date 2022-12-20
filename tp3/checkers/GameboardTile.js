@@ -3,8 +3,8 @@ import { Pickable } from "./Pickable.js";
 import { displayGraph, encode } from "./utils.js";
 
 export class GameboardTile extends Pickable{
-    constructor(sceneGraph, board, h, v, primitiveId, materialId) {
-        super(false);
+    constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
+        super(pickId, false);
         this.sceneGraph = sceneGraph;
         this.board = board;
         this.id = `checkers-tile-${v}${h}`;
@@ -15,9 +15,10 @@ export class GameboardTile extends Pickable{
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, encode(this.id), this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this.sceneGraph.components[this.id]);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
+
         if (this.piece) {
             this.piece.display();
         }
