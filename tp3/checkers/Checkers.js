@@ -9,8 +9,8 @@ export class Checkers {
         this.mainboard = mainboard;
         this.pieces = [];
         const pieceComponentId = buildPieceComponent(this.scene);
-        this.buildPiecesType1(pieceComponentId, piecesMaterialsIds[0]);
-        this.buildPiecesType2(pieceComponentId, piecesMaterialsIds[1]);
+        this.buildPieces(pieceComponentId, piecesMaterialsIds, 1);
+        this.buildPieces(pieceComponentId, piecesMaterialsIds, 2);
     }
 
     display() {
@@ -21,28 +21,17 @@ export class Checkers {
         this.mainboard.display();
     }
 
-
-    buildPiecesType1(componentref, materialId) {
+    buildPieces(componentref, piecesMaterialsIds, type) {
+        if (type !== 1 && type !== 2) return;
+        const isType1 = type == 1;
+        const materialId = piecesMaterialsIds[type-1];
         let n = 0;
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
+        for (let i = isType1? 0:7 ; isType1? i<8:i>-1; isType1? i++:i--) {
+            for (let j = isType1? 0:7 ; isType1? j<8:j>-1; isType1? j++:j--) {
                 if (n == 12) return;
                 const isDarkTile = (i + j) % 2 == 0;
                 if (isDarkTile) {
-                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i*8+j], 1, materialId, componentref));
-                    n++;
-                }
-            }
-        }
-    }
-    buildPiecesType2(componentref, materialId) {
-        let n = 0;
-        for (let i = 7; i > -1; i--) {
-            for (let j = 7; j > -1; j--) {
-                if (n == 12) return;
-                const isDarkTile = (i + j) % 2 == 0;
-                if (isDarkTile) {
-                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i*8+j], 2, materialId, componentref));
+                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i*8+j], type, materialId, componentref));
                     n++;
                 }
             }

@@ -2,13 +2,13 @@ import { MyComponent } from "../components/MyComponent.js";
 import { displayGraph } from "./utils.js";
 
 export class GameboardTile {
-    constructor(scene, board, h, v, primitiveId, materialId, p1, p2) {
+    constructor(scene, board, h, v, primitiveId, materialId) {
         this.scene = scene;
         this.board = board;
         this.id = `checkers-tile-${h}${v}`;
         this.h = h;
         this.v = v;
-        this.buildTile(primitiveId, materialId, p1, p2);
+        this.buildTile(primitiveId, materialId);
         this.piece = null;
     }
 

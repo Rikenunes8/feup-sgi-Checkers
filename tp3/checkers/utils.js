@@ -1,23 +1,23 @@
-export function displayGraph(scene, node, prevMaterial) {
+export function displayGraph(sceneGraph, node, prevMaterial) {
     const isPrimitive = node[0];
     const nodeId = node[1];
     if (isPrimitive) {
-        scene.primitives[nodeId].display();
+        sceneGraph.primitives[nodeId].display();
     }
     else {
-        const component = scene.components[nodeId];
+        const component = sceneGraph.components[nodeId];
         let materialId = component.getMaterial();
         if (materialId === 'inherit') materialId = prevMaterial;
-        const material = scene.materials[materialId];
+        const material = sceneGraph.materials[materialId];
 
-        scene.scene.pushMatrix();
-        scene.scene.multMatrix(component.transfMatrix);
+        sceneGraph.scene.pushMatrix();
+        sceneGraph.scene.multMatrix(component.transfMatrix);
 
         for (let child of component.children) {
             material.apply();
-            displayGraph(scene, child, materialId);
+            displayGraph(sceneGraph, child, materialId);
         }
-        scene.scene.popMatrix();
+        sceneGraph.scene.popMatrix();
     }
 }
 
