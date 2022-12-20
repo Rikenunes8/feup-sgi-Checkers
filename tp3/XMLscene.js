@@ -1,5 +1,6 @@
 import { CGFappearance, CGFscene, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
+import { Menu } from './checkers/Menu.js';
 import { MyQuad } from './components/MyQuad.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -70,6 +71,15 @@ export class XMLscene extends CGFscene {
         this.startTime = null;
 		this.setUpdatePeriod(10);
         this.setPickEnabled(true);
+
+        this.info = {
+            initialMenu: true,
+            selectedTheme: 1,
+            playerMaxTime: 20,
+            gameMaxTime: 2,
+        }
+
+        this.menu = new Menu(this, [0, 0], [10, 10]);
     }
 
     /**
@@ -205,6 +215,8 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+
+        // TODO: Add picking behavior to buttons of main menu
         if (this.checkers != null)
             this.checkers.managePick(this.pickMode, this.pickResults);
 
@@ -240,21 +252,21 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
-            this.graph.displayScene();
-            this.displayCheckers();
+            
+            if (this.info.initialMenu) {
+                this.menu.display();
+            } else {
+                if (this.checkers != null)
+                    this.checkers.display();
+                this.graph.displayScene();
+            }
+
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+        
     }
 
-    /**
-     * Displays the checkers game.
-     */
-    displayCheckers() {
-        if (this.checkers != null) {
-            this.checkers.display();
-        }
-    }
 }
