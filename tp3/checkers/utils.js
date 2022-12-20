@@ -1,15 +1,7 @@
-export function displayGraph(sceneGraph, node, prevMaterial = null, prevHighlighted) {
+export function displayGraph(sceneGraph, node, prevMaterial = null) {
     const isPrimitive = node[0];
     const nodeId = node[1];
     if (isPrimitive) {
-        if (prevHighlighted != null) {
-            sceneGraph.scene.highlightedShader.setUniformsValues({ scale: prevHighlighted[3] });
-            sceneGraph.scene.highlightedShader.setUniformsValues({ color: vec3.fromValues(prevHighlighted[0], prevHighlighted[1], prevHighlighted[2]) });
-            sceneGraph.scene.setActiveShader(sceneGraph.scene.highlightedShader);
-        }
-        else if (sceneGraph.scene.activeShader != sceneGraph.scene.defaultShader) {
-            sceneGraph.scene.setActiveShader(sceneGraph.scene.defaultShader);
-        }
         sceneGraph.primitives[nodeId].display();
     }
     else {
@@ -17,14 +9,13 @@ export function displayGraph(sceneGraph, node, prevMaterial = null, prevHighligh
         let materialId = component.getMaterial();
         if (materialId === 'inherit') materialId = prevMaterial;
         const material = sceneGraph.materials[materialId];
-        const highlighted = component.getHighlighted() ?? prevHighlighted;
 
         sceneGraph.scene.pushMatrix();
         sceneGraph.scene.multMatrix(component.transfMatrix);
 
         for (let child of component.children) {
             material.apply();
-            displayGraph(sceneGraph, child, materialId, highlighted);
+            displayGraph(sceneGraph, child, materialId);
         }
         sceneGraph.scene.popMatrix();
     }
@@ -32,21 +23,6 @@ export function displayGraph(sceneGraph, node, prevMaterial = null, prevHighligh
 
 export function diff(p1, p2, coord) {
     return Math.abs(p2[coord] - p1[coord]);
-}
-
-export function encode(string) {
-    const splits = string.split('-');
-    if (splits.length !== 3) return -1;
-    let number = '';
-    if (splits[1].includes('tile')) {
-        number += '1';
-    }
-    else if (splits[1].includes('piece')) {
-        number += '2';
-    }
-    number += splits[2];
-
-    return parseInt(number);
 }
 
 /**

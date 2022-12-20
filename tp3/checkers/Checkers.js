@@ -55,11 +55,11 @@ export class Checkers {
 
     selectPiece(id) {
         this.selectedPieceId = id;
-        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].isHighlighted = true;
+        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].material = 1;
     }
 
     unselectPiece() {
-        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].isHighlighted = false;
+        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].material = 0;
         this.selectedPieceId = null;
     }
 
@@ -127,7 +127,7 @@ export class Checkers {
     changeStateToWaitTilePick() {
         this.newState = GameState.WaitTilePick;
 
-        console.log(this.pieces[this.selectedPieceId])
+        this.pieces.forEach(p => p.pickable = false);
         this.pieces[this.selectedPieceId].pickable = true;
         for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
             if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
