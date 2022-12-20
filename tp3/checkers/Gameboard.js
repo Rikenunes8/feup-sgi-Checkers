@@ -4,8 +4,8 @@ import { diff, displayGraph } from "./utils.js";
 import { buildCheckersRectangle } from "./primitives.js";
 
 export class Gameboard {
-    constructor(scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
-        this.scene = scene;
+    constructor(sceneGraph, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
+        this.sceneGraph = sceneGraph;
         this.id = 'checkers-mainboard';
         this.p1 = p1;
         this.p2 = p2;
@@ -16,21 +16,21 @@ export class Gameboard {
 
         this.gameboardTiles = [];
         
-        const rectangleId = buildCheckersRectangle(this.scene);
+        const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildFaces(rectangleId);
         this.buildBoardBase(boardWallsMaterialId);
         this.buildTiles(rectangleId, lightTileMaterialId, darkTileMaterialId);
     }
 
     display() {
-        displayGraph(this.scene, [false, this.id], null);
+        displayGraph(this.sceneGraph, [false, this.id], null);
 
-        this.scene.scene.pushMatrix();
-        this.scene.scene.multMatrix(this.transfMatrix);
+        this.sceneGraph.scene.pushMatrix();
+        this.sceneGraph.scene.multMatrix(this.transfMatrix);
         for (const tile of this.gameboardTiles) {
             tile.display();
         }
-        this.scene.scene.popMatrix();
+        this.sceneGraph.scene.popMatrix();
     }
 
     buildFaces(primitiveId) {
@@ -67,14 +67,14 @@ export class Gameboard {
         }
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, -0.5, 0));
         const sideTexture = ['none', 1, 1];
-        this.scene.components[id] = new MyComponent(this.scene.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
+        this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
     }
 
     buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
-        for (let i = 0; i < 8; i++) {
-            for (let j = 0; j < 8; j++) {
-                const tileMaterial = (i + j) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
-                this.gameboardTiles.push(new GameboardTile(this.scene, this, j, i, primitiveId, tileMaterial, this.p1, this.p2));
+        for (let v = 0; v < 8; v++) {
+            for (let h = 0; h < 8; h++) {
+                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
+                this.gameboardTiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, this.p1, this.p2));
             }
         }
     }
@@ -84,7 +84,7 @@ export class Gameboard {
         for (let id of this.facesIds) {
             childs.push([false, id]);
         }
-        this.scene.components[this.id] = new MyComponent(this.scene.scene, this.id, this.transfMatrix, [materialId], ['none', 1, 1], childs, null, null);
+        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, this.transfMatrix, [materialId], ['none', 1, 1], childs, null, null);
     }
 
     buildBoardTransfMatrix() {

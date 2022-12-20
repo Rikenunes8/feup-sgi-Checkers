@@ -1,7 +1,5 @@
 import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
-import { CGFscene } from "../../lib/CGF.js";
-import { encode } from "./utils.js";
 
 export class Checkers {
     constructor (scene, mainboard, piecesMaterialsIds) {
@@ -14,11 +12,37 @@ export class Checkers {
     }
 
     display() {
-        // TODO: test purposes only
-        for (let piece of this.pieces) {
-            this.scene.scene.registerForPick(encode(piece.id), piece);
-        }
         this.mainboard.display();
+    }
+
+    onObjectSelected(obj, customId) {
+        console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
+        /*const encoded = encode(customId);
+        if (encoded >= 0) {
+            const type = Math.floor(encoded / 100);
+            const id = encoded % 100;
+            if (type == 1) {
+                this.mainboard.selectTile(id);
+            }
+            else if (type == 2) {
+                this.mainboard.selectPiece(id);
+            }
+        }*/
+    }
+
+    managePick(pickMode, pickResults) {
+        if (pickMode == false) {
+            if (pickResults != null && pickResults.length > 0) {
+                for (let i=0; i< pickResults.length; i++) {
+                    const obj = pickResults[i][0];
+                    if (obj) {
+                        const customId = pickResults[i][1];
+                        this.onObjectSelected(obj, customId);
+                    }
+                }
+                pickResults.splice(0,pickResults.length);
+            }
+        }
     }
 
     buildPieces(componentref, piecesMaterialsIds, type) {

@@ -1,11 +1,13 @@
 import { MyComponent } from "../components/MyComponent.js";
-import { displayGraph } from "./utils.js";
+import { Pickable } from "./Pickable.js";
+import { displayGraph, encode } from "./utils.js";
 
-export class GameboardTile {
-    constructor(scene, board, h, v, primitiveId, materialId) {
-        this.scene = scene;
+export class GameboardTile extends Pickable{
+    constructor(sceneGraph, board, h, v, primitiveId, materialId) {
+        super(false);
+        this.sceneGraph = sceneGraph;
         this.board = board;
-        this.id = `checkers-tile-${h}${v}`;
+        this.id = `checkers-tile-${v}${h}`;
         this.h = h;
         this.v = v;
         this.buildTile(primitiveId, materialId);
@@ -13,7 +15,9 @@ export class GameboardTile {
     }
 
     display() {
-        displayGraph(this.scene, [false, this.id], null);
+        this.registerPickable(this.sceneGraph.scene, encode(this.id), this.sceneGraph.components[this.id]);
+        displayGraph(this.sceneGraph, [false, this.id], null);
+        this.unregisterPickable(this.sceneGraph.scene);
         if (this.piece) {
             this.piece.display();
         }
@@ -24,6 +28,6 @@ export class GameboardTile {
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.h, 0, -this.v));
         mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
         let tileTexture = ['none', 1, 1];
-        this.scene.components[this.id] = new MyComponent(this.scene.scene, this.id, transfMatrix, [materialId], tileTexture, [[true, primitiveId]], null, null);
+        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], tileTexture, [[true, primitiveId]], null, null);
     }
 }

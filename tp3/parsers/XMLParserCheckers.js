@@ -26,7 +26,7 @@ export class XMLParserCheckers extends XMLParser {
         let pieces = this.parsePieces(children[piecesIndex]);
         if (!Array.isArray(pieces)) return pieces;
 
-        this.scene.checkers = new Checkers(this.scene, mainboard, pieces);
+        this.scene.scene.checkers = new Checkers(this.scene, mainboard, pieces);
     }
 
     parseMainboard(mainboard) {
