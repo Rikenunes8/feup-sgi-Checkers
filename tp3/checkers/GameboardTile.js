@@ -1,16 +1,22 @@
 import { MyComponent } from "../components/MyComponent.js";
+import { displayGraph } from "./utils.js";
 
 export class GameboardTile {
-    constructor(scene, h, v, primitiveId, materialId, p1, p2) {
+    constructor(scene, board, h, v, primitiveId, materialId, p1, p2) {
         this.scene = scene;
+        this.board = board;
         this.id = `checkers-tile-${h}${v}`;
         this.h = h;
         this.v = v;
         this.buildTile(primitiveId, materialId, p1, p2);
+        this.piece = null;
     }
 
-    diff(p1, p2, coord) {
-        return Math.abs(p2[coord] - p1[coord]);
+    display() {
+        displayGraph(this.scene, [false, this.id], null);
+        if (this.piece) {
+            this.piece.display();
+        }
     }
 
     buildTile(primitiveId, materialId) {
@@ -20,5 +26,4 @@ export class GameboardTile {
         let tileTexture = ['none', 1, 1];
         this.scene.components[this.id] = new MyComponent(this.scene.scene, this.id, transfMatrix, [materialId], tileTexture, [[true, primitiveId]], null, null);
     }
-
 }

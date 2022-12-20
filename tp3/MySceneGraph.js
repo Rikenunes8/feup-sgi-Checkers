@@ -161,7 +161,7 @@ export class MySceneGraph {
      */
     displayCheckers() {
         if (this.checkers != null) {
-            this.displayNode([false, 'checkers-mainboard'], this.materials['lightWood'], [ "none", 1, 1 ], null);
+            this.checkers.display();
         }
     }
 }
