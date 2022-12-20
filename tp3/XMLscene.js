@@ -1,5 +1,6 @@
-import { CGFscene } from '../lib/CGF.js';
+import { CGFappearance, CGFscene, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
+import { MyQuad } from './components/MyQuad.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -49,6 +50,22 @@ export class XMLscene extends CGFscene {
 
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
+
+        // font texture: 16 x 16 characters
+		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
+		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.trans.png");
+        this.appearance = new CGFappearance(this);
+        this.appearance.setTexture(this.fontTexture);
+
+		// plane where texture character will be rendered
+		this.quad = new MyQuad(this);
+
+		// instatiate text shader (used to simplify access via row/column coordinates)
+		// check the two files to see how it is done
+		this.textShader = new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+
+		// set number of rows and columns in font texture
+		this.textShader.setUniformsValues({'dims': [16, 16]});
 
         this.startTime = null;
 		this.setUpdatePeriod(10);

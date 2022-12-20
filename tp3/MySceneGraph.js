@@ -1,6 +1,5 @@
-import { CGFshader, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFXMLreader } from '../lib/CGF.js';
 import { Menu } from './checkers/Menu.js';
-import { MyQuad } from './components/MyQuad.js';
 import { XMLParserFile } from './parsers/XMLParserFile.js';
 
 /**
@@ -84,8 +83,8 @@ export class MySceneGraph {
     displayScene() {
 
         // Display Menu
-        //const menu = new Menu(this.scene, [0, 0], [10, 10]);
-        //menu.display();
+        const menu = new Menu(this.scene, [0, 0], [10, 10]);
+        menu.display();
 
         for (let id in this.primitives) { 
             if (this.displayNormals)
@@ -99,13 +98,6 @@ export class MySceneGraph {
             rootComponent.getMaterial(), 
             rootComponent.getTexture(), 
             rootComponent.getHighlighted());
-
-        //To test the parsing/creation of the primitives, call the display function directly
-        // this.primitives['demoRectangle'].display();
-        // this.primitives['demoCylinder'].display();
-        // this.primitives['demoSphere'].display();
-        // this.primitives['demoTorus'].display();
-        // this.primitives['patch'].display();
     }
 
     /**
