@@ -39,7 +39,7 @@ export class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
 
-        this.displayNormals = false; // TODO testing
+        this.displayNormals = false;
         this.displayLights = false;
         this.displayingLights = this.displayLights;
         this.resetAnimations = true;
@@ -52,6 +52,27 @@ export class XMLscene extends CGFscene {
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
 
+        this.initTextStuff();
+
+        this.startTime = null;
+		this.setUpdatePeriod(10);
+        this.setPickEnabled(true);
+
+        this.info = {
+            initialMenu: true,
+            selectedTheme: 1,
+            playerMaxTime: 20,
+            gameMaxTime: 2,
+        }
+
+        this.menu = new Menu(this, [0, 0], [10, 10]);
+    }
+
+    /**
+     * Initializes text appearance, texture and shaders.
+     * Initializes the primitive MyQuad used to render the text. 
+     */
+    initTextStuff() {
         // font texture: 16 x 16 characters
 		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
 		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.trans.png");
@@ -67,19 +88,6 @@ export class XMLscene extends CGFscene {
 
 		// set number of rows and columns in font texture
         this.textShader.setUniformsValues({ 'dims': [16, 16] })//, 'textColor': vec3.fromValues(0.0, 0.0, 0.0)});
-
-        this.startTime = null;
-		this.setUpdatePeriod(10);
-        this.setPickEnabled(true);
-
-        this.info = {
-            initialMenu: true,
-            selectedTheme: 1,
-            playerMaxTime: 20,
-            gameMaxTime: 2,
-        }
-
-        this.menu = new Menu(this, [0, 0], [10, 10]);
     }
 
     /**
