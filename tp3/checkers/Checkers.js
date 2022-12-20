@@ -7,9 +7,13 @@ const GameState = Object.freeze({
     WaitPiecePick: Symbol("WaitPiecePick"),
     WaitTilePick: Symbol("WaitTilePick"),
     Moving: Symbol("Moving"),
-    EndGame: Symbol("spring")
+    EndGame: Symbol("EndGame")
+});
 
-})
+const CurrentPlayer = Object.freeze({
+    P1: Symbol("P1"),
+    P2: Symbol("P2"),
+});
 
 export class Checkers {
     constructor (scene, mainboard, piecesMaterialsIds) {
@@ -18,12 +22,14 @@ export class Checkers {
         this.pieces = [];
         
         this.game = this.buildInitialGame();
-        this.displayGame();
+        this.printGame();
         
         const pieceComponentId = buildPieceComponent(this.scene);
         this.buildPieces(this.game, pieceComponentId, piecesMaterialsIds);
 
-        this.state = GameState.Menu;
+        this.turn = CurrentPlayer.P1;
+        this.selectedPieceId = null;
+        this.changeState(GameState.WaitPiecePick);
     }
 
     display() {
@@ -38,12 +44,82 @@ export class Checkers {
             const id = customId % 100;
             if (type == 1) {
                 console.log(`Selected tile: ${id}`);
+                if (this.game[id] == -1) {
+                    const prevTileId = this.game.indexOf(this.selectedPieceId);
+                    this.game[id] = this.game[prevTileId];
+                    this.game[prevTileId] = -1;
+                    this.selectedPieceId = null;
+                    this.updateMainboard();
+                    this.changeState(GameState.WaitPiecePick);
+                }
                 //this.mainboard.selectTile(id);
             }
             else if (type == 2) {
                 console.log(`Selected piece: ${id}`);
+                if (this.selectedPieceId != null) {
+                    this.selectedPieceId = null;
+                    this.changeState(GameState.WaitPiecePick);
+                } else {
+                    this.selectedPieceId = id;
+                    this.changeState(GameState.WaitTilePick);
+                }
                 //this.mainboard.selectPiece(id);
             }
+        }
+    }
+
+    updateMainboard() {
+        for (let v = 0; v < 8; v++) {
+            for (let h = 0; h < 8; h++) {
+                const tileId = v*8+h;
+                const pieceId = this.game[tileId];
+                if (pieceId != -1) {
+                    const piece = this.pieces[pieceId];
+                    if (tileId === piece.tile.pickId % 100) {
+                        continue;
+                    }
+                    else {
+                        piece.updateTile(this.mainboard.gameboardTiles[tileId]);
+                    }
+                }
+                else {
+                    this.mainboard.gameboardTiles[tileId].piece = null;
+                }
+            }
+        }
+    }
+
+    changeState(newState) {
+        this.state = newState;
+        switch (this.state) {
+            case GameState.Menu:
+                break;
+            case GameState.LoadScene:
+                break;
+            case GameState.WaitPiecePick:
+                this.mainboard.gameboardTiles.forEach(t => t.pickable = false);
+                this.pieces.forEach(p => p.pickable = false);
+
+                const start = this.turn == CurrentPlayer.P1 ? 0 : 12;
+                for (let i = start; i < start + 12; i++) {
+                    this.pieces[i].pickable = true;
+                }
+                break;
+            case GameState.WaitTilePick:
+                this.pieces.forEach(p => p.pickable = false);
+                this.pieces[this.selectedPieceId].pickable = true;
+                for (let v = 0; v < 8; v++) {
+                    for (let h = 0; h < 8; h++) {
+                        if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
+                            this.mainboard.gameboardTiles[v*8+h].pickable = true;
+                        }
+                    }
+                }
+                break;
+            case GameState.Moving:
+                break;
+            case GameState.EndGame:
+                break;
         }
     }
 
@@ -79,7 +155,8 @@ export class Checkers {
         return game;
     }
 
-    displayGame() {
+    // TODO: remove this function
+    printGame() {
         for (let v = 0; v < 8; v++) {
             console.log(this.game.slice(v*8, v*8+8).join(" "));
         }

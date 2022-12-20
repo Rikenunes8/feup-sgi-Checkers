@@ -31,4 +31,14 @@ export class Piece extends Pickable {
         // TODO implement
         console.log("OIOI");
     }
+    
+    updateTile(tile) {
+        this.tile.piece = null;
+        this.tile = tile;
+        this.tile.piece = this;
+        let transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
+        this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
+    }
+
 }
