@@ -1,7 +1,5 @@
 import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
-import { CGFscene } from "../../lib/CGF.js";
-import { encode } from "./utils.js";
 
 export class Checkers {
     constructor (scene, mainboard, piecesMaterialsIds) {
@@ -14,11 +12,38 @@ export class Checkers {
     }
 
     display() {
-        // TODO: test purposes only
-        for (let piece of this.pieces) {
-            this.scene.scene.registerForPick(encode(piece.id), piece);
-        }
         this.mainboard.display();
+    }
+
+    onObjectSelected(obj, customId) {
+        console.log(`Selected object: ${obj.id}, with pick id ${customId}`);
+        if (customId >= 0) {
+            const type = Math.floor(customId / 100);
+            const id = customId % 100;
+            if (type == 1) {
+                console.log(`Selected tile: ${id}`);
+                //this.mainboard.selectTile(id);
+            }
+            else if (type == 2) {
+                console.log(`Selected piece: ${id}`);
+                //this.mainboard.selectPiece(id);
+            }
+        }
+    }
+
+    managePick(pickMode, pickResults) {
+        if (pickMode == false) {
+            if (pickResults != null && pickResults.length > 0) {
+                for (let i=0; i< pickResults.length; i++) {
+                    const obj = pickResults[i][0];
+                    if (obj) {
+                        const customId = pickResults[i][1];
+                        this.onObjectSelected(obj, customId);
+                    }
+                }
+                pickResults.splice(0,pickResults.length);
+            }
+        }
     }
 
     buildPieces(componentref, piecesMaterialsIds, type) {
@@ -26,12 +51,13 @@ export class Checkers {
         const isType1 = type == 1;
         const materialId = piecesMaterialsIds[type-1];
         let n = 0;
-        for (let i = isType1? 0:7 ; isType1? i<8:i>-1; isType1? i++:i--) {
-            for (let j = isType1? 0:7 ; isType1? j<8:j>-1; isType1? j++:j--) {
+        for (let v = isType1? 0:7 ; isType1? v<8:v>-1; isType1? v++:v--) {
+            for (let h = isType1? 0:7 ; isType1? h<8:h>-1; isType1? h++:h--) {
                 if (n == 12) return;
-                const isDarkTile = (i + j) % 2 == 0;
+                const isDarkTile = (v + h) % 2 == 0;
                 if (isDarkTile) {
-                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i*8+j], type, materialId, componentref));
+                    const pickId = this.pieces.length + 200;
+                    this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[v*8+h], type, materialId, componentref, pickId));
                     n++;
                 }
             }

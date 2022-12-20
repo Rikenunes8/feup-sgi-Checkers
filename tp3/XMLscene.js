@@ -55,22 +55,6 @@ export class XMLscene extends CGFscene {
         this.setPickEnabled(true);
     }
 
-    logPicking() {
-		if (this.pickMode == false) {
-			// results can only be retrieved when picking mode is false
-			if (this.pickResults != null && this.pickResults.length > 0) {
-				for (var i=0; i< this.pickResults.length; i++) {
-					var obj = this.pickResults[i][0];
-					if (obj) {
-						var customId = this.pickResults[i][1];				
-						console.log("Picked object: " + obj + ", with pick id " + customId);
-					}
-				}
-				this.pickResults.splice(0,this.pickResults.length);
-			}		
-		}
-	}
-
     /**
      * Initializes the scene cameras.
      */
@@ -204,7 +188,8 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
-        this.logPicking();
+        if (this.checkers != null)
+            this.checkers.managePick(this.pickMode, this.pickResults);
 
         this.clearPickRegistration();
 
@@ -239,11 +224,20 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
             this.graph.displayScene();
-            this.graph.displayCheckers();
+            this.displayCheckers();
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    /**
+     * Displays the checkers game.
+     */
+    displayCheckers() {
+        if (this.checkers != null) {
+            this.checkers.display();
+        }
     }
 }
