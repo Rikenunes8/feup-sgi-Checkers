@@ -4,7 +4,7 @@ import { displayGraph } from "./utils.js";
 
 export class GameboardTile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
-        super(pickId, false);
+        super(pickId);
         this.sceneGraph = sceneGraph;
         this.board = board;
         this.id = `checkers-tile-${v}${h}`;
