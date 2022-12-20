@@ -190,9 +190,5 @@
             <type1 id="lightWood" />
             <type2 id="darkWood" />
         </pieces>
-        <gamemenu x1="0" y1="0" z1="2" x2="2" y2="0.5" z2="0" >
-            <materials id="lightWood" />
-            <materials id="darkWood" />
-        </gamemenu>
     </checkers>
 </sxs>

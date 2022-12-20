@@ -16,7 +16,8 @@ export class Menu {
 		
 		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
 		this.initButton = new MyRectangle(scene, 'checkers-menu-init-button', p1[0], p2[0], p1[1], p2[1]);
-		this.configButton = new MyRectangle(scene, 'checkers-menu-config-button', p1[0], p2[0], p1[1], p2[1]);
+		this.playerTimeBtn = new MyRectangle(scene, 'checkers-menu-playerTime-button', p1[0], p2[0], p1[1], p2[1]);
+		this.gameTimeBtn = new MyRectangle(scene, 'checkers-menu-gameTime-button', p1[0], p2[0], p1[1], p2[1]);
 		this.theme1Button = new MyRectangle(scene, 'checkers-menu-theme1-button', p1[0], p2[0], p1[1], p2[1]);
 		this.theme2Button = new MyRectangle(scene, 'checkers-menu-theme2-button', p1[0], p2[0], p1[1], p2[1]);
 		this.theme3Button = new MyRectangle(scene, 'checkers-menu-theme3-button', p1[0], p2[0], p1[1], p2[1]);
@@ -82,13 +83,22 @@ export class Menu {
 		this.theme3Button.display();
 		this.scene.popMatrix();
 
-		// Draw Config Game Button
+		// Draw Player Time Button
 		this.scene.pushMatrix();
 		this.buttonAppearance.apply();
 		this.scene.loadIdentity();
 		this.scene.scale(1.4, 0.3, 1);
-		this.scene.translate(-5, -27, -50);
-		this.configButton.display();
+		this.scene.translate(-12, -27, -50);
+		this.playerTimeBtn.display();
+		this.scene.popMatrix();
+
+		// Draw Game Time Button
+		this.scene.pushMatrix();
+		this.buttonAppearance.apply();
+		this.scene.loadIdentity();
+		this.scene.scale(1.4, 0.3, 1);
+		this.scene.translate(2, -27, -50);
+		this.gameTimeBtn.display();
 		this.scene.popMatrix();
 	}
 
@@ -107,13 +117,17 @@ export class Menu {
 
 		this.scene.translate(-17.8, -6.8, 0);
 		writeText(this.scene, 'THEME 1');
-		this.scene.translate(7, 0, 0);
+		this.scene.translate(7.2, 0, 0);
 		writeText(this.scene, 'THEME 2');
 		this.scene.translate(7, 0, 0);
 		writeText(this.scene, 'THEME 3');
 		
-		this.scene.translate(-18.2, -6.7, 0);
-		writeText(this.scene, 'CONFIG GAME');
+		this.scene.translate(-30.5, -6.7, 0);
+		// TODO: Add player time
+		writeText(this.scene, 'PLAYER MAX TIME:' + 's');
+
+		this.scene.translate(8.5, 0, 0);
+		writeText(this.scene, 'GAME MAX TIME:' + 's');
 	}
 	
 }
