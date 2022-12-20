@@ -7,7 +7,7 @@ export class GameboardTile extends Pickable {
         super(pickId);
         this.sceneGraph = sceneGraph;
         this.board = board;
-        this.id = `checkers-tile-${v}${h}`;
+        this.id = `checkers-tile-${pickId-100}`;
         this.h = h;
         this.v = v;
         this.buildTile(primitiveId, materialId);

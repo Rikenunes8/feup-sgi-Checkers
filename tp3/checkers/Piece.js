@@ -8,14 +8,14 @@ export class Piece extends Pickable {
         this.sceneGraph = sceneGraph;
         this.tile = tile;
         this.type = type;
-        this.id = `checkers-piece-${this.tile.v}${this.tile.h}`;
+        this.id = `checkers-piece-${pickId-200}`;
         this.buildPieceComponent(materialId, componentref);
 
         this.tile.piece = this;
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, this);//, this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
     }
@@ -24,14 +24,15 @@ export class Piece extends Pickable {
         const texture = ['none', 1, 1];
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
-        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], texture, [[false, componentref]], null, null);
+        const highlighted = [0, 1, 0, 1]
+        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], texture, [[false, componentref]], null, highlighted);
     }
 
     onPick() {
         // TODO implement
         console.log("OIOI");
     }
-    
+
     updateTile(tile) {
         this.tile.piece = null;
         this.tile = tile;

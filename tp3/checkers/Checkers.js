@@ -16,14 +16,14 @@ const CurrentPlayer = Object.freeze({
 });
 
 export class Checkers {
-    constructor (scene, mainboard, piecesMaterialsIds) {
-        this.scene = scene;
+    constructor (sceneGraph, mainboard, piecesMaterialsIds) {
+        this.sceneGraph = sceneGraph;
         this.mainboard = mainboard;
         this.pieces = [];
         
         this.game = this.buildInitialGame();
         
-        const pieceComponentId = buildPieceComponent(this.scene);
+        const pieceComponentId = buildPieceComponent(this.sceneGraph);
         this.buildPieces(this.game, pieceComponentId, piecesMaterialsIds);
 
         this.turn = CurrentPlayer.P1;
@@ -31,28 +31,36 @@ export class Checkers {
         this.changeState(GameState.WaitPiecePick);
     }
 
-    selectTile(id) {
+    pickTile(id) {
         console.log(`Selected tile: ${id}`);
         if (this.game[id] == -1) {
             const prevTileId = this.game.indexOf(this.selectedPieceId);
             this.game[id] = this.game[prevTileId];
             this.game[prevTileId] = -1;
-            this.selectedPieceId = null;
+            this.unselectPiece();
             this.updateMainboard();
             this.changeState(GameState.WaitPiecePick);
         }
-        //this.mainboard.selectTile(id);
     }
-    selectPiece(id) {
+    pickPiece(id) {
         console.log(`Selected piece: ${id}`);
         if (this.selectedPieceId != null) {
-            this.selectedPieceId = null;
+            this.unselectPiece();
             this.changeState(GameState.WaitPiecePick);
         } else {
-            this.selectedPieceId = id;
+            this.selectPiece(id);
             this.changeState(GameState.WaitTilePick);
         }
-        //this.mainboard.selectPiece(id);
+    }
+
+    selectPiece(id) {
+        this.selectedPieceId = id;
+        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].isHighlighted = true;
+    }
+
+    unselectPiece() {
+        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].isHighlighted = false;
+        this.selectedPieceId = null;
     }
 
     /**
@@ -119,7 +127,7 @@ export class Checkers {
     changeStateToWaitTilePick() {
         this.newState = GameState.WaitTilePick;
 
-        this.pieces.forEach(p => p.pickable = false);
+        console.log(this.pieces[this.selectedPieceId])
         this.pieces[this.selectedPieceId].pickable = true;
         for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
             if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
@@ -141,9 +149,9 @@ export class Checkers {
         const type = Math.floor(customId / 100);
         const id = customId % 100;
         if (type == 1) {
-            this.selectTile(id);
+            this.pickTile(id);
         } else if (type == 2) {
-            this.selectPiece(id);
+            this.pickPiece(id);
         }
     }
 
@@ -189,7 +197,7 @@ export class Checkers {
             if (game[i] != -1) {
                 const materialId = piecesMaterialsIds[type-1];
                 const pickId = game[i] + 200;
-                this.pieces.push(new Piece(this.scene, this.mainboard.gameboardTiles[i], type, materialId, componentref, pickId));
+                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.gameboardTiles[i], type, materialId, componentref, pickId));
             }
         }
     }
