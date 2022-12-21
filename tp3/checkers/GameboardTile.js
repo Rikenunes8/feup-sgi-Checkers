@@ -1,7 +1,9 @@
 import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
-import { CurrentPlayer, GameState } from "./Checkers.js";
+import { GameState } from "./Checkers.js";
+import { CurrentPlayer } from "./GameRuler.js";
+
 
 export class GameboardTile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
@@ -37,23 +39,27 @@ export class GameboardTile extends Pickable {
     onPick() {
         console.log(`Selected tile: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
-        const piecesToKill = checkers.validateMove(this.idx);
-        if (piecesToKill != null) {
-            const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
-            checkers.game[this.idx] = checkers.game[prevTileId];
-            checkers.game[prevTileId] = -1;
-            piecesToKill.forEach(pieceId => {
-                checkers.game[checkers.game.indexOf(pieceId)] = -1;
-            });
+        const piecesToKill = checkers.ruler.validateMove(this.idx);
+        if (piecesToKill == null) return null;
+        
+        /*const piece = checkers.pieces[checkers.selectedPieceId];
+        checkers.changeState(GameState.Moving);
+        checkers.movePiece(piece, piece.tile, this);*/
 
-            if (checkers.turn == CurrentPlayer.P1 && this.idx >= 56 || checkers.turn == CurrentPlayer.P2 && this.idx <= 7) {
-                checkers.pieces[checkers.selectedPieceId].becomeKing(true);
-            }
+        const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
+        checkers.game[this.idx] = checkers.game[prevTileId];
+        checkers.game[prevTileId] = -1;
+        piecesToKill.forEach(pieceId => {
+            checkers.game[checkers.game.indexOf(pieceId)] = -1;
+        });
 
-            checkers.unselectPiece();
-            checkers.updateMainboard();
-            checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-            checkers.changeState(GameState.WaitPiecePick);
+        if (checkers.turn == CurrentPlayer.P1 && this.idx >= 56 || checkers.turn == CurrentPlayer.P2 && this.idx <= 7) {
+            checkers.pieces[checkers.selectedPieceId].becomeKing(true);
         }
+
+        checkers.unselectPiece();
+        checkers.updateMainboard();
+        checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        checkers.changeState(GameState.WaitPiecePick);
     }
 }
