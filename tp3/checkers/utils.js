@@ -1,4 +1,4 @@
-export function displayGraph(sceneGraph, node, prevMaterial) {
+export function displayGraph(sceneGraph, node, prevMaterial = null) {
     const isPrimitive = node[0];
     const nodeId = node[1];
     if (isPrimitive) {
@@ -25,21 +25,6 @@ export function diff(p1, p2, coord) {
     return Math.abs(p2[coord] - p1[coord]);
 }
 
-export function encode(string) {
-    const splits = string.split('-');
-    if (splits.length !== 3) return -1;
-    let number = '';
-    if (splits[1].includes('tile')) {
-        number += '1';
-    }
-    else if (splits[1].includes('piece')) {
-        number += '2';
-    }
-    number += splits[2];
-
-    return parseInt(number);
-}
-
 /**
  * Writes a text on the scene
  * @param {*} scene where to write the text
@@ -50,5 +35,17 @@ export const writeText = (scene, text) => {
         scene.activeShader.setUniformsValues({'charCoords': [text.charCodeAt(i) % 16, Math.floor(text.charCodeAt(i) / 16)]});
         scene.quad.display();
         scene.translate(0.7, 0, 0);
+    }
+}
+export function toArrIndex(row, col) {
+    return (row * 8) + col;
+}
+
+export function belongsToPlayer(piece, player) {
+    if (player == 0) {
+        return piece < 12;
+    }
+    else {
+        return piece > 11;
     }
 }

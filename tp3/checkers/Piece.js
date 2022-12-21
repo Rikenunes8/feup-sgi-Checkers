@@ -1,21 +1,33 @@
 import { MyComponent } from '../components/MyComponent.js';
-import { displayGraph, encode } from './utils.js';
+import { displayGraph } from './utils.js';
 import { Pickable } from './Pickable.js';
+import { GameState } from './Checkers.js';
 
 export class Piece extends Pickable {
-    constructor(sceneGraph, tile, type, materialId, componentref, pickId) {
-        super(pickId, false);
+    /**
+     * 
+     * @param {*} sceneGraph 
+     * @param {*} tile 
+     * @param {boolean} isKing P for pawn or K for king
+     * @param {*} materialId 
+     * @param {*} componentrefs 
+     * @param {*} pickId 
+     */
+    constructor(sceneGraph, tile, isKing, materialId, componentrefs, pickId) {
+        super(pickId);
         this.sceneGraph = sceneGraph;
+        this.componentrefs = componentrefs;
         this.tile = tile;
-        this.type = type;
-        this.id = `checkers-piece-${this.tile.v}${this.tile.h}`;
-        this.buildPieceComponent(materialId, componentref);
+        this.isKing = isKing;
+        this.idx = pickId-200;
+        this.id = `checkers-piece-${this.idx}`;
+        this.buildPieceComponent(materialId, componentrefs[0]);
 
         this.tile.piece = this;
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, this);//, this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
     }
@@ -24,11 +36,33 @@ export class Piece extends Pickable {
         const texture = ['none', 1, 1];
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
-        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], texture, [[false, componentref]], null, null);
+        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId, 'white'], texture, [[false, componentref]], null, null);
     }
 
     onPick() {
-        // TODO implement
-        console.log("OIOI");
+        console.log(`Selected piece: ${this.idx}`);
+        const checkers = this.sceneGraph.scene.checkers;
+        if (checkers.selectedPieceId != null) {
+            checkers.unselectPiece();
+            checkers.changeState(GameState.WaitPiecePick);
+        } else {
+            checkers.selectPiece(this.idx);
+            checkers.changeState(GameState.WaitTilePick);
+        }
     }
+
+    updateTile(tile) {
+        this.tile.piece = null;
+        this.tile = tile;
+        this.tile.piece = this;
+        let transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
+        this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
+    }
+
+    becomeKing(toKing) {
+        this.isKing = toKing;
+        this.sceneGraph.components[this.id].children[0][1] = toKing ? this.componentrefs[1] : this.componentrefs[0];
+    }
+
 }

@@ -1,13 +1,15 @@
 import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
+import { CurrentPlayer, GameState } from "./Checkers.js";
 
 export class GameboardTile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
-        super(pickId, false);
+        super(pickId);
         this.sceneGraph = sceneGraph;
         this.board = board;
-        this.id = `checkers-tile-${v}${h}`;
+        this.idx = h + v * 8;
+        this.id = `checkers-tile-${this.idx}`;
         this.h = h;
         this.v = v;
         this.buildTile(primitiveId, materialId);
@@ -33,7 +35,25 @@ export class GameboardTile extends Pickable {
     }
 
     onPick() {
-        // TODO implement
-        console.log("OLA");
+        console.log(`Selected tile: ${this.idx}`);
+        const checkers = this.sceneGraph.scene.checkers;
+        const piecesToKill = checkers.validateMove(this.idx);
+        if (piecesToKill != null) {
+            const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
+            checkers.game[this.idx] = checkers.game[prevTileId];
+            checkers.game[prevTileId] = -1;
+            piecesToKill.forEach(pieceId => {
+                checkers.game[checkers.game.indexOf(pieceId)] = -1;
+            });
+
+            if (checkers.turn == CurrentPlayer.P1 && this.idx >= 56 || checkers.turn == CurrentPlayer.P2 && this.idx <= 7) {
+                checkers.pieces[checkers.selectedPieceId].becomeKing(true);
+            }
+
+            checkers.unselectPiece();
+            checkers.updateMainboard();
+            checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+            checkers.changeState(GameState.WaitPiecePick);
+        }
     }
 }
