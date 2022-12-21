@@ -1,18 +1,15 @@
-import { MyComponent } from "../components/MyComponent.js";
-import { GameboardTile } from './GameboardTile.js';
-import { diff, displayGraph } from "./utils.js";
-import { buildCheckersRectangle } from "./primitives.js";
+import { MyComponent } from "../../components/MyComponent.js";
+import { GameboardTile } from '../GameboardTile.js';
+import { buildCheckersRectangle } from "../primitives.js";
+import { displayGraph } from "../utils.js";
+import { Board } from "./Board.js";
 
-export class Gameboard {
+export class Gameboard extends Board {
     constructor(sceneGraph, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
-        this.sceneGraph = sceneGraph;
-        this.id = 'checkers-mainboard';
-        this.p1 = p1;
-        this.p2 = p2;
+        const id = 'checkers-mainboard';
+        super(sceneGraph, id, p1, p2);
 
         this.transfMatrix = this.buildBoardTransfMatrix();
-        
-        this.facesIds = [];
 
         this.tiles = [];
         
@@ -22,6 +19,10 @@ export class Gameboard {
         this.buildTiles(rectangleId, lightTileMaterialId, darkTileMaterialId);
     }
 
+    /**
+     * Displays the gameboard by displaying all its components
+     * and then the tiles
+     */
     display() {
         displayGraph(this.sceneGraph, [false, this.id], null);
 
@@ -80,26 +81,16 @@ export class Gameboard {
         }
     }
 
-    buildBoardBase(materialId) {
-        let childs = [];
-        for (let id of this.facesIds) {
-            childs.push([false, id]);
-        }
-        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, this.transfMatrix, [materialId], ['none', 1, 1], childs, null, null);
-    }
 
+    /**
+     * Builds the transformation matrix for gameboard
+     * @returns {mat4} The transformation matrix
+     */
     buildBoardTransfMatrix() {
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.med(0), this.med(1), this.med(2)));
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(this.diff(0)/8, this.diff(1), this.diff(2)/8));
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-4, 0.5, 4));
         return transfMatrix;
-    }
-
-    med(coord) {
-        return (this.p2[coord]+this.p1[coord])/2;
-    }
-    diff(coord) {
-        return diff(this.p1, this.p2, coord);
     }
 }

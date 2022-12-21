@@ -1,6 +1,7 @@
 import { XMLParser } from "./XMLParser.js";
-import { Gameboard } from "../checkers/Gameboard.js";
+import { Gameboard } from "../checkers/boards/Gameboard.js";
 import { Checkers } from "../checkers/Checkers.js";
+import { AuxiliarBoard } from "../checkers/boards/AuxiliarBoard.js";
 
 export class XMLParserCheckers extends XMLParser {
     constructor(scene) {
@@ -15,10 +16,12 @@ export class XMLParserCheckers extends XMLParser {
             nodeNames.push(children[i].nodeName);
         }
 
-        var mainboardIndex = nodeNames.indexOf("mainboard");
-        var piecesIndex = nodeNames.indexOf("pieces");
+        const mainboardIndex = nodeNames.indexOf("mainboard");
+        const piecesIndex = nodeNames.indexOf("pieces");
+        const auxiliarboardIndex = nodeNames.indexOf("auxiliarboard");
         if (mainboardIndex == -1) return "missing mainboard definition in checkers";
         if (piecesIndex == -1) return "missing pieces definition in checkers";
+        if (auxiliarboardIndex == -1) return "missing auxiliarboard definition in checkers";
 
         let mainboard = this.parseMainboard(children[mainboardIndex]);
         if (! mainboard instanceof Gameboard) return mainboard;
@@ -26,12 +29,15 @@ export class XMLParserCheckers extends XMLParser {
         let pieces = this.parsePieces(children[piecesIndex]);
         if (!Array.isArray(pieces)) return pieces;
 
-        this.scene.scene.checkers = new Checkers(this.scene, mainboard, pieces);
+        let auxiliarboard = this.parseAuxiliarBoard(children[auxiliarboardIndex]);
+        if (! auxiliarboard instanceof AuxiliarBoard) return auxiliarboard;
+
+        this.scene.scene.checkers = new Checkers(this.scene, mainboard, auxiliarboard, pieces);
     }
 
     /**
      * Parses mainboard tag
-     * @param {*} mainboard 
+     * @param {*} mainboard node
      * @returns GameBoard object
      */
     parseMainboard(mainboard) {
@@ -64,6 +70,33 @@ export class XMLParserCheckers extends XMLParser {
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
 
         return new Gameboard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
+    }
+
+    /**
+     * Parses auxiliarboard tag
+     * @param {*} auxiliarboard node 
+     * @returns AuxiliarBoard object
+     */
+    parseAuxiliarBoard(mainboard) {
+        let p1 = this.parseCoordinates3D(mainboard, "mainboard bottom left corner not defined", ['x1', 'y1', 'z1']);
+        let p2 = this.parseCoordinates3D(mainboard, "mainboard top right corner not defined", ['x2', 'y2', 'z2']);
+        if (!Array.isArray(p1)) return p1;
+        if (!Array.isArray(p2)) return p2;
+
+        var materials = mainboard.children;
+        let nodeNames = [];
+        for (var i = 0; i < materials.length; i++) {
+            nodeNames.push(materials[i].nodeName);
+        }
+
+        const boardWallsIndex = nodeNames.indexOf("boardWalls");
+        if (boardWallsIndex == -1) return "missing board walls definition in auxiliarboard";
+
+
+        const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
+        if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
+
+        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId);
     }
 
     parsePieces(pieces) {
