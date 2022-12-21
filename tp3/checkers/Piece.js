@@ -1,6 +1,7 @@
 import { MyComponent } from '../components/MyComponent.js';
 import { displayGraph } from './utils.js';
 import { Pickable } from './Pickable.js';
+import { GameState } from './Checkers.js';
 
 export class Piece extends Pickable {
     /**
@@ -18,7 +19,8 @@ export class Piece extends Pickable {
         this.componentrefs = componentrefs;
         this.tile = tile;
         this.isKing = isKing;
-        this.id = `checkers-piece-${pickId-200}`;
+        this.idx = pickId-200;
+        this.id = `checkers-piece-${this.idx}`;
         this.buildPieceComponent(materialId, componentrefs[0]);
 
         this.tile.piece = this;
@@ -38,8 +40,15 @@ export class Piece extends Pickable {
     }
 
     onPick() {
-        // TODO implement
-        console.log("OIOI");
+        console.log(`Selected piece: ${this.idx}`);
+        const checkers = this.sceneGraph.scene.checkers;
+        if (checkers.selectedPieceId != null) {
+            checkers.unselectPiece();
+            checkers.changeState(GameState.WaitPiecePick);
+        } else {
+            checkers.selectPiece(this.idx);
+            checkers.changeState(GameState.WaitTilePick);
+        }
     }
 
     updateTile(tile) {

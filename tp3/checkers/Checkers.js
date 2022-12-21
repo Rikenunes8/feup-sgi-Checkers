@@ -2,7 +2,7 @@ import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
 import { belongsToPlayer, toArrIndex } from "./utils.js";
 
-const GameState = Object.freeze({
+export const GameState = Object.freeze({
     Menu: Symbol("Menu"),
     LoadScene: Symbol("LoadScene"),
     WaitPiecePick: Symbol("WaitPiecePick"),
@@ -11,7 +11,7 @@ const GameState = Object.freeze({
     EndGame: Symbol("EndGame")
 });
 
-const CurrentPlayer = Object.freeze({
+export const CurrentPlayer = Object.freeze({
     P1: 0,
     P2: 1,
 });
@@ -82,8 +82,8 @@ export class Checkers {
                     if (!validMoves[tile2]) validMoves[tile2] = [];
                     if (validMoves[tile2].length <= eatenPieces.length) validMoves[tile2] = eatenPieces;
                     validMoves[tile2].push(this.game[tile]);
-                    this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, false, [...eatenPieces, this.game[tile]], toArrIndex(pieceRow, pieceCol));
-                    this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, true, [...eatenPieces, this.game[tile]], toArrIndex(pieceRow, pieceCol));
+                    this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, isKing, [...eatenPieces, this.game[tile]], toArrIndex(pieceRow, pieceCol));
+                    //this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, true, [...eatenPieces, this.game[tile]], toArrIndex(pieceRow, pieceCol));
                 }
             }
         }
@@ -95,37 +95,6 @@ export class Checkers {
         return validMoves[tileId];
     }
 
-    pickTile(id) {
-        console.log(`Selected tile: ${id}`);
-        const piecesToKill = this.validateMove(id);
-        if (piecesToKill != null) {
-            const prevTileId = this.game.indexOf(this.selectedPieceId);
-            this.game[id] = this.game[prevTileId];
-            this.game[prevTileId] = -1;
-            piecesToKill.forEach(pieceId => {
-                this.game[this.game.indexOf(pieceId)] = -1;
-            });
-
-            if (this.turn == CurrentPlayer.P1 && id >= 56 || this.turn == CurrentPlayer.P2 && id <= 7) {
-                this.pieces[this.selectedPieceId].becomeKing(true);
-            }
-
-            this.unselectPiece();
-            this.updateMainboard();
-            this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-            this.changeState(GameState.WaitPiecePick);
-        }
-    }
-    pickPiece(id) {
-        console.log(`Selected piece: ${id}`);
-        if (this.selectedPieceId != null) {
-            this.unselectPiece();
-            this.changeState(GameState.WaitPiecePick);
-        } else {
-            this.selectPiece(id);
-            this.changeState(GameState.WaitTilePick);
-        }
-    }
 
     selectPiece(id) {
         this.selectedPieceId = id;
