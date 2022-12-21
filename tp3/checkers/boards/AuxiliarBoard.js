@@ -11,9 +11,11 @@ export class AuxiliarBoard extends Board {
 
         this.transfMatrix = this.buildBoardTransfMatrix();
 
+        this.buttonsMaterialId = buttonsMaterialId;
+
         const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildBaseFaces(rectangleId);
-        this.buildMenu(rectangleId, buttonsMaterialId);
+        this.buildMenu(rectangleId);
         this.buildBoardBase(boardWallsMaterialId);
     }
 
@@ -37,9 +39,7 @@ export class AuxiliarBoard extends Board {
     displayButtons() {
         const scene = this.sceneGraph.scene;
 
-        // TODO Use buttonsMaterialId
-        this.buttonAppearance = new CGFappearance(scene);
-        this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+        this.buttonAppearance = this.sceneGraph.materials[this.buttonsMaterialId];
 
         // Draw init game button
 		scene.pushMatrix();
@@ -60,7 +60,7 @@ export class AuxiliarBoard extends Board {
 		scene.popMatrix();
     }
 
-    buildButtons(buttonsMaterialId) {
+    buildButtons() {
         this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', this.p1, this.p2, true,
             2001, () => {console.log("Player1 Score")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
         
@@ -78,9 +78,9 @@ export class AuxiliarBoard extends Board {
      * Builds the menu of the board
      * @param {*} primitiveId 
      */
-    buildMenu(primitiveId, buttonsMaterialId) {
+    buildMenu(primitiveId) {
         this.buildMenuFaces(primitiveId);
-        this.buildButtons(buttonsMaterialId);
+        this.buildButtons();
     }
 
     /**
