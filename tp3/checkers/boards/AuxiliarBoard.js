@@ -2,6 +2,8 @@ import { MyComponent } from "../../components/MyComponent.js";
 import { displayGraph } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
+import { MyButton } from "../../components/MyButton.js";
+import { CGFappearance } from "../../../lib/CGF.js";
 
 export class AuxiliarBoard extends Board {
     constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId) {
@@ -29,6 +31,47 @@ export class AuxiliarBoard extends Board {
 
     display() {
         displayGraph(this.sceneGraph, [false, this.id], null);
+        this.displayButtons();
+    }
+
+    displayButtons() {
+        const scene = this.sceneGraph.scene;
+
+        // TODO Use buttonsMaterialId
+        this.buttonAppearance = new CGFappearance(scene);
+        this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+
+        // Draw init game button
+		scene.pushMatrix();
+		this.buttonAppearance.apply();
+        scene.translate(8.49, 2.8, -1.8);
+        scene.scale(1, 0.8, 0.4);
+        scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.player1Score.display();
+        
+        scene.translate(0, -1.5, 0);
+        this.player1Time.display();
+        
+        scene.translate(9.5, 0, 0);
+        this.player2Time.display();
+
+        scene.translate(0, 1.5, 0);
+        this.player2Score.display();
+		scene.popMatrix();
+    }
+
+    buildButtons(buttonsMaterialId) {
+        this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', this.p1, this.p2, true,
+            2001, () => {console.log("Player1 Score")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        
+        this.player1Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Time-button', this.p1, this.p2, true,
+            2002, () => {console.log("Player1 Time")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        
+        this.player2Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Time-button', this.p1, this.p2, true,
+            2003, () => {console.log("Player2 Time")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        
+        this.player2Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Score-button', this.p1, this.p2, true,
+            2004, () => {console.log("Player2 Score")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
     }
 
     /**
@@ -37,6 +80,7 @@ export class AuxiliarBoard extends Board {
      */
     buildMenu(primitiveId, buttonsMaterialId) {
         this.buildMenuFaces(primitiveId);
+        this.buildButtons(buttonsMaterialId);
     }
 
     /**

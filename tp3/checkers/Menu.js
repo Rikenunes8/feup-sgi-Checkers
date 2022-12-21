@@ -1,7 +1,6 @@
 import { CGFappearance } from "../../lib/CGF.js";
 import { MyButton } from "../components/MyButton.js";
 import { MyRectangle } from "../components/MyRectangle.js";
-import { writeText } from "./utils.js";
 
 export class Menu {
     /**

@@ -59,7 +59,7 @@ export class XMLscene extends CGFscene {
         this.setPickEnabled(true);
 
         this.info = {
-            initialMenu: true,
+            initialMenu: false,
             selectedTheme: 1,
             playerMaxTime: 20,
             gameMaxTime: 2,
