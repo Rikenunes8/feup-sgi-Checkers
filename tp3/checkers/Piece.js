@@ -3,13 +3,23 @@ import { displayGraph } from './utils.js';
 import { Pickable } from './Pickable.js';
 
 export class Piece extends Pickable {
-    constructor(sceneGraph, tile, type, materialId, componentref, pickId) {
+    /**
+     * 
+     * @param {*} sceneGraph 
+     * @param {*} tile 
+     * @param {boolean} isKing P for pawn or K for king
+     * @param {*} materialId 
+     * @param {*} componentrefs 
+     * @param {*} pickId 
+     */
+    constructor(sceneGraph, tile, isKing, materialId, componentrefs, pickId) {
         super(pickId);
         this.sceneGraph = sceneGraph;
+        this.componentrefs = componentrefs;
         this.tile = tile;
-        this.type = type;
+        this.isKing = isKing;
         this.id = `checkers-piece-${pickId-200}`;
-        this.buildPieceComponent(materialId, componentref);
+        this.buildPieceComponent(materialId, componentrefs[0]);
 
         this.tile.piece = this;
     }
@@ -39,6 +49,11 @@ export class Piece extends Pickable {
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
         this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
+    }
+
+    becomeKing(toKing) {
+        this.isKing = toKing;
+        this.sceneGraph.components[this.id].children[0][1] = toKing ? this.componentrefs[1] : this.componentrefs[0];
     }
 
 }
