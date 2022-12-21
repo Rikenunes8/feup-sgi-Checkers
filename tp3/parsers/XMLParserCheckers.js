@@ -29,6 +29,11 @@ export class XMLParserCheckers extends XMLParser {
         this.scene.scene.checkers = new Checkers(this.scene, mainboard, pieces);
     }
 
+    /**
+     * Parses mainboard tag
+     * @param {*} mainboard 
+     * @returns GameBoard object
+     */
     parseMainboard(mainboard) {
         let p1 = this.parseCoordinates3D(mainboard, "mainboard bottom left corner not defined", ['x1', 'y1', 'z1']);
         let p2 = this.parseCoordinates3D(mainboard, "mainboard top right corner not defined", ['x2', 'y2', 'z2']);
@@ -82,4 +87,5 @@ export class XMLParserCheckers extends XMLParser {
 
         return [type1MaterialId, type2MaterialId];
     }
+
 }

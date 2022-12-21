@@ -181,7 +181,7 @@
     </components>
 
     <checkers>
-        <mainboard  x1="-4" y1="0" z1="4" x2="4" y2="1" z2="-4" >
+        <mainboard x1="-4" y1="0" z1="4" x2="4" y2="1" z2="-4" >
             <lightTile id="white" />
             <darkTile id="black" />
             <boardWalls id="lightWood" />

@@ -1,5 +1,7 @@
-import { CGFscene } from '../lib/CGF.js';
+import { CGFappearance, CGFscene, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
+import { Menu } from './checkers/Menu.js';
+import { MyQuad } from './components/MyQuad.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -37,7 +39,7 @@ export class XMLscene extends CGFscene {
 
         this.axis = new CGFaxis(this);
 
-        this.displayNormals = false; // TODO testing
+        this.displayNormals = false;
         this.displayLights = false;
         this.displayingLights = this.displayLights;
         this.resetAnimations = true;
@@ -50,9 +52,42 @@ export class XMLscene extends CGFscene {
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
 
+        this.initTextStuff();
+
         this.startTime = null;
 		this.setUpdatePeriod(10);
         this.setPickEnabled(true);
+
+        this.info = {
+            initialMenu: true,
+            selectedTheme: 1,
+            playerMaxTime: 20,
+            gameMaxTime: 2,
+        }
+
+        this.menu = new Menu(this, [0, 0], [10, 10]);
+    }
+
+    /**
+     * Initializes text appearance, texture and shaders.
+     * Initializes the primitive MyQuad used to render the text. 
+     */
+    initTextStuff() {
+        // font texture: 16 x 16 characters
+		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
+		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.trans.png");
+        this.textAppearance = new CGFappearance(this);
+        this.textAppearance.setTexture(this.fontTexture);
+
+		// plane where texture character will be rendered
+		this.quad = new MyQuad(this);
+
+		// instatiate text shader (used to simplify access via row/column coordinates)
+		// check the two files to see how it is done
+		this.textShader = new CGFshader(this.gl, "shaders/font.vert", "shaders/font.frag");
+
+		// set number of rows and columns in font texture
+        this.textShader.setUniformsValues({ 'dims': [16, 16] })//, 'textColor': vec3.fromValues(0.0, 0.0, 0.0)});
     }
 
     /**
@@ -188,6 +223,8 @@ export class XMLscene extends CGFscene {
      * Displays the scene.
      */
     display() {
+
+        // TODO: Add picking behavior to buttons of main menu
         if (this.checkers != null)
             this.checkers.managePick(this.pickMode, this.pickResults);
 
@@ -223,21 +260,21 @@ export class XMLscene extends CGFscene {
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
-            this.graph.displayScene();
-            this.displayCheckers();
+            
+            if (this.info.initialMenu) {
+                this.menu.display();
+            } else {
+                if (this.checkers != null)
+                    this.checkers.display();
+                this.graph.displayScene();
+            }
+
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+        
     }
 
-    /**
-     * Displays the checkers game.
-     */
-    displayCheckers() {
-        if (this.checkers != null) {
-            this.checkers.display();
-        }
-    }
 }

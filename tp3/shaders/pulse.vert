@@ -139,5 +139,4 @@ void main() {
 		
 	fcolor = color;
 	ftimeFactor = timeFactor;
-
 }

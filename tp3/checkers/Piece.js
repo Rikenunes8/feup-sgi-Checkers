@@ -15,7 +15,7 @@ export class Piece extends Pickable {
     }
 
     display() {
-        this.registerPickable(this.sceneGraph.scene, this.sceneGraph.components[this.id]);
+        this.registerPickable(this.sceneGraph.scene, this);//, this.sceneGraph.components[this.id]);
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.unregisterPickable(this.sceneGraph.scene);
     }
@@ -27,4 +27,8 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId], texture, [[false, componentref]], null, null);
     }
 
+    onPick() {
+        // TODO implement
+        console.log("OIOI");
+    }
 }

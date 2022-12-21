@@ -1,4 +1,5 @@
-import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../lib/CGF.js';
+import { CGFXMLreader } from '../lib/CGF.js';
+import { Menu } from './checkers/Menu.js';
 import { XMLParserFile } from './parsers/XMLParserFile.js';
 
 /**
@@ -78,28 +79,21 @@ export class MySceneGraph {
 
     /**
      * Displays the scene, processing each node, starting in the root node.
+     * Displays the menu in case the game is not started yet
      */
     displayScene() {
-
-        for (let id in this.primitives) { 
+        for (let id in this.primitives) {
             if (this.displayNormals)
                 this.primitives[id].enableNormalViz();
             else
                 this.primitives[id].disableNormalViz();
-        }  
+        }
 
         const rootComponent = this.components[this.idRoot]
-        this.displayNode([false, this.idRoot], 
-            rootComponent.getMaterial(), 
-            rootComponent.getTexture(), 
+        this.displayNode([false, this.idRoot],
+            rootComponent.getMaterial(),
+            rootComponent.getTexture(),
             rootComponent.getHighlighted());
-
-        //To test the parsing/creation of the primitives, call the display function directly
-        // this.primitives['demoRectangle'].display();
-        // this.primitives['demoCylinder'].display();
-        // this.primitives['demoSphere'].display();
-        // this.primitives['demoTorus'].display();
-        // this.primitives['patch'].display();
     }
 
     /**
