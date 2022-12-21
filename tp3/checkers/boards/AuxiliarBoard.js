@@ -1,5 +1,5 @@
 import { MyComponent } from "../../components/MyComponent.js";
-import { displayGraph } from "../utils.js";
+import { displayGraph, writeText } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
 import { MyButton } from "../../components/MyButton.js";
@@ -41,28 +41,51 @@ export class AuxiliarBoard extends Board {
 
         this.buttonAppearance = this.sceneGraph.materials[this.buttonsMaterialId];
 
-        // Draw init game button
+        // Draw player1 Score button
 		scene.pushMatrix();
 		this.buttonAppearance.apply();
         scene.translate(8.49, 2.8, -1.8);
         scene.scale(1, 0.8, 0.4);
         scene.rotate(-Math.PI / 2, 0, 1, 0);
         this.player1Score.display();
-        
-        scene.translate(0, -1.5, 0);
-        this.player1Time.display();
-        
-        scene.translate(9.5, 0, 0);
-        this.player2Time.display();
+        scene.scale(0.5, 0.5, 0.5);
+        scene.translate(-6, 1, 0.1);
+        // TODO instead of 10 go get the player score
+        writeText(scene, 'PLAYER 1 SCORE: ' + 10 + 's');
 
-        scene.translate(0, 1.5, 0);
+        // Draw player1 Time button
+        scene.scale(2, 2, 2);
+        this.buttonAppearance.apply();
+        scene.translate(-3.5, -2, 0);
+        this.player1Time.display();
+        scene.scale(0.5, 0.5, 0.5);
+        scene.translate(-6, 1, 0.1);
+        // TODO use the player time
+        writeText(scene, 'PLAYER 1 TIME: ' + 10 + 's');
+
+        scene.scale(2, 2, 2);
+        this.buttonAppearance.apply();
+        scene.translate(6, -0.5, 0);
+        this.player2Time.display();
+        scene.scale(0.5, 0.5, 0.5);
+        scene.translate(-6, 1, 0.1);
+        // TODO use the player time
+        writeText(scene, 'PLAYER 2 TIME: ' + 10 + 's');
+
+        scene.scale(2, 2, 2);
+        this.buttonAppearance.apply();
+        scene.translate(-3.1, 1, 0);
         this.player2Score.display();
+        scene.scale(0.5, 0.5, 0.5);
+        scene.translate(-6, 1, 0.1);
+        // TODO instead of 10 go get the player score
+        writeText(scene, 'PLAYER 2 SCORE: ' + 10 + 's');
 		scene.popMatrix();
     }
 
     buildButtons() {
         this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', this.p1, this.p2, true,
-            2001, () => {console.log("Player1 Score")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+            2001, () => {console.log("Player1 Score")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scene.playerMaxTime + 's', [-16, -6.7, -50]);
         
         this.player1Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Time-button', this.p1, this.p2, true,
             2002, () => {console.log("Player1 Time")});//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);

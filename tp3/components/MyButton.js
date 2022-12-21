@@ -27,11 +27,6 @@ export class MyButton extends Pickable {
     displayText() {
         if (this.text) {
             this.scene.pushMatrix();
-            const prevShader = this.scene.activeShader;
-            // activate shader for rendering text characters
-            this.scene.setActiveShaderSimple(this.scene.textShader);
-            // activate texture containing the font
-            this.scene.textAppearance.apply();
     
             // 	Reset transf. matrix to draw independent of camera
             this.scene.loadIdentity();
@@ -39,7 +34,6 @@ export class MyButton extends Pickable {
             // transform as needed to place on screen
             this.scene.translate(this.translate[0], this.translate[1], this.translate[2]);
             writeText(this.scene, this.text);
-            this.scene.setActiveShader(prevShader);
             this.scene.popMatrix();
         }
     }
