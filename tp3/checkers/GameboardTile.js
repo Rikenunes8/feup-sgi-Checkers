@@ -39,13 +39,15 @@ export class GameboardTile extends Pickable {
     onPick() {
         console.log(`Selected tile: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
-        const piecesToKill = checkers.ruler.validateMove(this.idx);
-        if (piecesToKill == null) return null;
+        const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
+        if (tilesIdxToVisit == null) return null;
         
-        /*const piece = checkers.pieces[checkers.selectedPieceId];
+        const piece = checkers.pieces[checkers.selectedPieceId];
         checkers.setState(GameState.Moving);
-        checkers.movePiece(piece, piece.tile, this);*/
+        const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
+        checkers.movePiece(piece, piece.tile, tilesToVisit);
 
+        /*
         const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
         checkers.game[this.idx] = checkers.game[prevTileId];
         checkers.game[prevTileId] = -1;
@@ -60,6 +62,6 @@ export class GameboardTile extends Pickable {
         checkers.unselectPiece();
         checkers.updateMainboard();
         checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-        checkers.setState(GameState.WaitPiecePick);
+        checkers.setState(GameState.WaitPiecePick);*/
     }
 }

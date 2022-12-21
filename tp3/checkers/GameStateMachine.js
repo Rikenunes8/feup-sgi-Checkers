@@ -12,13 +12,19 @@ export const GameState = Object.freeze({
 export class GameStateMachine {
     constructor(checkers) {
         this.checkers = checkers;
-        this.state = GameState.Menu;
+        this.state = GameState.WaitPiecePick;
     }
+
+    getState() {
+        return this.state;
+    }
+
     /**
      * Call the handler of the new state.
      * @param {GameState} newState New state to be set.
      */
     changeState(newState) {
+        this.state = newState;
         if (newState == GameState.WaitPiecePick) {
             this.changeStateToWaitPiecePick();
         }
@@ -38,8 +44,7 @@ export class GameStateMachine {
      * If the player is P2, only pieces 12 to 23 are pickable.
      */
     changeStateToWaitPiecePick() {
-        this.checkers.newState = GameState.WaitPiecePick;
-        this.checkers.mainboard.gameboardTiles.forEach(t => t.pickable = false);
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
 
         for (let i = 0; i < this.checkers.pieces.length; i++) {
             const isPickable = (this.checkers.turn == CurrentPlayer.P1 && i < 12) || (this.checkers.turn == CurrentPlayer.P2 && i >= 12);
@@ -55,20 +60,17 @@ export class GameStateMachine {
      * All other pieces are not pickable.
      */
     changeStateToWaitTilePick() {
-        this.checkers.newState = GameState.WaitTilePick;
-
         this.checkers.pieces.forEach(p => p.pickable = false);
         this.checkers.pieces[this.checkers.selectedPieceId].pickable = true;
         for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
             if ((v + h) % 2 == 0 && this.checkers.game[v*8+h] == -1) {
-                this.checkers.mainboard.gameboardTiles[v*8+h].pickable = true;
+                this.checkers.mainboard.tiles[v*8+h].pickable = true;
             }
         }
     }
 
     changeStateToMoving() {
-        this.checkers.newState = GameState.Moving;
-        this.checkers.mainboard.gameboardTiles.forEach(t => t.pickable = false);
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
     }
 }

@@ -2,6 +2,7 @@ import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
 import { GameRuler, CurrentPlayer } from "./GameRuler.js";
 import { GameStateMachine, GameState } from "./GameStateMachine.js";
+import { PieceAnimator } from "./PieceAnimator.js";
 
 export class Checkers {
     constructor (sceneGraph, mainboard, piecesMaterialsIds) {
@@ -9,7 +10,7 @@ export class Checkers {
         this.mainboard = mainboard;
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
-        this.animator = null;
+        this.pieceAnimator = null;
         this.pieces = [];
         
         this.game = this.ruler.buildInitialGame();
@@ -22,6 +23,10 @@ export class Checkers {
         this.setState(GameState.WaitPiecePick);
     }
 
+    startGame() {
+        this.setState(GameState.WaitPiecePick);
+    }
+
     /**
      * Displays the checkers game.
      */
@@ -30,7 +35,22 @@ export class Checkers {
     }
 
     update(time) {
-        //this.animator.update(time);
+        if (this.stateMachine.getState() == GameState.Moving) {
+            if (this.pieceAnimator.update(time)) {
+                const prevTileId = this.game.indexOf(this.selectedPieceId);
+                const tileIdx = this.pieces[this.selectedPieceId].tile.idx;
+                this.game[tileIdx] = this.game[prevTileId];
+                this.game[prevTileId] = -1;
+        
+                if (this.turn == CurrentPlayer.P1 && tileIdx >= 56 || this.turn == CurrentPlayer.P2 && tileIdx <= 7) {
+                    this.pieces[this.selectedPieceId].becomeKing(true);
+                }
+
+                this.unselectPiece();
+                this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+                this.setState(GameState.WaitPiecePick);
+            }
+        }
     }
 
     setState(state) {
@@ -45,6 +65,14 @@ export class Checkers {
     unselectPiece() {
         this.sceneGraph.components[this.pieces[this.selectedPieceId].id].material = 0;
         this.selectedPieceId = null;
+    }
+
+    movePiece(piece, prevTile, nextTiles) {
+        const lastTile = nextTiles[nextTiles.length-1];
+        const prevTilePos = [prevTile.h, 0, -prevTile.v];
+        const nextTilePoss = nextTiles.map(tile => [tile.h, 0, -tile.v]);
+        this.pieceAnimator = new PieceAnimator(this.sceneGraph);
+        this.pieceAnimator.setPiece(piece, prevTilePos, nextTilePoss, lastTile);
     }
 
     /**
@@ -62,11 +90,11 @@ export class Checkers {
             if (pieceId != -1) {
                 const piece = this.pieces[pieceId];
                 if (tileId !== piece.tile.pickId % 100) {
-                    piece.updateTile(this.mainboard.gameboardTiles[tileId]);
+                    piece.updateTile(this.mainboard.tiles[tileId]);
                 }
             }
             else {
-                this.mainboard.gameboardTiles[tileId].piece = null;
+                this.mainboard.tiles[tileId].piece = null;
             }
         }
     }
@@ -84,7 +112,7 @@ export class Checkers {
             if (game[i] != -1) {
                 const materialId = piecesMaterialsIds[type-1];
                 const pickId = game[i] + 200;
-                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.gameboardTiles[i], false, materialId, componentrefs, pickId));
+                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
             }
         }
     }

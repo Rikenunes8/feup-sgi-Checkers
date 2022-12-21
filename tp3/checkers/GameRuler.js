@@ -12,56 +12,52 @@ export class GameRuler {
 
     /**
      * 
-     * @param {*} pieceId 
-     * @returns {Array} Array of valid moves for the piece with id pieceId
+     * @param {*} pieceIdx 
+     * @returns {Array} Array of valid moves for the piece with id pieceIdx
      */
-    validMoves(pieceId) {
-        const piece = this.checkers.pieces[pieceId];
+    validMoves(pieceIdx) {
+        const piece = this.checkers.pieces[pieceIdx];
         const pieceTile = piece.tile;
-        const pieceRow = pieceTile.v;
-        const pieceCol = pieceTile.h;
         const validMoves = {};
 
         if (!piece.isKing) {
-            this.validSimpleMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, false);
-            this.validEatMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, false);
+            this.validSimpleMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
+            this.validEatMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
         }
         else {
-            this.validSimpleMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, false);
-            this.validSimpleMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, true);
-            this.validEatMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, false);
-            this.validEatMoves(this.checkers.turn, pieceRow, pieceCol, validMoves, true);
+            this.validSimpleMoves(this.checkers.turn, pieceTile.idx, validMoves, true);
+            this.validEatMoves(this.checkers.turn, pieceTile.idx, validMoves, true);
         }
         return validMoves;
     }
-    validSimpleMoves(player, pieceRow, pieceCol, validMoves, isKing) {
-        const rowInc = player == CurrentPlayer.P1 && !isKing ? 1 : -1;
-        const leftTile = toArrIndex(pieceRow+rowInc, pieceCol-1);
-        const rightTile = toArrIndex(pieceRow+rowInc, pieceCol+1);
-
-        for (let i = 0; i < 2; i++) {
-            const tile = i == 0 ? leftTile : rightTile;
-            if (this.checkers.game[tile] == -1) {
-                validMoves[tile] = [];
+    validSimpleMoves(player, tileIdx, validMoves, isKing) {
+        const pieceRow = Math.floor(tileIdx / 8);
+        const pieceCol = tileIdx % 8;
+        const rowInc = player == CurrentPlayer.P1 ? 1 : -1;
+        for (let i = 0; i < 4; i++) {
+            if (!isKing && i == 2) break;
+            let tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
+            if (this.checkers.game[tile] == -1 && Math.abs(tile % 8 - pieceCol) <= 2) {
+                validMoves[tile] = [tile];
             }
         }
     }
-    validEatMoves(player, pieceRow, pieceCol, validMoves, isKing, eatenPieces = [], lastPosition = null) {
+    validEatMoves(player, tileIdx, validMoves, isKing, visited = []) {
+        const pieceRow = Math.floor(tileIdx / 8);
+        const pieceCol = tileIdx % 8;
+        const lastPosition = visited.length > 1 ? visited[visited.length - 2] : null;
         const rowInc = player == CurrentPlayer.P1 && !isKing ? 1 : -1;
-        const leftTile = toArrIndex(pieceRow+rowInc, pieceCol-1);
-        const rightTile = toArrIndex(pieceRow+rowInc, pieceCol+1);
-
-        for (let i = 0; i < 2; i++) {
-            const tile = i == 0 ? leftTile : rightTile;
-            if (!belongsToPlayer(this.checkers.game[tile], player) && this.checkers.game[tile] != -1 
-                    && (lastPosition == null || toArrIndex(pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2) != lastPosition)) {
-                const tile2 = toArrIndex(pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2);
-                if (this.checkers.game[tile2] == -1) {
-                    if (!validMoves[tile2]) validMoves[tile2] = [];
-                    if (validMoves[tile2].length <= eatenPieces.length) validMoves[tile2] = eatenPieces;
-                    validMoves[tile2].push(this.checkers.game[tile]);
-                    this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, isKing, [...eatenPieces, this.checkers.game[tile]], toArrIndex(pieceRow, pieceCol));
-                    //this.validEatMoves(player, pieceRow+2*rowInc, pieceCol-Math.pow(-1, i)*2, validMoves, true, [...eatenPieces, this.checkers.game[tile]], toArrIndex(pieceRow, pieceCol));
+        for (let i = 0; i < 4; i++) {
+            if (!isKing && i == 2) break;
+            const tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
+            const nextTile = toArrIndex(pieceRow + 2*rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - 2*Math.pow(-1, i));
+            const pieceId = this.checkers.game[tile];
+            if (!belongsToPlayer(pieceId, player) && pieceId != -1 && Math.abs(tile % 8 - pieceCol) <= 2
+                    && (lastPosition == null || nextTile != lastPosition)) {
+                if (this.checkers.game[nextTile] == -1 && Math.abs(nextTile % 8 - pieceCol) <= 2) {
+                    this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile]);
+                    if (!validMoves[nextTile] || validMoves[nextTile].length <= visited.length) 
+                        validMoves[nextTile] = [...visited, nextTile];
                 }
             }
         }
@@ -70,6 +66,7 @@ export class GameRuler {
 
     validateMove(tileId) {
         const validMoves = this.validMoves(this.checkers.selectedPieceId);
+        console.log(validMoves);
         return validMoves[tileId];
     }
 

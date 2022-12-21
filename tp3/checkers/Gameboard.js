@@ -14,7 +14,7 @@ export class Gameboard {
         
         this.facesIds = [];
 
-        this.gameboardTiles = [];
+        this.tiles = [];
         
         const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildFaces(rectangleId);
@@ -27,7 +27,7 @@ export class Gameboard {
 
         this.sceneGraph.scene.pushMatrix();
         this.sceneGraph.scene.multMatrix(this.transfMatrix);
-        for (const tile of this.gameboardTiles) {
+        for (const tile of this.tiles) {
             tile.display();
         }
         this.sceneGraph.scene.popMatrix();
@@ -75,7 +75,7 @@ export class Gameboard {
             for (let h = 0; h < 8; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
                 const pickId = (v * 8) + h + 100;
-                this.gameboardTiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }
     }
