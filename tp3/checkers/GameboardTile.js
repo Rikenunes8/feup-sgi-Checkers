@@ -1,7 +1,7 @@
 import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
-import { GameState } from "./Checkers.js";
+import { GameState } from "./GameStateMachine.js";
 import { CurrentPlayer } from "./GameRuler.js";
 
 
@@ -43,7 +43,7 @@ export class GameboardTile extends Pickable {
         if (piecesToKill == null) return null;
         
         /*const piece = checkers.pieces[checkers.selectedPieceId];
-        checkers.changeState(GameState.Moving);
+        checkers.setState(GameState.Moving);
         checkers.movePiece(piece, piece.tile, this);*/
 
         const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
@@ -60,6 +60,6 @@ export class GameboardTile extends Pickable {
         checkers.unselectPiece();
         checkers.updateMainboard();
         checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-        checkers.changeState(GameState.WaitPiecePick);
+        checkers.setState(GameState.WaitPiecePick);
     }
 }

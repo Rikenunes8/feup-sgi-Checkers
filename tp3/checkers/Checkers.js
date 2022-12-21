@@ -1,32 +1,25 @@
 import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
 import { GameRuler, CurrentPlayer } from "./GameRuler.js";
-
-export const GameState = Object.freeze({
-    Menu: Symbol("Menu"),
-    LoadScene: Symbol("LoadScene"),
-    WaitPiecePick: Symbol("WaitPiecePick"),
-    WaitTilePick: Symbol("WaitTilePick"),
-    Moving: Symbol("Moving"),
-    EndGame: Symbol("EndGame")
-});
+import { GameStateMachine, GameState } from "./GameStateMachine.js";
 
 export class Checkers {
     constructor (sceneGraph, mainboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
         this.mainboard = mainboard;
-        this.ruler = new GameRuler(sceneGraph.scene);
+        this.ruler = new GameRuler(this);
+        this.stateMachine = new GameStateMachine(this);
         this.animator = null;
         this.pieces = [];
         
-        this.game = this.buildInitialGame();
+        this.game = this.ruler.buildInitialGame();
         
         const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
         this.buildPieces(this.game, pieceComponentsIds, piecesMaterialsIds);
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceId = null;
-        this.changeState(GameState.WaitPiecePick);
+        this.setState(GameState.WaitPiecePick);
     }
 
     /**
@@ -38,6 +31,10 @@ export class Checkers {
 
     update(time) {
         //this.animator.update(time);
+    }
+
+    setState(state) {
+        this.stateMachine.changeState(state);
     }
 
     selectPiece(id) {
@@ -72,76 +69,6 @@ export class Checkers {
                 this.mainboard.gameboardTiles[tileId].piece = null;
             }
         }
-    }
-
-    /**
-     * Call the handler of the new state.
-     * @param {GameState} newState New state to be set.
-     */
-    changeState(newState) {
-        if (newState == GameState.WaitPiecePick) {
-            this.changeStateToWaitPiecePick();
-        }
-        else if (newState == GameState.WaitTilePick) {
-            this.changeStateToWaitTilePick();
-        }
-    }
-
-    /**
-     * Changes the state to WaitPiecePick.
-     * This state is used when the player is waiting for a piece to be selected.
-     * All tiles are not pickable.
-     * If the player is P1, only pieces 0 to 11 are pickable.
-     * If the player is P2, only pieces 12 to 23 are pickable.
-     */
-    changeStateToWaitPiecePick() {
-        this.newState = GameState.WaitPiecePick;
-        this.mainboard.gameboardTiles.forEach(t => t.pickable = false);
-
-        for (let i = 0; i < this.pieces.length; i++) {
-            const isPickable = (this.turn == CurrentPlayer.P1 && i < 12) || (this.turn == CurrentPlayer.P2 && i >= 12);
-            this.pieces[i].pickable = isPickable;
-        }
-    }
-
-    /**
-     * Changes the state to WaitTilePick.
-     * This state is used when the player has selected a piece and is waiting for a tile to be selected.
-     * Only tiles that are empty and are adjacent to the selected piece are pickable.
-     * The selected piece is pickable.
-     * All other pieces are not pickable.
-     */
-    changeStateToWaitTilePick() {
-        this.newState = GameState.WaitTilePick;
-
-        this.pieces.forEach(p => p.pickable = false);
-        this.pieces[this.selectedPieceId].pickable = true;
-        for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
-            if ((v + h) % 2 == 0 && this.game[v*8+h] == -1) {
-                this.mainboard.gameboardTiles[v*8+h].pickable = true;
-            }
-        }
-    }
-
-    /**
-     * Builds the initial game board. -1 tiles are empty, and the rest are filled with pieces numbered from 0 until 23.
-     * Pieces under 12 are player 1 pieces, and the rest are player 2 pieces.
-     * @returns {Array} An array of 64 elements, representing the game board.
-     */
-    buildInitialGame() {
-        const game = new Array(8*8);
-        let n = 0;
-        for (let v = 0; v < 8; v++) {
-            for (let h = 0; h < 8; h++) {
-                if ((v + h) % 2 == 0 && (v < 3 || v > 4)) {
-                    game[v*8+h] = n++;
-                }
-                else {
-                    game[v*8+h] = -1;
-                }
-            }
-        }
-        return game;
     }
 
     /**
