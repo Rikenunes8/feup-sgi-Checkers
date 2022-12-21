@@ -1,5 +1,4 @@
 import { MyComponent } from "../../components/MyComponent.js";
-import { buildCheckersRectangle } from "../primitives.js";
 import { diff } from "../utils.js";
 
 export class Board {
@@ -20,7 +19,7 @@ export class Board {
     buildBoardTransfMatrix() {
         throw new Error("Method 'buildBoardTransfMatrix()' must be implemented.");
     }
-    
+
     /**
      * Builds the base of the board
      * @param {string} materialId 

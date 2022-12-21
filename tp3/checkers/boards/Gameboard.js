@@ -81,7 +81,6 @@ export class Gameboard extends Board {
         }
     }
 
-
     /**
      * Builds the transformation matrix for gameboard
      * @returns {mat4} The transformation matrix

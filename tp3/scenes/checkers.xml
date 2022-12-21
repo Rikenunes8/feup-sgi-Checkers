@@ -187,7 +187,8 @@
             <boardWalls id="lightWood" />
         </mainboard>
         <auxiliarboard x1="-4" y1="0" z1="4" x2="4" y2="1" z2="-4" >
-            <boardWalls id="lightWood" />
+            <boardWalls id="white" />
+            <buttonsMaterial id="darkWood" />
         </auxiliarboard>
         <pieces>
             <type1 id="lightWood" />

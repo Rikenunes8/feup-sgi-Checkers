@@ -92,11 +92,16 @@ export class XMLParserCheckers extends XMLParser {
         const boardWallsIndex = nodeNames.indexOf("boardWalls");
         if (boardWallsIndex == -1) return "missing board walls definition in auxiliarboard";
 
-
         const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
 
-        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId);
+        const buttonsMatIndex = nodeNames.indexOf("buttonsMaterial");
+        if (buttonsMatIndex == -1) return "missing buttons material definition in auxiliarboard";
+
+        const buttonsMaterialId = this.reader.getString(materials[buttonsMatIndex], 'id', false);
+        if (this.scene.materials[buttonsMaterialId] == null) return "no material defined with ID " + buttonsMaterialId;
+
+        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId, buttonsMaterialId);
     }
 
     parsePieces(pieces) {

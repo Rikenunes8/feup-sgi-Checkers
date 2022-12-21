@@ -2,21 +2,17 @@ import { MyComponent } from "../../components/MyComponent.js";
 import { displayGraph } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
-import { GameboardTile } from "../GameboardTile.js";
-import { MyButton } from "../../components/MyButton.js";
 
 export class AuxiliarBoard extends Board {
-    constructor(sceneGraph, p1, p2, boardWallsMaterialId) {
+    constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId) {
         super(sceneGraph, 'checkers-auxiliarboard', p1, p2);
 
         this.transfMatrix = this.buildBoardTransfMatrix();
 
         const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildBaseFaces(rectangleId);
-        this.buildMenu(rectangleId);
-
+        this.buildMenu(rectangleId, buttonsMaterialId);
         this.buildBoardBase(boardWallsMaterialId);
-        //this.buildTiles(rectangleId, lightTileMaterialId, darkTileMaterialId);
     }
 
     /**
@@ -39,7 +35,7 @@ export class AuxiliarBoard extends Board {
      * Builds the menu of the board
      * @param {*} primitiveId 
      */
-    buildMenu(primitiveId) {
+    buildMenu(primitiveId, buttonsMaterialId) {
         this.buildMenuFaces(primitiveId);
     }
 
@@ -59,7 +55,7 @@ export class AuxiliarBoard extends Board {
     /**
      * Builds a face of the Menu
      * @param {*} primitiveId 
-     * @param {*} side 
+     * @param {*} side
      */
     buildMenuFace(primitiveId, side) {
         const id = `checkers-auxiliarboard-${side}-face`;
@@ -88,13 +84,8 @@ export class AuxiliarBoard extends Board {
 
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, -0.5, 0));
         const sideTexture = ['none', 1, 1];
-        this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
-    }
-
-    buildMenuButtons() {
-        //this.initButton = new MyButton(scene, 'checkers-auxiliarboard-init-button', p1, p2, false, 2000, () => { console.log("OLA") });
-
-
+        this.sceneGraph.components[id] =
+            new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
     }
 
     /**
@@ -148,15 +139,6 @@ export class AuxiliarBoard extends Board {
         this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
     }
 
-    buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
-        for (let v = 0; v < 8; v++) {
-            for (let h = 0; h < 8; h++) {
-                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
-                const pickId = (v * 8) + h + 100;
-                this.gameboardTiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
-            }
-        }
-    }
 
 
 }

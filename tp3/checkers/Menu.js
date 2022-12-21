@@ -15,7 +15,6 @@ export class Menu {
         this.p1 = p1;
 		this.p2 = p2;
 
-		// TODO: create these functions for each button
 		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
 		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, 1000, this.initBtnOnPick);
 		this.playerTimeBtn = new MyButton(scene, 'checkers-menu-playerTime-button', p1, p2, true, 1001, this.playerTimeBtnOnPick);
