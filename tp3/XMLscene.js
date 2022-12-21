@@ -59,7 +59,7 @@ export class XMLscene extends CGFscene {
         this.setPickEnabled(true);
 
         this.info = {
-            initialMenu: true,
+            initialMenu: false,
             selectedTheme: 1,
             playerMaxTime: 20,
             gameMaxTime: 2,
@@ -75,7 +75,7 @@ export class XMLscene extends CGFscene {
     initTextStuff() {
         // font texture: 16 x 16 characters
 		// http://jens.ayton.se/oolite/files/font-tests/rgba/oolite-font.png
-		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.png");
+		this.fontTexture = new CGFtexture(this, "screenshots/oolite-font.trans.png");
         this.textAppearance = new CGFappearance(this);
         this.textAppearance.setTexture(this.fontTexture);
 

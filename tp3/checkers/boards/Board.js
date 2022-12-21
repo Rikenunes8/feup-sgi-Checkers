@@ -14,6 +14,7 @@ export class Board {
         this.p2 = p2;
         this.tranfMatrix = null;
         this.facesIds = [];
+        this.tiles = [];
     }
 
     buildBoardTransfMatrix() {

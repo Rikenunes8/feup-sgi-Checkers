@@ -3,10 +3,10 @@ import { displayGraph, writeText } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
 import { MyButton } from "../../components/MyButton.js";
-import { CGFappearance } from "../../../lib/CGF.js";
+import { GameboardTile } from "../GameboardTile.js";
 
 export class AuxiliarBoard extends Board {
-    constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId) {
+    constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId) {
         super(sceneGraph, 'checkers-auxiliarboard', p1, p2);
 
         this.transfMatrix = this.buildBoardTransfMatrix();
@@ -17,6 +17,19 @@ export class AuxiliarBoard extends Board {
         this.buildBaseFaces(rectangleId);
         this.buildMenu(rectangleId);
         this.buildBoardBase(boardWallsMaterialId);
+        this.buildTiles(rectangleId, lightTileMaterialId, darkTileMaterialId);
+    }
+
+    buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
+
+        // build a tile with 12 pieces for each player
+        for (let v = 0; v < 6; v++) {
+            for (let h = 0; h < 4; h++) {
+                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
+                const pickId = (v * 8) + h + 100;
+                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+            }
+        }
     }
 
     /**
@@ -34,6 +47,15 @@ export class AuxiliarBoard extends Board {
     display() {
         displayGraph(this.sceneGraph, [false, this.id], null);
         this.displayButtons();
+        const scene = this.sceneGraph.scene;
+
+        scene.pushMatrix();
+        scene.multMatrix(this.transfMatrix);
+        scene.translate(4.5, -1.49, 3);
+        for (const tile of this.tiles) {
+            tile.display();
+        }
+        scene.popMatrix();
     }
 
     displayButtons() {
