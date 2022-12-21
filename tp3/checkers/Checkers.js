@@ -68,6 +68,9 @@ export class Checkers {
     }
 
     movePiece(piece, prevTile, nextTiles) {
+        // Put piece color to original
+        this.sceneGraph.components[piece.id].material = 0;
+        
         const lastTile = nextTiles[nextTiles.length-1];
         const prevTilePos = [prevTile.h, 0, -prevTile.v];
         const nextTilePoss = nextTiles.map(tile => [tile.h, 0, -tile.v]);
