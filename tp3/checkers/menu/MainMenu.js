@@ -1,8 +1,8 @@
-import { CGFappearance } from "../../lib/CGF.js";
-import { MyButton } from "../components/MyButton.js";
-import { MyRectangle } from "../components/MyRectangle.js";
+import { CGFappearance } from "../../../lib/CGF.js";
+import { MyButton } from "../../components/MyButton.js";
+import { MyRectangle } from "../../components/MyRectangle.js";
 
-export class Menu {
+export class MainMenu {
     /**
      *
      * @param {*} scene 
@@ -14,11 +14,11 @@ export class Menu {
         this.p1 = p1;
 		this.p2 = p2;
 
-		this.background = new MyRectangle(scene, 'checkers-menu-background', p1[0], p2[0], p1[1], p2[1]);
-		this.initButton = new MyButton(scene, 'checkers-menu-init-button', p1, p2, true, 1000, this.initBtnOnPick, 'START GAME', [-3, 6.8, -50]);
-		this.theme1Button = new MyButton(scene, 'checkers-menu-theme1-button', p1, p2, true, 1003, () => this.selectTheme(1), 'THEME 1', [-14, 0, -50]);
-		this.theme2Button = new MyButton(scene, 'checkers-menu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2), 'THEME 2', [-1.8, 0, -50]);
-		this.theme3Button = new MyButton(scene, 'checkers-menu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3), 'THEME 3', [10, 0, -50]);
+		this.background = new MyRectangle(scene, 'checkers-mainMenu-background', p1[0], p2[0], p1[1], p2[1]);
+		this.initButton = new MyButton(scene, 'checkers-mainMenu-init-button', p1, p2, true, 1000, this.goToScenePick, 'GO TO SCENE', [-3, 6.8, -50]);
+		this.theme1Button = new MyButton(scene, 'checkers-mainMenu-theme1-button', p1, p2, true, 1003, () => this.selectTheme(1), 'THEME 1', [-14, 0, -50]);
+		this.theme2Button = new MyButton(scene, 'checkers-mainMenu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2), 'THEME 2', [-1.8, 0, -50]);
+		this.theme3Button = new MyButton(scene, 'checkers-mainMenu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3), 'THEME 3', [10, 0, -50]);
 		this.backgroundAppearance = new CGFappearance(scene);
 		this.backgroundAppearance.setAmbient(0.937, 0.905, 0.86, 1);
 
@@ -50,9 +50,9 @@ export class Menu {
 	 * Display the buttons of the menu
 	 */
 	displayButtons() {
-		this.playerTimeBtn = new MyButton(this.scene, 'checkers-menu-playerTime-button', this.p1, this.p2, true,
+		this.playerTimeBtn = new MyButton(this.scene, 'checkers-mainMenu-playerTime-button', this.p1, this.p2, true,
 			1001, this.playerTimeBtnOnPick, 'PLAYER MAX TIME:' + this.scene.info.playerMaxTime + 's', [-16, -6.7, -50]);
-		this.gameTimeBtn = new MyButton(this.scene, 'checkers-menu-gameTime-button', this.p1, this.p2, true,
+		this.gameTimeBtn = new MyButton(this.scene, 'checkers-mainMenu-gameTime-button', this.p1, this.p2, true,
 			1002, this.gameTimeBtnOnPick, 'GAME MAX TIME:' + this.scene.info.gameMaxTime + 'm', [4.5, -6.7, -50]);
 
 		// draw background
@@ -119,7 +119,7 @@ export class Menu {
 		this.scene.popMatrix();
 	}
 
-	initBtnOnPick = () => {
+	goToScenePick = () => {
 		this.scene.info.initialMenu = false;
 	}
 
