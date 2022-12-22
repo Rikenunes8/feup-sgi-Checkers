@@ -1,6 +1,5 @@
 import { CGFobject } from '../../lib/CGF.js';
 
-
 export class MyComponent extends CGFobject {
 
     constructor(scene, id, transfMatrix, materials, texture, children, animation, highlighted) {

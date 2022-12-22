@@ -5,12 +5,13 @@ import { GameStateMachine, GameState } from "./GameStateMachine.js";
 import { PieceAnimator } from "./PieceAnimator.js";
 
 export class Checkers {
-    constructor (sceneGraph, mainboard, piecesMaterialsIds) {
+    constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
         this.mainboard = mainboard;
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
         this.pieceAnimator = new PieceAnimator(this);
+        this.auxiliarboard = auxiliarboard;
         this.pieces = [];
         
         this.game = this.ruler.buildInitialGame();
@@ -21,13 +22,6 @@ export class Checkers {
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
         this.setState(GameState.WaitPiecePick);
-    }
-
-    /**
-     * Displays the checkers game.
-     */
-    display() {
-        this.mainboard.display();
     }
 
     /**
@@ -99,6 +93,14 @@ export class Checkers {
     unselectPiece() {
         this.sceneGraph.components[this.pieces[this.selectedPieceIdx].id].material = 0;
         this.selectedPieceIdx = null;
+    }
+
+    /**
+     * Displays the checkers game.
+     */
+    display() {
+        this.mainboard.display();
+        this.auxiliarboard.display();
     }
 
     /**
