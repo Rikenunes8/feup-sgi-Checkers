@@ -65,6 +65,9 @@ export class XMLscene extends CGFscene {
             playerMaxTime: 20,
             gameMaxTime: 2,
             initedGame: false,
+            p1Time: 0,
+            p2Time: 0,
+            totalTime: 0,
         }
 
         this.mainMenu = new MainMenu(this, [0, 0], [10, 10]);
