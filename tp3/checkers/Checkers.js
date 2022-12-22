@@ -1,6 +1,6 @@
 import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
-import { GameRuler, CurrentPlayer } from "./GameRuler.js";
+import { GameRuler, CurrentPlayer, emptyTile } from "./GameRuler.js";
 import { GameStateMachine, GameState } from "./GameStateMachine.js";
 import { PieceAnimator } from "./PieceAnimator.js";
 import { GameSequence } from "./GameSequence.js";
@@ -57,13 +57,14 @@ export class Checkers {
         if (this.stateMachine.getState() == GameState.Moving) {
             // animate piece movement (collector and collected pieces)
             if (this.pieceAnimator.update(time)) {
-                const prevTileId = this.game.indexOf(this.selectedPieceIdx);
-                const tileIdx = this.pieces[this.selectedPieceIdx].tile.idx;
-                this.game[tileIdx] = this.game[prevTileId];
-                this.game[prevTileId] = -1;
-        
-                if (this.turn == CurrentPlayer.P1 && tileIdx >= 56 || this.turn == CurrentPlayer.P2 && tileIdx <= 7) {
-                    this.pieces[this.selectedPieceIdx].becomeKing(true);
+                const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
+                const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
+                this.game[tileIdx] = this.game[prevTileIdx];
+                this.game[prevTileIdx] = emptyTile;
+
+
+                if (this.ruler.becomeKing(tileIdx, this.turn)) {
+                    this.getPiece(this.selectedPieceIdx).becomeKing(true);
                 }
 
                 this.unselectPiece();
@@ -76,12 +77,12 @@ export class Checkers {
 
             // check for colision with other pieces
             for (let i = 0; i < this.pieces.length; i++) {
-                if (i != this.selectedPieceIdx) {
+                if (i != this.selectedPieceIdx-1) {
                     const piece = this.pieces[i];
                     if (this.pieceAnimator.checkCollision(piece)) {
                         console.log("Collision with piece " + i);
-                        const prevTileId = this.game.indexOf(piece.idx);
-                        this.game[prevTileId] = -1;
+                        const prevTileIdx = this.getTileIdx(piece.idx);
+                        this.game[prevTileIdx] = emptyTile;
                         const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
                         const nextTilePoss = [[10, 0, -10]]; // TODO: get tile position
                         this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, null, true, time);
@@ -106,14 +107,14 @@ export class Checkers {
      */
     selectPiece(idx) {
         this.selectedPieceIdx = idx;
-        this.sceneGraph.components[this.pieces[this.selectedPieceIdx].id].material = 1;
+        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 1;
     }
 
     /**
      * Unselect the selected piece. Return to original material.
      */
     unselectPiece() {
-        this.sceneGraph.components[this.pieces[this.selectedPieceIdx].id].material = 0;
+        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 0;
         this.selectedPieceIdx = null;
     }
 
@@ -140,6 +141,17 @@ export class Checkers {
         this.sequence.topMove().animate(this.pieceAnimator);
     }
 
+    getPiece(idx) {
+        return this.pieces[Math.abs(idx)-1];
+    }
+
+    getTileIdx(pieceIdx) {
+        let idx = this.game.indexOf(pieceIdx);
+        if (idx == -1) 
+            idx = this.game.indexOf(-pieceIdx);
+        return idx;
+    }
+
     /**
      * Build the pieces for the game from the game matrix.
      * @param {Array} game An array of 64 elements, representing the game board.
@@ -149,9 +161,9 @@ export class Checkers {
     buildPieces(game, componentrefs, piecesMaterialsIds) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
-            const type = game[i] <= 11? 1:2;
-            if (game[i] != -1) {
-                const materialId = piecesMaterialsIds[type-1];
+            if (game[i] != emptyTile) {
+                const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
+                const materialId = piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
                 this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
             }

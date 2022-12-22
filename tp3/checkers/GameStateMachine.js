@@ -1,4 +1,4 @@
-import { CurrentPlayer } from "./GameRuler.js";
+import { CurrentPlayer, emptyTile } from "./GameRuler.js";
 
 export const GameState = Object.freeze({
     Menu: Symbol("Menu"),
@@ -49,9 +49,9 @@ export class GameStateMachine {
     changeStateToWaitPiecePick() {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
 
-        for (let i = 0; i < this.checkers.pieces.length; i++) {
-            const isPickable = (this.checkers.turn == CurrentPlayer.P1 && i < 12) || (this.checkers.turn == CurrentPlayer.P2 && i >= 12);
-            this.checkers.pieces[i].pickable = isPickable;
+        for (let piece of this.checkers.pieces) {
+            const isPickable = this.checkers.ruler.belongsToPlayer(piece.idx, this.checkers.turn)
+            piece.pickable = isPickable;
         }
     }
 
@@ -64,9 +64,9 @@ export class GameStateMachine {
      */
     changeStateToWaitTilePick() {
         this.checkers.pieces.forEach(p => p.pickable = false);
-        this.checkers.pieces[this.checkers.selectedPieceIdx].pickable = true;
+        this.checkers.getPiece(this.checkers.selectedPieceIdx).pickable = true;
         for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
-            if ((v + h) % 2 == 0 && this.checkers.game[v*8+h] == -1) {
+            if ((v + h) % 2 == 0 && this.checkers.game[v*8+h] == emptyTile) {
                 this.checkers.mainboard.tiles[v*8+h].pickable = true;
             }
         }

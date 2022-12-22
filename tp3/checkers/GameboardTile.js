@@ -42,7 +42,7 @@ export class GameboardTile extends Pickable {
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
         if (tilesIdxToVisit == null) return null;
         
-        const piece = checkers.pieces[checkers.selectedPieceIdx];
+        const piece = checkers.getPiece(checkers.selectedPieceIdx);
         checkers.setState(GameState.Moving);
         const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
         checkers.movePiece(piece, piece.tile, tilesToVisit);

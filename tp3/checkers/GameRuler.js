@@ -5,6 +5,8 @@ export const CurrentPlayer = Object.freeze({
     P2: Symbol("P2"),
 });
 
+export const emptyTile = 0;
+
 export class GameRuler {
     constructor(checkers) {
         this.checkers = checkers;
@@ -35,7 +37,7 @@ export class GameRuler {
      * @returns {Array} Array of valid moves for the piece with id pieceIdx
      */
     validMoves(pieceIdx) {
-        const piece = this.checkers.pieces[pieceIdx];
+        const piece = this.checkers.getPiece(pieceIdx);
         const pieceTile = piece.tile;
         const validMoves = {};
 
@@ -63,7 +65,7 @@ export class GameRuler {
         for (let i = 0; i < 4; i++) {
             if (!isKing && i == 2) break;
             let tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
-            if (this.checkers.game[tile] == -1 && !this.overflowBoard(tile, pieceCol)) {
+            if (this.checkers.game[tile] == emptyTile && !this.overflowBoard(tile, pieceCol)) {
                 validMoves[tile] = [tile];
             }
         }
@@ -88,9 +90,9 @@ export class GameRuler {
             const tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
             const nextTile = toArrIndex(pieceRow + 2*rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - 2*Math.pow(-1, i));
             const pieceId = this.checkers.game[tile];
-            if (!this.belongsToPlayer(pieceId, player) && pieceId != -1 && !this.overflowBoard(tile, pieceCol)
+            if (!this.belongsToPlayer(pieceId, player) && pieceId != emptyTile && !this.overflowBoard(tile, pieceCol)
                     && (lastPosition == null || nextTile != lastPosition)) {
-                if (this.checkers.game[nextTile] == -1 && !this.overflowBoard(nextTile, pieceCol)) {
+                if (this.checkers.game[nextTile] == emptyTile && !this.overflowBoard(nextTile, pieceCol)) {
                     this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile]);
                     if (!validMoves[nextTile] || validMoves[nextTile].length <= visited.length) 
                         validMoves[nextTile] = [...visited, nextTile];
@@ -116,14 +118,14 @@ export class GameRuler {
      */
     buildInitialGame() {
         const game = new Array(8*8);
-        let n = 0;
+        let n = 1;
         for (let v = 0; v < 8; v++) {
             for (let h = 0; h < 8; h++) {
                 if ((v + h) % 2 == 0 && (v < 3 || v > 4)) {
                     game[v*8+h] = n++;
                 }
                 else {
-                    game[v*8+h] = -1;
+                    game[v*8+h] = emptyTile;
                 }
             }
         }
@@ -142,10 +144,14 @@ export class GameRuler {
 
     belongsToPlayer(pieceIdx, player) {
         if (player == CurrentPlayer.P1) {
-            return pieceIdx < 12 && pieceIdx >= 0;
+            return (pieceIdx < 13 && pieceIdx > 0) || (pieceIdx > -13 && pieceIdx < 0);
         }
         else {
-            return pieceIdx > 11;
+            return (pieceIdx > 12 && pieceIdx < 25) || (pieceIdx < -12 && pieceIdx > -25);
         }
+    }
+
+    becomeKing(tileIdx, player) {
+        return player == CurrentPlayer.P1 && tileIdx >= 56 || player == CurrentPlayer.P2 && tileIdx <= 7
     }
 }
