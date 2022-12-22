@@ -40,12 +40,3 @@ export const writeText = (scene, text) => {
 export function toArrIndex(row, col) {
     return (row * 8) + col;
 }
-
-export function belongsToPlayer(piece, player) {
-    if (player == 0) {
-        return piece < 12;
-    }
-    else {
-        return piece > 11;
-    }
-}

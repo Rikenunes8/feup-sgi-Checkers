@@ -51,7 +51,10 @@ export class Checkers {
 
                 this.unselectPiece();
                 this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-                this.setState(GameState.WaitPiecePick);
+                if (this.ruler.checkEndGame(this.game, this.turn))
+                    this.setState(GameState.EndGame);
+                else
+                    this.setState(GameState.WaitPiecePick);
             }
 
             // check for colision with other pieces

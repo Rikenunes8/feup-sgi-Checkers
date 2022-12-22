@@ -34,6 +34,9 @@ export class GameStateMachine {
         else if (newState == GameState.Moving) {
             this.changeStateToMoving();
         }
+        else if (newState == GameState.EndGame) {
+            this.changeStateToEndGame();
+        }
     }
 
     /**
@@ -69,8 +72,20 @@ export class GameStateMachine {
         }
     }
 
+    /**
+     * Changes the state to Moving.
+     */
     changeStateToMoving() {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
+    }
+
+    /**
+     * Changes the state to EndGame.
+     */
+    changeStateToEndGame() {
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
+        this.checkers.pieces.forEach(p => p.pickable = false);
+        console.log("Game Over!");
     }
 }

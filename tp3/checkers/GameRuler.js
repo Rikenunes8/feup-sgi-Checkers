@@ -1,14 +1,33 @@
-import { belongsToPlayer, toArrIndex } from "./utils.js";
+import { toArrIndex } from "./utils.js";
 
 export const CurrentPlayer = Object.freeze({
-    P1: 0,
-    P2: 1,
+    P1: Symbol("P1"),
+    P2: Symbol("P2"),
 });
 
 export class GameRuler {
     constructor(checkers) {
         this.checkers = checkers;
     }
+
+    /**
+     * Check if the player has any valid moves.
+     * @param {Array} game gameboard array
+     * @param {CurrentPlayer} player Player to check moves
+     * @returns True if the player has no valid moves, false otherwise.
+     */
+    checkEndGame(game, player) {
+        for (let i = 0; i < game.length; i++) {
+            if (this.belongsToPlayer(game[i], player)) {
+                const validMoves = this.validMoves(game[i]);
+                if (Object.keys(validMoves).length > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     /**
      * Search valid moves for the piece correspondent to pieceIdx
@@ -69,7 +88,7 @@ export class GameRuler {
             const tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
             const nextTile = toArrIndex(pieceRow + 2*rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - 2*Math.pow(-1, i));
             const pieceId = this.checkers.game[tile];
-            if (!belongsToPlayer(pieceId, player) && pieceId != -1 && !this.overflowBoard(tile, pieceCol)
+            if (!this.belongsToPlayer(pieceId, player) && pieceId != -1 && !this.overflowBoard(tile, pieceCol)
                     && (lastPosition == null || nextTile != lastPosition)) {
                 if (this.checkers.game[nextTile] == -1 && !this.overflowBoard(nextTile, pieceCol)) {
                     this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile]);
@@ -119,5 +138,14 @@ export class GameRuler {
      */
     overflowBoard(tileIdx, pieceCol) {
         return Math.abs(tileIdx % 8 - pieceCol) > 2
+    }
+
+    belongsToPlayer(pieceIdx, player) {
+        if (player == CurrentPlayer.P1) {
+            return pieceIdx < 12 && pieceIdx >= 0;
+        }
+        else {
+            return pieceIdx > 11;
+        }
     }
 }
