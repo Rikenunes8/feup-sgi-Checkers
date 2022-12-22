@@ -186,11 +186,11 @@
             <darkTile id="black" />
             <boardWalls id="lightWood" />
         </mainboard>
-        <auxiliarboard x1="-4" y1="0" z1="4" x2="4" y2="1" z2="-4" >
+        <auxiliarboard x1="5" y1="0" z1="4" x2="8" y2="1" z2="-4" >
             <boardWalls id="white" />
             <lightTile id="white" />
             <darkTile id="black" />
-            <buttonsMaterial id="lightWood" />
+            <buttonsMaterial id="white" />
         </auxiliarboard>
         <pieces>
             <type1 id="lightWood" />

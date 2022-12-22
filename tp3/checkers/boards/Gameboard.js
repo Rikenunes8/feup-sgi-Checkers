@@ -34,15 +34,18 @@ export class Gameboard extends Board {
         this.sceneGraph.scene.popMatrix();
     }
 
-    buildFaces(primitiveId) {
-        this.buildFace(primitiveId, 'front');
-        this.buildFace(primitiveId, 'back');
-        this.buildFace(primitiveId, 'left');
-        this.buildFace(primitiveId, 'right');
-        this.buildFace(primitiveId, 'bottom');
+    buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
+        for (let v = 0; v < 8; v++) {
+            for (let h = 0; h < 8; h++) {
+                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
+                const pickId = (v * 8) + h + 100;
+                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+            }
+        }
     }
-    buildFace(primitiveId, side) {
-        const id = `checkers-board-${side}-face`;
+
+    buildFace(primitiveId, side, isMainBoard = true) {
+        const id = isMainBoard ? `checkers-board-${side}-face` : `checkers-auxiliarboard-${side}-face`;
         this.facesIds.push(id);
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(4, -0.5, -4));
@@ -69,16 +72,6 @@ export class Gameboard extends Board {
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, -0.5, 0));
         const sideTexture = ['none', 1, 1];
         this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
-    }
-
-    buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
-        for (let v = 0; v < 8; v++) {
-            for (let h = 0; h < 8; h++) {
-                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
-                const pickId = (v * 8) + h + 100;
-                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
-            }
-        }
     }
 
     /**

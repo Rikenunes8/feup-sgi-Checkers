@@ -17,6 +17,19 @@ export class Board {
         this.tiles = [];
     }
 
+    buildFaces(primitiveId) {
+        this.buildFace(primitiveId, 'front');
+        this.buildFace(primitiveId, 'back');
+        this.buildFace(primitiveId, 'left');
+        this.buildFace(primitiveId, 'right');
+        this.buildFace(primitiveId, 'bottom');
+    }
+
+    buildFace(pritiveId, side) {
+        throw new Error("Method 'buildFace()' must be implemented.");
+    }
+
+
     buildBoardTransfMatrix() {
         throw new Error("Method 'buildBoardTransfMatrix()' must be implemented.");
     }
