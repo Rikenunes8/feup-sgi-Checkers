@@ -129,8 +129,8 @@ export class Checkers {
     /**
      * Start piece movement animation.
      * @param {Piece} piece Piece to animate.
-     * @param {GameboardTile} prevTile Start tile
-     * @param {Array[GameboardTile]} nextTiles Tiles to visit
+     * @param {Tile} prevTile Start tile
+     * @param {Array[Tile]} nextTiles Tiles to visit
      */
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original

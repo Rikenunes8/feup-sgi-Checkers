@@ -1,5 +1,5 @@
 import { XMLParser } from "./XMLParser.js";
-import { Gameboard } from "../checkers/boards/Gameboard.js";
+import { GameBoard } from "../checkers/boards/GameBoard.js";
 import { Checkers } from "../checkers/Checkers.js";
 import { AuxiliarBoard } from "../checkers/boards/AuxiliarBoard.js";
 
@@ -24,7 +24,7 @@ export class XMLParserCheckers extends XMLParser {
         if (auxiliarboardIndex == -1) return "missing auxiliarboard definition in checkers";
 
         let mainboard = this.parseMainboard(children[mainboardIndex]);
-        if (! mainboard instanceof Gameboard) return mainboard;
+        if (! mainboard instanceof GameBoard) return mainboard;
 
         let pieces = this.parsePieces(children[piecesIndex]);
         if (!Array.isArray(pieces)) return pieces;
@@ -69,7 +69,7 @@ export class XMLParserCheckers extends XMLParser {
         if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
 
-        return new Gameboard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
+        return new GameBoard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
     }
 
     /**

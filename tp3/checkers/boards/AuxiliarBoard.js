@@ -3,7 +3,7 @@ import { displayGraph, writeText } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
 import { MyButton } from "../../components/MyButton.js";
-import { GameboardTile } from "../GameboardTile.js";
+import { Tile } from "../Tile.js";
 
 export class AuxiliarBoard extends Board {
     constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId) {
@@ -31,7 +31,7 @@ export class AuxiliarBoard extends Board {
             for (let h = 0; h < 3; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
                 const pickId = (v * 8) + h + 300;
-                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+                this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }
     }

@@ -19,7 +19,7 @@ export class PieceAnimator {
      * @param {Piece} piece 
      * @param {Array} startPosition Position where the animation starts
      * @param {Array[Array]} endPositions Sequence of positions to visit
-     * @param {GameboardTile} endTile Tile where the piece will be placed at the end of the animation
+     * @param {Tile} endTile Tile where the piece will be placed at the end of the animation
      * @param {boolean} isCollected Type of animation (parabolic or linear)
      * @param {int} startTime 
      */
