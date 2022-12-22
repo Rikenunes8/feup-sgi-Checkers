@@ -10,7 +10,7 @@ export class Checkers {
         this.mainboard = mainboard;
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
-        this.pieceAnimator = null;
+        this.pieceAnimator = new PieceAnimator(this);
         this.pieces = [];
         
         this.game = this.ruler.buildInitialGame();
@@ -19,11 +19,7 @@ export class Checkers {
         this.buildPieces(this.game, pieceComponentsIds, piecesMaterialsIds);
 
         this.turn = CurrentPlayer.P1;
-        this.selectedPieceId = null;
-        this.setState(GameState.WaitPiecePick);
-    }
-
-    startGame() {
+        this.selectedPieceIdx = null;
         this.setState(GameState.WaitPiecePick);
     }
 
@@ -34,39 +30,80 @@ export class Checkers {
         this.mainboard.display();
     }
 
+    /**
+     * Update the checkers game on moving state
+     * Update the piece animations
+     * Check for colisions with other pieces
+     * @param {*} time 
+     */
     update(time) {
         if (this.stateMachine.getState() == GameState.Moving) {
+            // animate piece movement (collector and collected pieces)
             if (this.pieceAnimator.update(time)) {
-                const prevTileId = this.game.indexOf(this.selectedPieceId);
-                const tileIdx = this.pieces[this.selectedPieceId].tile.idx;
+                const prevTileId = this.game.indexOf(this.selectedPieceIdx);
+                const tileIdx = this.pieces[this.selectedPieceIdx].tile.idx;
                 this.game[tileIdx] = this.game[prevTileId];
                 this.game[prevTileId] = -1;
         
                 if (this.turn == CurrentPlayer.P1 && tileIdx >= 56 || this.turn == CurrentPlayer.P2 && tileIdx <= 7) {
-                    this.pieces[this.selectedPieceId].becomeKing(true);
+                    this.pieces[this.selectedPieceIdx].becomeKing(true);
                 }
 
                 this.unselectPiece();
                 this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
                 this.setState(GameState.WaitPiecePick);
             }
+
+            // check for colision with other pieces
+            for (let i = 0; i < this.pieces.length; i++) {
+                if (i != this.selectedPieceIdx) {
+                    const piece = this.pieces[i];
+                    if (this.pieceAnimator.checkCollision(piece)) {
+                        console.log("Collision with piece " + i);
+                        const prevTileId = this.game.indexOf(piece.idx);
+                        this.game[prevTileId] = -1;
+                        const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
+                        const nextTilePoss = [[10, 0, -10]]; // TODO: get tile position
+                        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, null, true, time);
+                        break;
+                    }
+                }
+            }
+
         }
     }
 
+    /**
+     * Change the game state.
+     * @param {GameState} state 
+     */
     setState(state) {
         this.stateMachine.changeState(state);
     }
 
-    selectPiece(id) {
-        this.selectedPieceId = id;
-        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].material = 1;
+    /**
+     * Select a piece. Change its material.
+     * @param {int} idx 
+     */
+    selectPiece(idx) {
+        this.selectedPieceIdx = idx;
+        this.sceneGraph.components[this.pieces[this.selectedPieceIdx].id].material = 1;
     }
 
+    /**
+     * Unselect the selected piece. Return to original material.
+     */
     unselectPiece() {
-        this.sceneGraph.components[this.pieces[this.selectedPieceId].id].material = 0;
-        this.selectedPieceId = null;
+        this.sceneGraph.components[this.pieces[this.selectedPieceIdx].id].material = 0;
+        this.selectedPieceIdx = null;
     }
 
+    /**
+     * Start piece movement animation.
+     * @param {Piece} piece Piece to animate.
+     * @param {GameboardTile} prevTile Start tile
+     * @param {Array[GameboardTile]} nextTiles Tiles to visit
+     */
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original
         this.sceneGraph.components[piece.id].material = 0;
@@ -75,7 +112,7 @@ export class Checkers {
         const prevTilePos = [prevTile.h, 0, -prevTile.v];
         const nextTilePoss = nextTiles.map(tile => [tile.h, 0, -tile.v]);
         this.pieceAnimator = new PieceAnimator(this.sceneGraph);
-        this.pieceAnimator.setPiece(piece, prevTilePos, nextTilePoss, lastTile);
+        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, lastTile, false);
     }
 
     /**

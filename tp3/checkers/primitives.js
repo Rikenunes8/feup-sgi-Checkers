@@ -1,30 +1,50 @@
 import { MyTorus } from '../components/MyTorus.js';
-import { MyCylinder } from '../components/MyCylinder.js';
 import { MyRectangle } from '../components/MyRectangle.js';
 import { MyComponent } from '../components/MyComponent.js';
 
+/**
+ * Radius of a piece component.
+ */
+export const pawnRadius = 0.4;
+
+/**
+ * Add a torus primitive to the scene graph.
+ * @param {*} sceneGraph 
+ * @returns id of the torus primitive
+ */
 function buildCheckersTorus(sceneGraph) {
     const id = 'checkers-torus';
     sceneGraph.primitives[id] = new MyTorus(sceneGraph.scene, id, 0.2, 0.2, 10, 10);
     return id;
 };
-function buildCheckersCylinder(sceneGraph) {
-    const id = 'checkers-cylinder';
-    sceneGraph.primitives[id] = new MyCylinder(sceneGraph.scene, id, 0.3, 0.3, 0.4, 10, 4);
-    return id;
-};
+
+/**
+ * Add a rectangle primitive to the scene graph.
+ * @param {*} sceneGraph 
+ * @returns id of the rectangle primitive
+ */
 export function buildCheckersRectangle(sceneGraph) {
     const id = 'checkers-rectangle';
     sceneGraph.primitives[id] = new MyRectangle(sceneGraph.scene, id, 0.0, 1.0, 0.0, 1.0);
     return id;
 };
 
+/**
+ * Add a pawn and a king component to the scene graph.
+ * @param {*} sceneGraph 
+ * @returns Array with the ids of the pawn and king components, respectively
+ */
 export function buildPieceComponent(sceneGraph) {
     const pawnComponentId = buildPawnComponent(sceneGraph);
     const kingComponentId = buildKingComponent(sceneGraph, pawnComponentId);
     return [pawnComponentId, kingComponentId];
 }
 
+/**
+ * Add a pawn component to the scene graph.
+ * @param {*} sceneGraph 
+ * @returns id of the pawn component
+ */
 function buildPawnComponent(sceneGraph) {
     const id = 'checkers-pawn';
     const primitiveId = buildCheckersTorus(sceneGraph);
@@ -35,6 +55,12 @@ function buildPawnComponent(sceneGraph) {
     return id;
 }
 
+/**
+ * Add a king component to the scene graph.
+ * @param {*} sceneGraph 
+ * @param {*} pawnComponentId id of the pawn component
+ * @returns id of the king component
+ */
 function buildKingComponent(sceneGraph, pawnComponentId) {
     const pawnComponentId2 = 'checkers-pawn2';
     let transfMatrix2 = mat4.create();

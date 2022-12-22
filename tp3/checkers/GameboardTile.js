@@ -42,13 +42,13 @@ export class GameboardTile extends Pickable {
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
         if (tilesIdxToVisit == null) return null;
         
-        const piece = checkers.pieces[checkers.selectedPieceId];
+        const piece = checkers.pieces[checkers.selectedPieceIdx];
         checkers.setState(GameState.Moving);
         const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
         checkers.movePiece(piece, piece.tile, tilesToVisit);
 
         /*
-        const prevTileId = checkers.game.indexOf(checkers.selectedPieceId);
+        const prevTileId = checkers.game.indexOf(checkers.selectedPieceIdx);
         checkers.game[this.idx] = checkers.game[prevTileId];
         checkers.game[prevTileId] = -1;
         piecesToKill.forEach(pieceId => {
@@ -56,7 +56,7 @@ export class GameboardTile extends Pickable {
         });
 
         if (checkers.turn == CurrentPlayer.P1 && this.idx >= 56 || checkers.turn == CurrentPlayer.P2 && this.idx <= 7) {
-            checkers.pieces[checkers.selectedPieceId].becomeKing(true);
+            checkers.pieces[checkers.selectedPieceIdx].becomeKing(true);
         }
 
         checkers.unselectPiece();

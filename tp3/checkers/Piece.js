@@ -42,7 +42,7 @@ export class Piece extends Pickable {
     onPick() {
         console.log(`Selected piece: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
-        if (checkers.selectedPieceId != null) {
+        if (checkers.selectedPieceIdx != null) {
             checkers.unselectPiece();
             checkers.setState(GameState.WaitPiecePick);
         } else {

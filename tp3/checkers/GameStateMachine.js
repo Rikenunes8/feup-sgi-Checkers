@@ -61,7 +61,7 @@ export class GameStateMachine {
      */
     changeStateToWaitTilePick() {
         this.checkers.pieces.forEach(p => p.pickable = false);
-        this.checkers.pieces[this.checkers.selectedPieceId].pickable = true;
+        this.checkers.pieces[this.checkers.selectedPieceIdx].pickable = true;
         for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
             if ((v + h) % 2 == 0 && this.checkers.game[v*8+h] == -1) {
                 this.checkers.mainboard.tiles[v*8+h].pickable = true;

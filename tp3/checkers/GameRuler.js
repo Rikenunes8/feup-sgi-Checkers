@@ -11,8 +11,8 @@ export class GameRuler {
     }
 
     /**
-     * 
-     * @param {*} pieceIdx 
+     * Search valid moves for the piece correspondent to pieceIdx
+     * @param {*} pieceIdx Index of the piece in the Gameboard pieces array
      * @returns {Array} Array of valid moves for the piece with id pieceIdx
      */
     validMoves(pieceIdx) {
@@ -30,6 +30,13 @@ export class GameRuler {
         }
         return validMoves;
     }
+    /**
+     * Update validMoves with the simple moves (diagonal adjacents) for the piece from tileIdx tile
+     * @param {CurrentPlayer} player 
+     * @param {int} tileIdx position of the piece in the gameboard
+     * @param {Map} validMoves key is the tile index, value is the path to the tile
+     * @param {boolean} isKing true if the piece is a king or false if it is a pawn
+     */
     validSimpleMoves(player, tileIdx, validMoves, isKing) {
         const pieceRow = Math.floor(tileIdx / 8);
         const pieceCol = tileIdx % 8;
@@ -37,11 +44,21 @@ export class GameRuler {
         for (let i = 0; i < 4; i++) {
             if (!isKing && i == 2) break;
             let tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
-            if (this.checkers.game[tile] == -1 && Math.abs(tile % 8 - pieceCol) <= 2) {
+            if (this.checkers.game[tile] == -1 && !this.overflowBoard(tile, pieceCol)) {
                 validMoves[tile] = [tile];
             }
         }
     }
+
+    /**
+     * Update validMoves with eating moves (diagonal jumping one tile of a different player) for the piece from tileIdx tile.
+     * If the piece can eat more than one piece, it will add all the possible paths to the validMoves map.
+     * @param {CurrentPlayer} player 
+     * @param {int} tileIdx position of the piece in the gameboard
+     * @param {Map} validMoves key is the tile index, value is the path to the tile
+     * @param {boolean} isKing true if the piece is a king or false if it is a pawn
+     * @param {*} visited 
+     */
     validEatMoves(player, tileIdx, validMoves, isKing, visited = []) {
         const pieceRow = Math.floor(tileIdx / 8);
         const pieceCol = tileIdx % 8;
@@ -52,9 +69,9 @@ export class GameRuler {
             const tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
             const nextTile = toArrIndex(pieceRow + 2*rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - 2*Math.pow(-1, i));
             const pieceId = this.checkers.game[tile];
-            if (!belongsToPlayer(pieceId, player) && pieceId != -1 && Math.abs(tile % 8 - pieceCol) <= 2
+            if (!belongsToPlayer(pieceId, player) && pieceId != -1 && !this.overflowBoard(tile, pieceCol)
                     && (lastPosition == null || nextTile != lastPosition)) {
-                if (this.checkers.game[nextTile] == -1 && Math.abs(nextTile % 8 - pieceCol) <= 2) {
+                if (this.checkers.game[nextTile] == -1 && !this.overflowBoard(nextTile, pieceCol)) {
                     this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile]);
                     if (!validMoves[nextTile] || validMoves[nextTile].length <= visited.length) 
                         validMoves[nextTile] = [...visited, nextTile];
@@ -63,11 +80,14 @@ export class GameRuler {
         }
     }
 
-
-    validateMove(tileId) {
-        const validMoves = this.validMoves(this.checkers.selectedPieceId);
-        console.log(validMoves);
-        return validMoves[tileId];
+    /**
+     * Validate if the move is valid for the selected piece
+     * @param {*} tileIdx 
+     * @returns Array with the path to the tileIdx tile if it is a valid move, null otherwise
+     */
+    validateMove(tileIdx) {
+        const validMoves = this.validMoves(this.checkers.selectedPieceIdx);
+        return validMoves[tileIdx];
     }
 
     /**
@@ -89,5 +109,15 @@ export class GameRuler {
             }
         }
         return game;
+    }
+
+    /**
+     * Check if the tileIdx tile is more than 2 columns away from the pieceCol column
+     * @param {*} tileIdx 
+     * @param {*} pieceCol 
+     * @returns 
+     */
+    overflowBoard(tileIdx, pieceCol) {
+        return Math.abs(tileIdx % 8 - pieceCol) > 2
     }
 }
