@@ -22,11 +22,11 @@ export class Menu {
 	 * Displays all the menu
 	 */
 	display() {
-		const initText = this.scene.info.initedGame ? 'PAUSE GAME' : 'INIT GAME';		
+		const initText = this.scene.info.initedGame ? 'PAUSE GAME' : 'START GAME';		
 		const initCoordX = this.scene.info.initedGame ? -39.5 : -39;
 		this.initButton = new MyButton(this.scene, 'checkers-menu-init-button', [-25.3, 42], [-17, 50], true, 3000, this.initBtnOnPick, initText, [initCoordX, 19.2, -50]);
 		this.undoButton = new MyButton(this.scene, 'checkers-menu-undo-button', [-25.3, 32], [-17, 40], true, 3001, this.undoBtnOnPick, 'UNDO', [-37.5, 16.2, -50]);
-		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, 22], [-17, 30], true, 3002, this.mainMenuOnPick, 'GO TO MAIN MENU', [-41.5, 13.2, -50]);
+		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, 22], [-17, 30], true, 3002, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 13.2, -50]);
 
 		this.scene.pushMatrix();
 		
