@@ -1,7 +1,7 @@
 import { MyComponent } from '../components/MyComponent.js';
 import { displayGraph } from './utils.js';
 import { Pickable } from './Pickable.js';
-import { GameState } from './Checkers.js';
+import { GameState } from './GameStateMachine.js';
 
 export class Piece extends Pickable {
     /**
@@ -44,10 +44,10 @@ export class Piece extends Pickable {
         const checkers = this.sceneGraph.scene.checkers;
         if (checkers.selectedPieceId != null) {
             checkers.unselectPiece();
-            checkers.changeState(GameState.WaitPiecePick);
+            checkers.setState(GameState.WaitPiecePick);
         } else {
             checkers.selectPiece(this.idx);
-            checkers.changeState(GameState.WaitTilePick);
+            checkers.setState(GameState.WaitTilePick);
         }
     }
 
