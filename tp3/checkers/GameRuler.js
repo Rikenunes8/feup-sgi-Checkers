@@ -33,7 +33,7 @@ export class GameRuler {
 
     /**
      * Search valid moves for the piece correspondent to pieceIdx
-     * @param {*} pieceIdx Index of the piece in the Gameboard pieces array
+     * @param {*} pieceIdx Index of the piece in the GameBoard pieces array
      * @returns {Array} Array of valid moves for the piece with id pieceIdx
      */
     validMoves(pieceIdx) {

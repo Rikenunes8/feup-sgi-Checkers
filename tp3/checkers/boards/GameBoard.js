@@ -1,10 +1,10 @@
 import { MyComponent } from "../../components/MyComponent.js";
-import { GameboardTile } from '../GameboardTile.js';
+import { Tile } from '../Tile.js';
 import { buildCheckersRectangle } from "../primitives.js";
 import { displayGraph } from "../utils.js";
 import { Board } from "./Board.js";
 
-export class Gameboard extends Board {
+export class GameBoard extends Board {
     constructor(sceneGraph, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
         const id = 'checkers-mainboard';
         super(sceneGraph, id, p1, p2);
@@ -37,7 +37,7 @@ export class Gameboard extends Board {
             for (let h = 0; h < 8; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
                 const pickId = (v * 8) + h + 100;
-                this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+                this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }
     }
