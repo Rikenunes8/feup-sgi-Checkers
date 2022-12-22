@@ -30,6 +30,28 @@ export class Board {
     }
 
 
+    buildFaceMatrix(side, transfMatrix) {
+        if (side == 'front') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, 0.5));
+        } else if (side == 'back') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, -0.5));
+            mat4.rotateY(transfMatrix, transfMatrix, Math.PI);
+        } else if (side == 'left') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, 0, 0));
+            mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        } else if (side == 'right') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0.5, 0, 0));
+            mat4.rotateY(transfMatrix, transfMatrix, Math.PI / 2);
+        } else if (side == 'bottom') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, -0.5, 0));
+            mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
+        } else if (side == 'top') {
+            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0.5, 0));
+            mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
+        }
+        return transfMatrix;
+    }
+
     buildBoardTransfMatrix() {
         throw new Error("Method 'buildBoardTransfMatrix()' must be implemented.");
     }

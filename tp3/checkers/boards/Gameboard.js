@@ -48,25 +48,9 @@ export class Gameboard extends Board {
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(4, -0.5, -4));
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(8, 1, 8));
-        if (side == 'front') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, 0.5));
-        }
-        else if (side == 'back') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, -0.5));
-            mat4.rotateY(transfMatrix, transfMatrix, Math.PI);
-        }
-        else if (side == 'left') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, 0, 0));
-            mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        }
-        else if (side == 'right') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0.5, 0, 0));
-            mat4.rotateY(transfMatrix, transfMatrix, Math.PI / 2);
-        }
-        else if (side == 'bottom') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, -0.5, 0));
-            mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
-        }
+
+        transfMatrix = this.buildFaceMatrix(side, transfMatrix);
+        
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, -0.5, 0));
         const sideTexture = ['none', 1, 1];
         this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);

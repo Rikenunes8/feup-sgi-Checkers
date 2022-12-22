@@ -30,7 +30,7 @@ export class AuxiliarBoard extends Board {
         for (let v = 0; v < 8; v++) {
             for (let h = 0; h < 3; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
-                const pickId = (v * 8) + h + 100;
+                const pickId = (v * 8) + h + 300;
                 this.tiles.push(new GameboardTile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }
@@ -99,7 +99,7 @@ export class AuxiliarBoard extends Board {
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
         // TODO instead of 10 go get the player score
-        writeText(scene, 'SCORE:' + 10);
+        writeText(scene, 'Score:' + 10);
         scene.popMatrix();
 
         // Draw player2 Time
@@ -121,7 +121,7 @@ export class AuxiliarBoard extends Board {
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
         // TODO instead of 10 go get the player score
-        writeText(scene, 'SCORE:' + 10);
+        writeText(scene, 'Score:' + 10);
         scene.popMatrix();
 
         // Draw player1 Time
@@ -147,6 +147,7 @@ export class AuxiliarBoard extends Board {
         scene.popMatrix();
     }
 
+    /*
     buildButtons() {
         // TODO try to use text inside the button and not outside
         this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scene.playerMaxTime + 's', [-16, -6.7, -50]);
@@ -158,7 +159,7 @@ export class AuxiliarBoard extends Board {
         this.player2Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
         
         this.totalTime = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-initGame-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
-    }
+    } */
 
     /**
      * Builds the menu of the board
@@ -166,7 +167,7 @@ export class AuxiliarBoard extends Board {
      */
     buildMenu(primitiveId) {
         this.buildMenuFaces(primitiveId);
-        this.buildButtons();
+        // this.buildButtons();
     }
 
     /**
@@ -195,34 +196,12 @@ export class AuxiliarBoard extends Board {
         if (isMenu) {
             mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3.5, 2, -4));
             mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(1, 6, 8));
-        }
-        else {
+        } else {
             mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(1.5, -0.5, -4));
             mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(3, 1, 8));
         }
 
-        if (side == 'front') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, 0.5));
-        }
-        else if (side == 'back') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0, -0.5));
-            mat4.rotateY(transfMatrix, transfMatrix, Math.PI);
-        }
-        else if (side == 'left') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, 0, 0));
-            mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        }
-        else if (side == 'right') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0.5, 0, 0));
-            mat4.rotateY(transfMatrix, transfMatrix, Math.PI / 2);
-        }
-        else if (side == 'bottom') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, -0.5, 0));
-            mat4.rotateX(transfMatrix, transfMatrix, Math.PI / 2);
-        } else if (side == 'top') {
-            mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(0, 0.5, 0));
-            mat4.rotateX(transfMatrix, transfMatrix, -Math.PI / 2);
-        }
+        transfMatrix = this.buildFaceMatrix(side, transfMatrix);
 
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, -0.5, 0));
         const sideTexture = ['none', 1, 1];
