@@ -46,22 +46,5 @@ export class GameboardTile extends Pickable {
         checkers.setState(GameState.Moving);
         const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
         checkers.movePiece(piece, piece.tile, tilesToVisit);
-
-        /*
-        const prevTileId = checkers.game.indexOf(checkers.selectedPieceIdx);
-        checkers.game[this.idx] = checkers.game[prevTileId];
-        checkers.game[prevTileId] = -1;
-        piecesToKill.forEach(pieceId => {
-            checkers.game[checkers.game.indexOf(pieceId)] = -1;
-        });
-
-        if (checkers.turn == CurrentPlayer.P1 && this.idx >= 56 || checkers.turn == CurrentPlayer.P2 && this.idx <= 7) {
-            checkers.pieces[checkers.selectedPieceIdx].becomeKing(true);
-        }
-
-        checkers.unselectPiece();
-        checkers.updateMainboard();
-        checkers.turn = checkers.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-        checkers.setState(GameState.WaitPiecePick);*/
     }
 }

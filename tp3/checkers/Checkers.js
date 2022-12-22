@@ -116,30 +116,6 @@ export class Checkers {
     }
 
     /**
-     * Update mainboard according to the game board.
-     * This function is called when the game board is updated.
-     * It updates the mainboard tiles and pieces.
-     * If a piece is not on the same tile as the piece in the mainboard, it is updated.
-     * If a piece is on the same tile as the piece in the mainboard, it is not updated.
-     * If a tile is not occupied by a piece, it is set to null.
-     */
-    updateMainboard() {
-        for (let v = 0; v < 8; v++) for (let h = 0; h < 8; h++) {
-            const tileId = v*8+h;
-            const pieceId = this.game[tileId];
-            if (pieceId != -1) {
-                const piece = this.pieces[pieceId];
-                if (tileId !== piece.tile.pickId % 100) {
-                    piece.updateTile(this.mainboard.tiles[tileId]);
-                }
-            }
-            else {
-                this.mainboard.tiles[tileId].piece = null;
-            }
-        }
-    }
-
-    /**
      * Build the pieces for the game from the game matrix.
      * @param {Array} game An array of 64 elements, representing the game board.
      * @param {string} componentref Component that represents a piece.
