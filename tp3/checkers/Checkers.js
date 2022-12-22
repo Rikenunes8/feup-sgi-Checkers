@@ -33,7 +33,6 @@ export class Checkers {
         // TODO Check if game already initialized using GameStateMachine probably
         // reset these times when game ends and we click init game again
         const scene = this.sceneGraph.scene;
-        console.log("OLA: ", scene.info.initedGame);
         if (scene.info.initedGame) {
             scene.info.totalTime += 1;
 
@@ -87,7 +86,6 @@ export class Checkers {
                     }
                 }
             }
-
         }
     }
 
