@@ -3,18 +3,21 @@ import { buildPieceComponent } from "./primitives.js";
 import { GameRuler, CurrentPlayer } from "./GameRuler.js";
 import { GameStateMachine, GameState } from "./GameStateMachine.js";
 import { PieceAnimator } from "./PieceAnimator.js";
+import { GameSequence } from "./GameSequence.js";
+import { GameMove } from "./GameMove.js";
 
 export class Checkers {
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
         this.mainboard = mainboard;
+        this.auxiliarboard = auxiliarboard;
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
-        this.pieceAnimator = new PieceAnimator(this);
-        this.auxiliarboard = auxiliarboard;
+        this.pieceAnimator = new PieceAnimator(this.sceneGraph);
         this.pieces = [];
         
         this.game = this.ruler.buildInitialGame();
+        this.sequence = new GameSequence(this.game);
         
         const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
         this.buildPieces(this.game, pieceComponentsIds, piecesMaterialsIds);
@@ -132,11 +135,9 @@ export class Checkers {
         // Put piece color to original
         this.sceneGraph.components[piece.id].material = 0;
         
-        const lastTile = nextTiles[nextTiles.length-1];
-        const prevTilePos = [prevTile.h, 0, -prevTile.v];
-        const nextTilePoss = nextTiles.map(tile => [tile.h, 0, -tile.v]);
-        this.pieceAnimator = new PieceAnimator(this.sceneGraph);
-        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, lastTile, false);
+        const newGameMove = new GameMove(piece, prevTile, nextTiles, this.game);
+        this.sequence.addMove(newGameMove);
+        this.sequence.topMove().animate(this.pieceAnimator);
     }
 
     /**
