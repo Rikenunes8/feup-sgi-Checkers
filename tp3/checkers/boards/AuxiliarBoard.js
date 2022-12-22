@@ -109,8 +109,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        // TODO instead of 10 go get the player score
-        writeText(scene, 'Time:' + 10 + 's');
+        writeText(scene, 'Time:' + scene.info.p2Time + 's');
         scene.popMatrix();
 
         // Draw player1 Score
@@ -124,26 +123,24 @@ export class AuxiliarBoard extends Board {
         writeText(scene, 'Score:' + 10);
         scene.popMatrix();
 
-        // Draw player1 Time
+        // Draw Total Time
         scene.pushMatrix();
         transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1, -5.7));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        // TODO instead of 10 go get the player score
-        writeText(scene, 'Total Game Time:' + 10 + 's');
+        writeText(scene, 'Total Game Time:' + scene.info.totalTime + 's');
         scene.popMatrix();
 
-        // Draw Total Time
+        // Draw player1 Time
         scene.pushMatrix();
         transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -2.7));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        // TODO instead of 10 go get the player score
-        writeText(scene, 'Time:' + 10 + 's');
+        writeText(scene, 'Time:' + scene.info.p1Time + 's');
         scene.popMatrix();
     }
 

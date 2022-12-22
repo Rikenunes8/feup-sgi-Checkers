@@ -27,10 +27,8 @@ export class MyButton extends Pickable {
     displayText() {
         if (this.text) {
             this.scene.pushMatrix();
-    
             // 	Reset transf. matrix to draw independent of camera
             this.scene.loadIdentity();
-    
             // transform as needed to place on screen
             this.scene.translate(this.translate[0], this.translate[1], this.translate[2]);
             writeText(this.scene, this.text);

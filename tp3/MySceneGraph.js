@@ -1,5 +1,4 @@
 import { CGFXMLreader } from '../lib/CGF.js';
-import { Menu } from './checkers/Menu.js';
 import { XMLParserFile } from './parsers/XMLParserFile.js';
 
 /**
