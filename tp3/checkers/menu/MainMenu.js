@@ -129,7 +129,7 @@ export class MainMenu {
 
 	playerTimeBtnOnPick = () => {
 		if (this.scene.info.playerMaxTime == 60)
-			this.scene.info.playerMaxTime = 0;
+			this.scene.info.playerMaxTime = 20;
 		else
 			this.scene.info.playerMaxTime += 20;
 	}
