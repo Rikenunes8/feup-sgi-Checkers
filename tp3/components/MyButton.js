@@ -20,7 +20,7 @@ export class MyButton extends Pickable {
         this.registerPickable(this.scene, this);
         this.button.display();
         this.unregisterPickable(this.scene);
-        
+
         this.displayText();
     }
 

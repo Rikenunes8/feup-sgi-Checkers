@@ -190,7 +190,7 @@
             <boardWalls id="white" />
             <lightTile id="white" />
             <darkTile id="black" />
-            <buttonsMaterial id="white" />
+            <buttonsMaterial id="lightWood" />
         </auxiliarboard>
         <pieces>
             <type1 id="lightWood" />

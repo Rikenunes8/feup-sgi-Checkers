@@ -64,63 +64,100 @@ export class AuxiliarBoard extends Board {
     displayButtons() {
         const scene = this.sceneGraph.scene;
 
+        let transfMatrix;
+        
         this.buttonAppearance = this.sceneGraph.materials[this.buttonsMaterialId];
-        let transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(-0.5, 0, 0));
+
+        // Display Player2
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 4.2, -6.3));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        //scene.multMatrix(transfMatrix);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
+        scene.multMatrix(transfMatrix);
 
-        // Draw player1 Score button
-		scene.pushMatrix();
-		this.buttonAppearance.apply();
-        scene.translate(8.49, 2.8, -1.8);
-        scene.scale(1, 0.8, 0.4);
-        scene.rotate(-Math.PI / 2, 0, 1, 0);
-        this.player1Score.display();
-        scene.scale(0.5, 0.5, 0.5);
-        scene.translate(-6, 1, 0.1);
+        writeText(scene, 'PLAYER 2');
+        scene.popMatrix();
+
+        // Display Player1
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 4.2, -2.7));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
+        scene.multMatrix(transfMatrix);
+
+        writeText(scene, 'PLAYER 1');
+        scene.popMatrix();
+
+        
+        // Draw player2 Score
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 3.2, -6.3));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
         // TODO instead of 10 go get the player score
-        writeText(scene, 'PLAYER 1 SCORE: ' + 10 + 's');
+        writeText(scene, 'SCORE:' + 10);
+        scene.popMatrix();
 
-        // Draw player1 Time button
-        scene.scale(2, 2, 2);
-        this.buttonAppearance.apply();
-        scene.translate(-3.5, -2, 0);
-        this.player1Time.display();
-        scene.scale(0.5, 0.5, 0.5);
-        scene.translate(-6, 1, 0.1);
-        // TODO use the player time
-        writeText(scene, 'PLAYER 1 TIME: ' + 10 + 's');
-
-        scene.scale(2, 2, 2);
-        this.buttonAppearance.apply();
-        scene.translate(6, -0.5, 0);
-        this.player2Time.display();
-        scene.scale(0.5, 0.5, 0.5);
-        scene.translate(-6, 1, 0.1);
-        // TODO use the player time
-        writeText(scene, 'PLAYER 2 TIME: ' + 10 + 's');
-
-        scene.scale(2, 2, 2);
-        this.buttonAppearance.apply();
-        scene.translate(-3.1, 1, 0);
-        this.player2Score.display();
-        scene.scale(0.5, 0.5, 0.5);
-        scene.translate(-6, 1, 0.1);
+        // Draw player2 Time
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -6.3));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
         // TODO instead of 10 go get the player score
-        writeText(scene, 'PLAYER 2 SCORE: ' + 10 + 's');
-		scene.popMatrix();
+        writeText(scene, 'Time:' + 10 + 's');
+        scene.popMatrix();
+
+        // Draw player1 Score
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 3.2, -2.7));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
+        // TODO instead of 10 go get the player score
+        writeText(scene, 'SCORE:' + 10);
+        scene.popMatrix();
+
+        // Draw player1 Time
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1, -5.7));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
+        // TODO instead of 10 go get the player score
+        writeText(scene, 'Total Game Time:' + 10 + 's');
+        scene.popMatrix();
+
+        // Draw Total Time
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -2.7));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
+        // TODO instead of 10 go get the player score
+        writeText(scene, 'Time:' + 10 + 's');
+        scene.popMatrix();
     }
 
     buildButtons() {
         // TODO try to use text inside the button and not outside
-        this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', this.p1, this.p2, false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scene.playerMaxTime + 's', [-16, -6.7, -50]);
+        this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scene.playerMaxTime + 's', [-16, -6.7, -50]);
         
-        this.player1Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Time-button', this.p1, this.p2, false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        this.player1Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Time-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
         
-        this.player2Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Time-button', this.p1, this.p2, false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        this.player2Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Time-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
         
-        this.player2Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Score-button', this.p1, this.p2, false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        this.player2Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
+        
+        this.totalTime = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-initGame-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
     }
 
     /**

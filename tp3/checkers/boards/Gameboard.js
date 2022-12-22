@@ -11,8 +11,6 @@ export class Gameboard extends Board {
 
         this.transfMatrix = this.buildBoardTransfMatrix();
 
-        this.tiles = [];
-        
         const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildFaces(rectangleId);
         this.buildBoardBase(boardWallsMaterialId);
