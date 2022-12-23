@@ -366,6 +366,7 @@ export class Checkers {
 
     resetBtnHandler() {
         this.setState(GameState.Idle);
+        this.setState(GameState.WaitPiecePick);
     }
 
     initBtnHandler() {
