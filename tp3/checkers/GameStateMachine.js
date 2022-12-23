@@ -3,6 +3,8 @@ import { CurrentPlayer, emptyTile } from "./GameRuler.js";
 export const GameState = Object.freeze({
     Menu: Symbol("Menu"),
     Pause: Symbol("Pause"),
+    Replay: Symbol("Replay"),
+    ReplayMoving: Symbol("ReplayMoving"),
     WaitPiecePick: Symbol("WaitPiecePick"),
     WaitTilePick: Symbol("WaitTilePick"),
     Moving: Symbol("Moving"),
@@ -29,17 +31,18 @@ export class GameStateMachine {
             // TODO: Do we want to do something here?
         } else if (newState == GameState.Pause) {
             this.changeStateToPause();
+        } else if (newState == GameState.Replay) {
+            this.changeStateToReplay();
         } else if (newState == GameState.WaitPiecePick) {
             this.changeStateToWaitPiecePick();
-        }
-        else if (newState == GameState.WaitTilePick) {
+        } else if (newState == GameState.WaitTilePick) {
             this.changeStateToWaitTilePick();
-        }
-        else if (newState == GameState.Moving) {
+        } else if (newState == GameState.Moving) {
             this.changeStateToMoving();
-        }
-        else if (newState == GameState.EndGame) {
+        } else if (newState == GameState.EndGame) {
             this.changeStateToEndGame();
+        } else if (newState == GameState.ReplayMoving) {
+            this.changeStateToReplayMoving();
         }
     }
 
@@ -53,6 +56,19 @@ export class GameStateMachine {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
         this.checkers.unselectPiece();
+    }
+
+    changeStateToReplay() {
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
+        this.checkers.pieces.forEach(p => p.pickable = false);
+        this.checkers.unselectPiece();
+    }
+
+    /**
+     * Changes the state to ReplayMoving.
+     */
+    changeStateToReplayMoving() {
+
     }
 
     /**
