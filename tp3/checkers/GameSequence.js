@@ -24,9 +24,13 @@ export class GameSequence {
     }
 
     undo() {
-        if (this._gameSequence.length > 0) {
+        if (this._gameSequence.length > 1) {
             this._gameSequence.pop();
         }
+    }
+
+    isEmpty() {
+        return this._gameSequence.length == 1;
     }
 
     // TODO: check this

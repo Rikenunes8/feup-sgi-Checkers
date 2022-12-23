@@ -234,6 +234,20 @@ export class Checkers {
             && this.stateMachine.getState() != GameState.EndGame;
     }
 
+    forceGameUpdate() {
+        this.game = [...this.sequence.topMove().gameboard];
+        for (let piece of this.pieces) {
+            const tileIdx = this.getTileIdx(piece.idx);
+            if (tileIdx == -1) {
+                piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]);
+            }
+            else {
+                piece.updateTile(this.mainboard.tiles[tileIdx]);
+            }
+        }
+
+    }
+
 
     // ****************** Button Handlers ******************
 
@@ -251,7 +265,12 @@ export class Checkers {
     }
 
     undoBtnHandler() {
-        throw new Error("Not implemented");
+        if (this.sequence.isEmpty()) return;
+        this.unselectPiece();
+        this.forceGameUpdate();
+        this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        this.sequence.undo();
+        this.setState(GameState.WaitPiecePick);
     }
 
     mainMenuBtnHandler() {
