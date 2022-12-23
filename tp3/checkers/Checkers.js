@@ -11,6 +11,10 @@ import { Menu } from './menu/Menu.js';
 export class Checkers {
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
+        
+        this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
+        this.menu = new Menu(this.sceneGraph.scene);
+
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
         this.ruler = new GameRuler(this);
@@ -40,8 +44,6 @@ export class Checkers {
             p2Time: 0,
             totalTime: 0,
         }
-        this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
-        this.menu = new Menu(this.sceneGraph.scene);
     }
 
     /**
@@ -167,10 +169,20 @@ export class Checkers {
         this.sequence.topMove().animate(this.pieceAnimator);
     }
 
+    /**
+     * Get the entity Piece from the piece idx.
+     * @param {*} idx 
+     * @returns 
+     */
     getPiece(idx) {
         return this.pieces[Math.abs(idx)-1];
     }
 
+    /**
+     * Get the tile idx where the piece is or -1 if the piece is not in the game.
+     * @param {int} pieceIdx Idx of the piece to get the tile idx.
+     * @returns Index of the tile where the piece is. The piece may be a pawn or a king (pieceIdx positive or negative).
+     */
     getTileIdx(pieceIdx) {
         let idx = this.game.indexOf(pieceIdx);
         if (idx == -1) 
@@ -203,6 +215,18 @@ export class Checkers {
         }
     }
 
+    /**
+     * @returns {boolean} True if the game is running (pause not included), false otherwise.
+     */
+    isGameRunning() {
+        return this.stateMachine.getState() != GameState.Menu 
+            && this.stateMachine.getState() != GameState.Pause
+            && this.stateMachine.getState() != GameState.EndGame;
+    }
+
+
+    // ****************** Button Handlers ******************
+
     goToSceneBtnHandler() {
         this.setState(GameState.Pause);
     }
@@ -222,11 +246,5 @@ export class Checkers {
 
     mainMenuBtnHandler() {
         this.setState(GameState.Menu);
-    }
-
-    isGameRunning() {
-        return this.stateMachine.getState() != GameState.Menu 
-            && this.stateMachine.getState() != GameState.Pause
-            && this.stateMachine.getState() != GameState.EndGame;
     }
 }

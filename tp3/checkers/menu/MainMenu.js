@@ -33,13 +33,11 @@ export class MainMenu {
 	 * Displays all the menu
 	 */
 	display() {
-		this.scene.pushMatrix();
-		
 		// Optional: disable depth test so that it is always in front (need to reenable in the end)
 		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
-
+		
+		this.scene.pushMatrix();
 		this.displayButtons();
-
 		this.scene.popMatrix();
         
         // re-enable depth test 

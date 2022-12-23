@@ -12,7 +12,7 @@ export const GameState = Object.freeze({
 export class GameStateMachine {
     constructor(checkers) {
         this.checkers = checkers;
-        this.state = GameState.WaitPiecePick;
+        this.state = null;
     }
 
     getState() {
@@ -26,7 +26,7 @@ export class GameStateMachine {
     changeState(newState) {
         this.state = newState;
         if (newState == GameState.Menu) {
-            
+            // TODO: Do we want to do something here?
         } else if (newState == GameState.Pause) {
             this.changeStateToPause();
         } else if (newState == GameState.WaitPiecePick) {
@@ -43,6 +43,12 @@ export class GameStateMachine {
         }
     }
 
+    /**
+     * Changes the state to Pause.
+     * This state is used when the game is paused.
+     * All tiles and pieces are not pickable.
+     * The selected piece is unselected.
+     */
     changeStateToPause() {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
