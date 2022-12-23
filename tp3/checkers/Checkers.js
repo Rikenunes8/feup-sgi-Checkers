@@ -24,7 +24,7 @@ export class Checkers {
         this.stateMachine = new GameStateMachine(this);
         this.pieceAnimator = new PieceAnimator(this.sceneGraph);
         this.pieces = [];
-        
+
         this.game = this.ruler.buildInitialGame();
         this.sequence = new GameSequence(this.game);
         
@@ -49,6 +49,24 @@ export class Checkers {
         }
 		this.invalidMove.appearance.setAmbient(popupAmbient[0], popupAmbient[1], popupAmbient[2], popupAmbient[3]);
 
+        this.results = {
+            p1Time: 0,
+            p2Time: 0,
+            totalTime: 0,
+        }
+    }
+
+    /**
+     * Resets the game to the initial state.
+     * To do so, it builds a new game, a new sequence
+     * and resets the turn, selected piece and state.
+     */
+    resetGame() {
+        this.game = this.ruler.buildInitialGame();
+        this.sequence = new GameSequence(this.game);
+        this.turn = CurrentPlayer.P1;
+        this.selectedPieceIdx = null;
+        this.setState(GameState.Idle);
         this.results = {
             p1Time: 0,
             p2Time: 0,
@@ -275,7 +293,16 @@ export class Checkers {
             && this.stateMachine.getState() != GameState.Pause
             && this.stateMachine.getState() != GameState.EndGame
             && this.stateMachine.getState() != GameState.Replay
-            && this.stateMachine.getState() != GameState.ReplayMoving;
+            && this.stateMachine.getState() != GameState.ReplayMoving
+            && this.stateMachine.getState() != GameState.Idle;
+    }
+
+    /**
+     * @returns {boolean} True if the game is in pause, false otherwise.
+     */
+    isGamePaused() {
+        console.log("isGamePaused: ", this.stateMachine.getState())
+        return this.stateMachine.getState() == GameState.Pause;
     }
 
     forceGameUpdate(gameboard) {

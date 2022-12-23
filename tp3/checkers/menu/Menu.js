@@ -20,9 +20,10 @@ export class Menu {
 	 */
 	display() {
 		const isGameRunning = this.scene.checkers.isGameRunning();
-		const initText = isGameRunning ? 'PAUSE GAME' : 'START GAME';
-		const initCoordX = isGameRunning ? -39.5 : -39;
-		this.initButton = new MyButton(this.scene, 'checkers-menu-init-button', [-25.3, 42], [-17, 50], true, 3000, this.initBtnOnPick, initText, [initCoordX, 19.2, -50]);
+		const isGamePaused = this.scene.checkers.isGamePaused();
+		const initText = isGameRunning ? 'PAUSE GAME' : (isGamePaused ? 'CONTINUE GAME' : 'START GAME');
+		const initXCoords = isGamePaused ? -37.5 : -39.5;
+		this.initButton = new MyButton(this.scene, 'checkers-menu-init-button', [-25.3, 42], [-17, 50], true, 3000, this.initBtnOnPick, initText, [initXCoords, 19.2, -50]);
 		this.undoButton = new MyButton(this.scene, 'checkers-menu-undo-button', [-25.3, 32], [-17, 40], true, 3001, this.undoBtnOnPick, 'UNDO', [-37.5, 16.2, -50]);
 		this.replayButton = new MyButton(this.scene, 'checkers-menu-replay-button', [-25.3, 22], [-17, 30], true, 3002, this.replayBtnOnPick, 'REPLAY', [-37.5, 13.2, -50]);
 		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, 12], [-17, 20], true, 3003, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 10.2, -50]);
