@@ -10,7 +10,7 @@ void main() {
 	// use the color we want the text to be
 	vec3 color3 = vec3(0.3, 0.3, 0.3);
 
-	if (color.a < 0.5)
+	if (color.a < 0.7)
 		discard;
 	else
 		gl_FragColor = color * vec4(color3, 1.0);

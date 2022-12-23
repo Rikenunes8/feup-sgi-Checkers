@@ -7,6 +7,9 @@ import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
 import { Menu } from './menu/Menu.js';
+import { MyButton } from "../components/MyButton.js";
+import { CGFappearance } from "../../lib/CGF.js";
+import { popupAmbient } from "./constants.js";
 
 export class Checkers {
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
@@ -38,6 +41,13 @@ export class Checkers {
             playerMaxTime: 20,
             gameMaxTime: 2,
         }
+
+        this.invalidMove = {
+            showInvalidMove: false,
+            popup: new MyButton(this.sceneGraph.scene, 'checkers-invalid-popup', [20, -80], [35, -70], true, 3000, this.initBtnOnPick, 'Inválid Move', [28, -17, -50]),
+            appearance: new CGFappearance(this.sceneGraph.scene),
+        }
+		this.invalidMove.appearance.setAmbient(popupAmbient[0], popupAmbient[1], popupAmbient[2], popupAmbient[3]);
 
         this.results = {
             p1Time: 0,
@@ -161,8 +171,37 @@ export class Checkers {
             this.menu.display();
             this.mainboard.display();
             this.auxiliarboard.display();
+            this.displayPopUp();
         }
         
+    }
+
+    /**
+     * Function to change the display state of the popup.
+     */
+    changePopupState = (visible) => {
+        this.invalidMove.showInvalidMove = visible;
+    }
+
+    /**
+     * Displays Popup for invalid move.
+     */
+    displayPopUp() {
+        if (this.invalidMove.showInvalidMove) {
+            const scene = this.sceneGraph.scene;
+
+            scene.pushMatrix();
+            scene.gl.disable(scene.gl.DEPTH_TEST);
+
+            this.invalidMove.appearance.apply();
+            scene.loadIdentity();
+            scene.scale(1.4, 0.3, 1);
+            scene.translate(-5, 18, -50);
+            this.invalidMove.popup.display();
+            
+            scene.gl.enable(scene.gl.DEPTH_TEST);
+            scene.popMatrix();
+        }
     }
 
     /**
