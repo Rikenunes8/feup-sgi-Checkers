@@ -2,7 +2,7 @@ import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
 import { GameState } from "./GameStateMachine.js";
-
+import { popupTime } from "./constants.js";
 
 export class Tile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
@@ -39,11 +39,17 @@ export class Tile extends Pickable {
         console.log(`Selected tile: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
-        if (tilesIdxToVisit == null) return null;
+
+        if (tilesIdxToVisit == null) {
+            checkers.changePopupState();
+            setTimeout(checkers.changePopupState, popupTime);
+            return null;
+        }
         
         const piece = checkers.getPiece(checkers.selectedPieceIdx);
         checkers.setState(GameState.Moving);
         const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
         checkers.movePiece(piece, piece.tile, tilesToVisit);
     }
+
 }
