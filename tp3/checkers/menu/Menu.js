@@ -11,9 +11,6 @@ export class Menu {
     constructor(scene) {
 		this.scene = scene;
 
-		this.backgroundAppearance = new CGFappearance(scene);
-		this.backgroundAppearance.setAmbient(0.937, 0.905, 0.86, 1);
-
 		this.buttonAppearance = new CGFappearance(scene);
 		this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
     }
@@ -22,19 +19,18 @@ export class Menu {
 	 * Displays all the menu
 	 */
 	display() {
-		const initText = this.scene.info.initedGame ? 'PAUSE GAME' : 'START GAME';		
-		const initCoordX = this.scene.info.initedGame ? -39.5 : -39;
+		const isGameRunning = this.scene.checkers.isGameRunning();
+		const initText = isGameRunning ? 'PAUSE GAME' : 'START GAME';
+		const initCoordX = isGameRunning ? -39.5 : -39;
 		this.initButton = new MyButton(this.scene, 'checkers-menu-init-button', [-25.3, 42], [-17, 50], true, 3000, this.initBtnOnPick, initText, [initCoordX, 19.2, -50]);
 		this.undoButton = new MyButton(this.scene, 'checkers-menu-undo-button', [-25.3, 32], [-17, 40], true, 3001, this.undoBtnOnPick, 'UNDO', [-37.5, 16.2, -50]);
 		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, 22], [-17, 30], true, 3002, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 13.2, -50]);
 
-		this.scene.pushMatrix();
-		
 		// Optional: disable depth test so that it is always in front (need to reenable in the end)
 		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
 
+		this.scene.pushMatrix();
 		this.displayButtons();
-
 		this.scene.popMatrix();
         
         // re-enable depth test 
@@ -52,7 +48,6 @@ export class Menu {
 		this.scene.scale(1.4, 0.3, 1);
 		this.scene.translate(-5, 18, -50);
 		this.initButton.display();
-		this.buttonAppearance.apply();
 		this.scene.popMatrix();
 
 		// Draw undo button
@@ -62,7 +57,6 @@ export class Menu {
 		this.scene.scale(1.4, 0.3, 1);
 		this.scene.translate(-5, 18, -50);
 		this.undoButton.display();
-		this.buttonAppearance.apply();
 		this.scene.popMatrix();
 
 		// Draw go to main menu button
@@ -72,22 +66,21 @@ export class Menu {
 		this.scene.scale(1.4, 0.3, 1);
 		this.scene.translate(-5, 18, -50);
 		this.mainMenuBtn.display();
-		this.buttonAppearance.apply();
 		this.scene.popMatrix();
 	}
 
 	initBtnOnPick = () => {
-		// TODO: Change game state
 		console.log("Init button picked");
-		this.scene.info.initedGame = !this.scene.info.initedGame;
+		this.scene.checkers.initBtnHandler();
 	}
 
 	undoBtnOnPick = () => {
-		// TODO: Call undo function
 		console.log("Undo button picked");
+		this.scene.checkers.undoBtnHandler();
 	}
 	
 	mainMenuOnPick = () => {
-		this.scene.info.initialMenu = true;
+		console.log("Main menu button picked");
+		this.scene.checkers.mainMenuBtnHandler();
 	}
 }

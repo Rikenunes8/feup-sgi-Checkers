@@ -5,10 +5,16 @@ import { GameStateMachine, GameState } from "./GameStateMachine.js";
 import { PieceAnimator } from "./PieceAnimator.js";
 import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
+import { MainMenu } from './menu/MainMenu.js';
+import { Menu } from './menu/Menu.js';
 
 export class Checkers {
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
+        
+        this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
+        this.menu = new Menu(this.sceneGraph.scene);
+
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
         this.ruler = new GameRuler(this);
@@ -24,8 +30,20 @@ export class Checkers {
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
-        this.setState(GameState.WaitPiecePick);
+        this.setState(GameState.Menu);
         this.interval = setInterval(this.updateTime, 1000);
+
+        this.config = {
+            selectedTheme: 1,
+            playerMaxTime: 20,
+            gameMaxTime: 2,
+        }
+
+        this.results = {
+            p1Time: 0,
+            p2Time: 0,
+            totalTime: 0,
+        }
     }
 
     /**
@@ -35,14 +53,16 @@ export class Checkers {
     updateTime = () => {
         // TODO Check if game already initialized using GameStateMachine probably
         // reset these times when game ends and we click init game again
-        const scene = this.sceneGraph.scene;
-        if (scene.info.initedGame) {
-            scene.info.totalTime += 1;
-
+        const currentState = this.stateMachine.getState();
+        if (currentState != GameState.Menu 
+            && currentState != GameState.EndGame 
+            && currentState != GameState.Pause) {
+            
+            this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
-                scene.info.p1Time += 1;
+                this.results.p1Time += 1;
             } else {   
-                scene.info.p2Time += 1;
+                this.results.p2Time += 1;
             }
         }
     }
@@ -114,6 +134,7 @@ export class Checkers {
      * Unselect the selected piece. Return to original material.
      */
     unselectPiece() {
+        if (this.selectedPieceIdx == null) return;
         this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 0;
         this.selectedPieceIdx = null;
     }
@@ -122,8 +143,15 @@ export class Checkers {
      * Displays the checkers game.
      */
     display() {
-        this.mainboard.display();
-        this.auxiliarboard.display();
+        if (this.stateMachine.getState() == GameState.Menu) {
+            this.mainMenu.display();            
+        }
+        else {
+            this.menu.display();
+            this.mainboard.display();
+            this.auxiliarboard.display();
+        }
+        
     }
 
     /**
@@ -141,10 +169,20 @@ export class Checkers {
         this.sequence.topMove().animate(this.pieceAnimator);
     }
 
+    /**
+     * Get the entity Piece from the piece idx.
+     * @param {*} idx 
+     * @returns 
+     */
     getPiece(idx) {
         return this.pieces[Math.abs(idx)-1];
     }
 
+    /**
+     * Get the tile idx where the piece is or -1 if the piece is not in the game.
+     * @param {int} pieceIdx Idx of the piece to get the tile idx.
+     * @returns Index of the tile where the piece is. The piece may be a pawn or a king (pieceIdx positive or negative).
+     */
     getTileIdx(pieceIdx) {
         let idx = this.game.indexOf(pieceIdx);
         if (idx == -1) 
@@ -175,5 +213,38 @@ export class Checkers {
         for (let v = 0; v < 8; v++) {
             console.log(this.game.slice(v*8, v*8+8).join(" "));
         }
+    }
+
+    /**
+     * @returns {boolean} True if the game is running (pause not included), false otherwise.
+     */
+    isGameRunning() {
+        return this.stateMachine.getState() != GameState.Menu 
+            && this.stateMachine.getState() != GameState.Pause
+            && this.stateMachine.getState() != GameState.EndGame;
+    }
+
+
+    // ****************** Button Handlers ******************
+
+    goToSceneBtnHandler() {
+        this.setState(GameState.Pause);
+    }
+
+    initBtnHandler() {
+        const currentState = this.stateMachine.getState();
+        if (currentState == GameState.Pause) {
+            this.setState(GameState.WaitPiecePick);
+        } else {
+            this.setState(GameState.Pause);
+        }
+    }
+
+    undoBtnHandler() {
+        throw new Error("Not implemented");
+    }
+
+    mainMenuBtnHandler() {
+        this.setState(GameState.Menu);
     }
 }
