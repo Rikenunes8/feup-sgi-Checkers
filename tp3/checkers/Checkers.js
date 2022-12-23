@@ -53,13 +53,7 @@ export class Checkers {
     updateTime = () => {
         // TODO Check if game already initialized using GameStateMachine probably
         // reset these times when game ends and we click init game again
-        const currentState = this.stateMachine.getState();
-        if (currentState != GameState.Menu 
-            && currentState != GameState.EndGame 
-            && currentState != GameState.Pause
-            && currentState != GameState.Replay
-            && currentState != GameState.ReplayMoving) {
-            
+        if (this.isGameRunning()) {
             this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
                 this.results.p1Time += 1;
@@ -92,12 +86,11 @@ export class Checkers {
 
                 this.unselectPiece();
                 this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-                if (this.stateMachine.getState() == GameState.Moving) {
-                    if (this.ruler.checkEndGame(this.game, this.turn))
-                        this.setState(GameState.EndGame);
-                    else
-                        this.setState(GameState.WaitPiecePick);
-                } else {
+                if (this.ruler.checkEndGame(this.game, this.turn)) {
+                    this.setState(GameState.EndGame);
+                } else if (this.stateMachine.getState() == GameState.Moving) {
+                    this.setState(GameState.WaitPiecePick);
+                } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
                     this.setState(GameState.Replay);
                     this.sequence.replayNextMove(this, this.pieceAnimator);
                 }
@@ -167,13 +160,11 @@ export class Checkers {
     display() {
         if (this.stateMachine.getState() == GameState.Menu) {
             this.mainMenu.display();            
-        }
-        else {
+        } else {
             this.menu.display();
             this.mainboard.display();
             this.auxiliarboard.display();
         }
-        
     }
 
     /**
@@ -246,8 +237,6 @@ export class Checkers {
             && this.stateMachine.getState() != GameState.EndGame
             && this.stateMachine.getState() != GameState.Replay
             && this.stateMachine.getState() != GameState.ReplayMoving;
-
-
     }
 
     forceGameUpdate(gameboard) {
