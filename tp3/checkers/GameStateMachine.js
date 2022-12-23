@@ -82,7 +82,8 @@ export class GameStateMachine {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
 
         for (let piece of this.checkers.pieces) {
-            const isPickable = this.checkers.ruler.belongsToPlayer(piece.idx, this.checkers.turn)
+            const isPickable = this.checkers.ruler.belongsToPlayer(piece.idx, this.checkers.turn) 
+                            && this.checkers.getTileIdx(piece.idx) != -1;
             piece.pickable = isPickable;
         }
     }
