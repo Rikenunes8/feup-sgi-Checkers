@@ -31,7 +31,6 @@ export class GameStateMachine {
         if (newState == GameState.Menu) {
             // TODO: Do we want to do something here?
         } else if (newState == GameState.Idle) {
-            // TODO: Do we want to do something here?
             this.changeStateToIdle();
         }
         else if (newState == GameState.Pause) {

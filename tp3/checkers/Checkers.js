@@ -12,6 +12,13 @@ import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
 
 export class Checkers {
+    /**
+     * 
+     * @param {*} sceneGraph 
+     * @param {*} mainboard 
+     * @param {*} auxiliarboard 
+     * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
+     */
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
         
@@ -20,6 +27,7 @@ export class Checkers {
 
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
+
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
         this.pieceAnimator = new PieceAnimator(this.sceneGraph);
@@ -27,9 +35,10 @@ export class Checkers {
 
         this.game = this.ruler.buildInitialGame();
         this.sequence = new GameSequence(this.game);
-        
+
+        this.piecesMaterialsIds = piecesMaterialsIds;
         const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
-        this.buildPieces(this.game, pieceComponentsIds, piecesMaterialsIds);
+        this.buildPieces(this.game, pieceComponentsIds);
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
@@ -62,11 +71,19 @@ export class Checkers {
      * and resets the turn, selected piece and state.
      */
     resetGame() {
+
+        this.mainboard.buildBoard();
+        this.auxiliarboard.buildBoard();
+
+        this.pieces = [];
         this.game = this.ruler.buildInitialGame();
         this.sequence = new GameSequence(this.game);
+
+        const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
+        this.buildPieces(this.game, pieceComponentsIds);
+
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
-        this.setState(GameState.Idle);
         this.results = {
             p1Time: 0,
             p2Time: 0,
@@ -264,14 +281,13 @@ export class Checkers {
      * Build the pieces for the game from the game matrix.
      * @param {Array} game An array of 64 elements, representing the game board.
      * @param {string} componentref Component that represents a piece.
-     * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
      */
-    buildPieces(game, componentrefs, piecesMaterialsIds) {
+    buildPieces(game, componentrefs) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
             if (game[i] != emptyTile) {
                 const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
-                const materialId = piecesMaterialsIds[type];
+                const materialId = this.piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
                 this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
             }
@@ -301,7 +317,6 @@ export class Checkers {
      * @returns {boolean} True if the game is in pause, false otherwise.
      */
     isGamePaused() {
-        console.log("isGamePaused: ", this.stateMachine.getState())
         return this.stateMachine.getState() == GameState.Pause;
     }
 
@@ -323,12 +338,12 @@ export class Checkers {
     // ****************** Button Handlers ******************
 
     goToSceneBtnHandler() {
-        this.setState(GameState.Pause);
+        this.setState(GameState.Idle);
     }
 
     initBtnHandler() {
         const currentState = this.stateMachine.getState();
-        if (currentState == GameState.Pause) {
+        if (currentState == GameState.Pause || currentState == GameState.Idle) {
             this.setState(GameState.WaitPiecePick);
         } else {
             this.setState(GameState.Pause);

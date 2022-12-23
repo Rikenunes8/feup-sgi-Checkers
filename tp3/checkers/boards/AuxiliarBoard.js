@@ -2,22 +2,25 @@ import { MyComponent } from "../../components/MyComponent.js";
 import { displayGraph, writeText } from "../utils.js";
 import { buildCheckersRectangle } from "../primitives.js";
 import { Board } from "./Board.js";
-import { MyButton } from "../../components/MyButton.js";
 import { Tile } from "../Tile.js";
 
 export class AuxiliarBoard extends Board {
     constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId) {
-        super(sceneGraph, 'checkers-auxiliarboard', p1, p2);
+        super(sceneGraph, 'checkers-auxiliarboard', p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
 
+        this.buildBoard();
+    }
+
+    buildBoard() {
         this.transfMatrix = this.buildBoardTransfMatrix();
-
-        this.buttonsMaterialId = buttonsMaterialId;
+        this.facesIds = [];
+        this.tiles = [];
 
         const rectangleId = buildCheckersRectangle(this.sceneGraph);
         this.buildFaces(rectangleId);
         this.buildMenu(rectangleId);
-        this.buildBoardBase(boardWallsMaterialId);
-        this.buildTiles(rectangleId, lightTileMaterialId, darkTileMaterialId);
+        this.buildBoardBase();
+        this.buildTiles(rectangleId);
     }
 
     /**
@@ -26,10 +29,10 @@ export class AuxiliarBoard extends Board {
      * @param {*} lightTileMaterialId 
      * @param {*} darkTileMaterialId 
      */
-    buildTiles(primitiveId, lightTileMaterialId, darkTileMaterialId) {
+    buildTiles(primitiveId) {
         for (let v = 0; v < 8; v++) {
             for (let h = 0; h < 3; h++) {
-                const tileMaterial = (v + h) % 2 != 0 ? lightTileMaterialId : darkTileMaterialId;
+                const tileMaterial = (v + h) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
                 const pickId = (v * 8) + h + 300;
                 this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }

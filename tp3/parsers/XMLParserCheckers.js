@@ -64,7 +64,6 @@ export class XMLParserCheckers extends XMLParser {
         const darkTileMaterialId = this.reader.getString(materials[darkTileIndex], 'id', false);
         const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
 
-
         if (this.scene.materials[lightTileMaterialId] == null) return "no material defined with ID " + lightTileMaterialId;
         if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
