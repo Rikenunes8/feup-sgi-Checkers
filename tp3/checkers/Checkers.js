@@ -122,37 +122,44 @@ export class Checkers {
      */
     update(time) {
         if (this.stateMachine.getState() == GameState.Moving || this.stateMachine.getState() == GameState.ReplayMoving) {
-            // animate piece movement (collector and collected pieces)
-            if (this.pieceAnimator.update(time)) {
-                const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
-                const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
-                this.game[tileIdx] = this.game[prevTileIdx];
-                this.game[prevTileIdx] = emptyTile;
-
-
-                if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
-                    this.ruler.becomeKing(tileIdx, true);
-                    this.getPiece(this.selectedPieceIdx).becomeKing(true);
-                }
-
-                this.unselectPiece();
-                this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-                if (this.ruler.checkEndGame(this.game, this.turn)) {
-                    this.setState(GameState.EndGame);
-                } else if (this.stateMachine.getState() == GameState.Moving) {
-                    this.setState(GameState.WaitPiecePick);
-                } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
-                    this.setState(GameState.Replay);
-                    this.sequence.replayNextMove(this, this.pieceAnimator);
-                }
-            }
-
+            const endedAnimations = this.pieceAnimator.update(time);
+            if (endedAnimations) this.endTurn();
             this.checkCollisions(time);
         }
     }
 
+    /**
+     * End the turn of the current player and prepare the next one
+     */
+    endTurn() {
+        const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
+        const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
+        this.game[tileIdx] = this.game[prevTileIdx];
+        this.game[prevTileIdx] = emptyTile;
+
+
+        if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
+            this.ruler.becomeKing(tileIdx, true);
+            this.getPiece(this.selectedPieceIdx).becomeKing(true);
+        }
+
+        this.unselectPiece();
+        this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        if (this.ruler.checkEndGame(this.game, this.turn)) {
+            this.setState(GameState.EndGame);
+        } else if (this.stateMachine.getState() == GameState.Moving) {
+            this.setState(GameState.WaitPiecePick);
+        } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
+            this.setState(GameState.Replay);
+            this.sequence.replayNextMove(this, this.pieceAnimator);
+        }
+    }
+
+    /**
+     * Check for colision with other pieces and update the game if there is one
+     * @param {*} time 
+     */
     checkCollisions(time) {
-        // check for colision with other pieces
         for (let i = 0; i < this.pieces.length; i++) {
             if (i != this.selectedPieceIdx-1) {
                 const piece = this.pieces[i];
@@ -212,9 +219,9 @@ export class Checkers {
         if (this.stateMachine.getState() == GameState.Menu) {
             this.mainMenu.display();            
         } else {
-            this.menu.display();
             this.mainboard.display();
             this.auxiliarboard.display();
+            this.menu.display();
             this.displayPopUp();
         }
     }
@@ -230,21 +237,20 @@ export class Checkers {
      * Displays Popup for invalid move.
      */
     displayPopUp() {
-        if (this.invalidMove.showInvalidMove) {
-            const scene = this.sceneGraph.scene;
+        if (! this.invalidMove.showInvalidMove) return;
+        const scene = this.sceneGraph.scene;
 
-            scene.pushMatrix();
-            scene.gl.disable(scene.gl.DEPTH_TEST);
+        scene.gl.disable(scene.gl.DEPTH_TEST);
+        
+        scene.pushMatrix();
+        scene.loadIdentity();
+        scene.scale(1.4, 0.3, 1);
+        scene.translate(-5, 18, -50);
+        this.invalidMove.appearance.apply();
+        this.invalidMove.popup.display();
+        scene.popMatrix();
 
-            this.invalidMove.appearance.apply();
-            scene.loadIdentity();
-            scene.scale(1.4, 0.3, 1);
-            scene.translate(-5, 18, -50);
-            this.invalidMove.popup.display();
-            
-            scene.gl.enable(scene.gl.DEPTH_TEST);
-            scene.popMatrix();
-        }
+        scene.gl.enable(scene.gl.DEPTH_TEST);
     }
 
     /**
