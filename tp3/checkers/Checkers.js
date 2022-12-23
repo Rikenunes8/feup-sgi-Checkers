@@ -341,6 +341,10 @@ export class Checkers {
         this.setState(GameState.Idle);
     }
 
+    resetBtnHandler() {
+        this.setState(GameState.Idle);
+    }
+
     initBtnHandler() {
         const currentState = this.stateMachine.getState();
         if (currentState == GameState.Pause || currentState == GameState.Idle) {
