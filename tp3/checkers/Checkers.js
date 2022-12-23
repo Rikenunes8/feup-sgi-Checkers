@@ -60,10 +60,8 @@ export class Checkers {
 
         this.results = {
             p1Time: 0,
-            p1Score: 0,
             p1CurrTime: 0,
             p2Time: 0,
-            p2Score: 0,
             p2CurrTime: 0,
             totalTime: 0,
         }
@@ -90,10 +88,8 @@ export class Checkers {
         this.selectedPieceIdx = null;
         this.results = {
             p1Time: 0,
-            p1Score: 0,
             p1CurrTime: 0,
             p2Time: 0,
-            p2Score: 0,
             p2CurrTime: 0,
             totalTime: 0,
         }
@@ -260,7 +256,7 @@ export class Checkers {
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original
         this.sceneGraph.components[piece.id].material = 0;
-        
+
         const newGameMove = new GameMove(piece, prevTile, nextTiles, this.game);
         this.sequence.addMove(newGameMove);
         this.sequence.topMove().animate(this.pieceAnimator);
@@ -342,6 +338,23 @@ export class Checkers {
                 piece.updateTile(this.mainboard.tiles[tileIdx]);
             }
         }
+    }
+
+    /**
+     * Calculates the score of each player.
+     * @returns [p1Score, p2Score] -> Array with the score of each player.
+     */
+    getScores() {
+        let p1Count = 0;
+        let p2Count = 0;
+        for (let pieceIdx of this.game) {
+            if (this.ruler.belongsToPlayer(pieceIdx, CurrentPlayer.P1))
+                p1Count++;
+            else if (this.ruler.belongsToPlayer(pieceIdx, CurrentPlayer.P2))
+                p2Count++;
+        }
+
+        return [12 - p2Count, 12 - p1Count];
     }
 
 

@@ -66,6 +66,7 @@ export class AuxiliarBoard extends Board {
 
     displayButtons() {
         const scene = this.sceneGraph.scene;
+        const [p1Score, p2Score] = scene.checkers.getScores();
 
         let transfMatrix;
         
@@ -101,7 +102,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Score:' + scene.checkers.results.p2Score);
+        writeText(scene, 'Score:' + p2Score);
         scene.popMatrix();
 
         // Draw player2 Curr Time
@@ -132,7 +133,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Score:' + scene.checkers.results.p1Score);
+        writeText(scene, 'Score:' + p1Score);
         scene.popMatrix();
 
         // Draw player1 Time
