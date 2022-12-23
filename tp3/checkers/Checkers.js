@@ -83,7 +83,8 @@ export class Checkers {
                 this.game[prevTileIdx] = emptyTile;
 
 
-                if (this.ruler.becomeKing(tileIdx, this.turn)) {
+                if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
+                    this.ruler.becomeKing(tileIdx, true);
                     this.getPiece(this.selectedPieceIdx).becomeKing(true);
                 }
 
@@ -242,10 +243,10 @@ export class Checkers {
                 piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]);
             }
             else {
+                piece.becomeKing(this.ruler.isKing(tileIdx));
                 piece.updateTile(this.mainboard.tiles[tileIdx]);
             }
         }
-
     }
 
 

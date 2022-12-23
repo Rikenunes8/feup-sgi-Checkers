@@ -151,7 +151,16 @@ export class GameRuler {
         }
     }
 
-    becomeKing(tileIdx, player) {
+    isKing(tileIdx) {
+        return this.checkers.game[tileIdx] < 0;
+    }
+
+    shouldBecomeKing(tileIdx, player) {
         return player == CurrentPlayer.P1 && tileIdx >= 56 || player == CurrentPlayer.P2 && tileIdx <= 7
+    }
+
+    becomeKing(tileIdx, toKing) {
+        const pieceIdx = Math.abs(this.checkers.game[tileIdx]);
+        this.checkers.game[tileIdx] = toKing ? -pieceIdx : pieceIdx;
     }
 }
