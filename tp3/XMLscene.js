@@ -1,7 +1,5 @@
 import { CGFappearance, CGFscene, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
-import { MainMenu } from './checkers/menu/MainMenu.js';
-import { Menu } from './checkers/menu/Menu.js';
 import { MyQuad } from './components/MyQuad.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -58,20 +56,6 @@ export class XMLscene extends CGFscene {
         this.startTime = null;
 		this.setUpdatePeriod(10);
         this.setPickEnabled(true);
-
-        this.info = {
-            initialMenu: true,
-            selectedTheme: 1,
-            playerMaxTime: 20,
-            gameMaxTime: 2,
-            initedGame: false,
-            p1Time: 0,
-            p2Time: 0,
-            totalTime: 0,
-        }
-
-        this.mainMenu = new MainMenu(this, [0, 0], [10, 10]);
-        this.menu = new Menu(this);
     }
 
     /**
@@ -283,14 +267,9 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
             
-            if (this.info.initialMenu) {
-                this.mainMenu.display();
-            } else {
-                if (this.checkers != null)
-                    this.checkers.display();
-                this.graph.displayScene();
-                this.menu.display();
-            }
+            if (this.checkers != null)
+                this.checkers.display();
+            this.graph.displayScene();
 
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }

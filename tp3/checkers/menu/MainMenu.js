@@ -51,9 +51,9 @@ export class MainMenu {
 	 */
 	displayButtons() {
 		this.playerTimeBtn = new MyButton(this.scene, 'checkers-mainMenu-playerTime-button', this.p1, this.p2, true,
-			1001, this.playerTimeBtnOnPick, 'PLAYER MAX TIME:' + this.scene.info.playerMaxTime + 's', [-16, -6.7, -50]);
+			1001, this.playerTimeBtnOnPick, 'PLAYER MAX TIME:' + this.scene.checkers.config.playerMaxTime + 's', [-16, -6.7, -50]);
 		this.gameTimeBtn = new MyButton(this.scene, 'checkers-mainMenu-gameTime-button', this.p1, this.p2, true,
-			1002, this.gameTimeBtnOnPick, 'GAME MAX TIME:' + this.scene.info.gameMaxTime + 'm', [4.5, -6.7, -50]);
+			1002, this.gameTimeBtnOnPick, 'GAME MAX TIME:' + this.scene.checkers.config.gameMaxTime + 'm', [4.5, -6.7, -50]);
 
 		// draw background
 		this.scene.pushMatrix();
@@ -76,7 +76,7 @@ export class MainMenu {
 
 		// Draw Themes Buttons
 		this.scene.pushMatrix();
-		if (this.scene.info.selectedTheme == 1)
+		if (this.scene.checkers.config.selectedTheme == 1)
 			this.selectedBtnAppearance.apply();
 		else 
 			this.buttonAppearance.apply();
@@ -85,14 +85,14 @@ export class MainMenu {
 		this.scene.translate(-20, -5, -50);
 		this.theme1Button.display();
 
-		if (this.scene.info.selectedTheme == 2)
+		if (this.scene.checkers.config.selectedTheme == 2)
 			this.selectedBtnAppearance.apply();
 		else 
 			this.buttonAppearance.apply();
 		this.scene.translate(15, 0, 0);
 		this.theme2Button.display();
 
-		if (this.scene.info.selectedTheme == 3)
+		if (this.scene.checkers.config.selectedTheme == 3)
 			this.selectedBtnAppearance.apply();
 		else 
 			this.buttonAppearance.apply();
@@ -120,25 +120,24 @@ export class MainMenu {
 	}
 
 	goToScenePick = () => {
-		this.scene.info.initialMenu = false;
+		this.scene.checkers.goToSceneBtnHandler();
 	}
 
 	selectTheme = (num) => {
-		this.scene.info.selectedTheme = num;
+		this.scene.checkers.config.selectedTheme = num;
 	}
 
 	playerTimeBtnOnPick = () => {
-		if (this.scene.info.playerMaxTime == 60)
-			this.scene.info.playerMaxTime = 20;
+		if (this.scene.checkers.config.playerMaxTime == 60)
+			this.scene.checkers.config.playerMaxTime = 20;
 		else
-			this.scene.info.playerMaxTime += 20;
+			this.scene.checkers.config.playerMaxTime += 20;
 	}
 
 	gameTimeBtnOnPick = () => {
-		if (this.scene.info.gameMaxTime == 5)
-			this.scene.info.gameMaxTime = 2;
+		if (this.scene.checkers.config.gameMaxTime == 5)
+			this.scene.checkers.config.gameMaxTime = 2;
 		else
-			this.scene.info.gameMaxTime += 1;
+			this.scene.checkers.config.gameMaxTime += 1;
 	}
-	
 }

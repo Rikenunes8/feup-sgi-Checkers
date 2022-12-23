@@ -2,7 +2,7 @@ import { CurrentPlayer, emptyTile } from "./GameRuler.js";
 
 export const GameState = Object.freeze({
     Menu: Symbol("Menu"),
-    LoadScene: Symbol("LoadScene"),
+    Pause: Symbol("Pause"),
     WaitPiecePick: Symbol("WaitPiecePick"),
     WaitTilePick: Symbol("WaitTilePick"),
     Moving: Symbol("Moving"),
@@ -25,7 +25,11 @@ export class GameStateMachine {
      */
     changeState(newState) {
         this.state = newState;
-        if (newState == GameState.WaitPiecePick) {
+        if (newState == GameState.Menu) {
+            
+        } else if (newState == GameState.Pause) {
+            this.changeStateToPause();
+        } else if (newState == GameState.WaitPiecePick) {
             this.changeStateToWaitPiecePick();
         }
         else if (newState == GameState.WaitTilePick) {
@@ -37,6 +41,12 @@ export class GameStateMachine {
         else if (newState == GameState.EndGame) {
             this.changeStateToEndGame();
         }
+    }
+
+    changeStateToPause() {
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
+        this.checkers.pieces.forEach(p => p.pickable = false);
+        this.checkers.unselectPiece();
     }
 
     /**
