@@ -12,6 +12,13 @@ import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
 
 export class Checkers {
+    /**
+     * 
+     * @param {*} sceneGraph 
+     * @param {*} mainboard 
+     * @param {*} auxiliarboard 
+     * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
+     */
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
         
@@ -20,16 +27,18 @@ export class Checkers {
 
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
+
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
         this.pieceAnimator = new PieceAnimator(this.sceneGraph);
         this.pieces = [];
-        
+
         this.game = this.ruler.buildInitialGame();
         this.sequence = new GameSequence(this.game);
-        
+
+        this.piecesMaterialsIds = piecesMaterialsIds;
         const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
-        this.buildPieces(this.game, pieceComponentsIds, piecesMaterialsIds);
+        this.buildPieces(this.game, pieceComponentsIds);
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
@@ -38,8 +47,8 @@ export class Checkers {
 
         this.config = {
             selectedTheme: 1,
-            playerMaxTime: 20,
-            gameMaxTime: 2,
+            turnMaxTime: 20,
+            playerMaxTime: 2,
         }
 
         this.invalidMove = {
@@ -51,7 +60,37 @@ export class Checkers {
 
         this.results = {
             p1Time: 0,
+            p1CurrTime: 0,
             p2Time: 0,
+            p2CurrTime: 0,
+            totalTime: 0,
+        }
+    }
+
+    /**
+     * Resets the game to the initial state.
+     * To do so, it builds a new game, a new sequence
+     * and resets the turn, selected piece and state.
+     */
+    resetGame() {
+
+        this.mainboard.buildBoard();
+        this.auxiliarboard.buildBoard();
+
+        this.pieces = [];
+        this.game = this.ruler.buildInitialGame();
+        this.sequence = new GameSequence(this.game);
+
+        const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
+        this.buildPieces(this.game, pieceComponentsIds);
+
+        this.turn = CurrentPlayer.P1;
+        this.selectedPieceIdx = null;
+        this.results = {
+            p1Time: 0,
+            p1CurrTime: 0,
+            p2Time: 0,
+            p2CurrTime: 0,
             totalTime: 0,
         }
     }
@@ -67,8 +106,10 @@ export class Checkers {
             this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
                 this.results.p1Time += 1;
-            } else {   
+                this.results.p1CurrTime += 1;
+            } else {
                 this.results.p2Time += 1;
+                this.results.p2CurrTime += 1;
             }
         }
     }
@@ -81,37 +122,44 @@ export class Checkers {
      */
     update(time) {
         if (this.stateMachine.getState() == GameState.Moving || this.stateMachine.getState() == GameState.ReplayMoving) {
-            // animate piece movement (collector and collected pieces)
-            if (this.pieceAnimator.update(time)) {
-                const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
-                const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
-                this.game[tileIdx] = this.game[prevTileIdx];
-                this.game[prevTileIdx] = emptyTile;
-
-
-                if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
-                    this.ruler.becomeKing(tileIdx, true);
-                    this.getPiece(this.selectedPieceIdx).becomeKing(true);
-                }
-
-                this.unselectPiece();
-                this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-                if (this.ruler.checkEndGame(this.game, this.turn)) {
-                    this.setState(GameState.EndGame);
-                } else if (this.stateMachine.getState() == GameState.Moving) {
-                    this.setState(GameState.WaitPiecePick);
-                } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
-                    this.setState(GameState.Replay);
-                    this.sequence.replayNextMove(this, this.pieceAnimator);
-                }
-            }
-
+            const endedAnimations = this.pieceAnimator.update(time);
+            if (endedAnimations) this.endTurn();
             this.checkCollisions(time);
         }
     }
 
+    /**
+     * End the turn of the current player and prepare the next one
+     */
+    endTurn() {
+        const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
+        const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
+        this.game[tileIdx] = this.game[prevTileIdx];
+        this.game[prevTileIdx] = emptyTile;
+
+
+        if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
+            this.ruler.becomeKing(tileIdx, true);
+            this.getPiece(this.selectedPieceIdx).becomeKing(true);
+        }
+
+        this.unselectPiece();
+        this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        if (this.ruler.checkEndGame(this.game, this.turn)) {
+            this.setState(GameState.EndGame);
+        } else if (this.stateMachine.getState() == GameState.Moving) {
+            this.setState(GameState.WaitPiecePick);
+        } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
+            this.setState(GameState.Replay);
+            this.sequence.replayNextMove(this, this.pieceAnimator);
+        }
+    }
+
+    /**
+     * Check for colision with other pieces and update the game if there is one
+     * @param {*} time 
+     */
     checkCollisions(time) {
-        // check for colision with other pieces
         for (let i = 0; i < this.pieces.length; i++) {
             if (i != this.selectedPieceIdx-1) {
                 const piece = this.pieces[i];
@@ -171,9 +219,9 @@ export class Checkers {
         if (this.stateMachine.getState() == GameState.Menu) {
             this.mainMenu.display();            
         } else {
-            this.menu.display();
             this.mainboard.display();
             this.auxiliarboard.display();
+            this.menu.display();
             this.displayPopUp();
         }
     }
@@ -189,21 +237,20 @@ export class Checkers {
      * Displays Popup for invalid move.
      */
     displayPopUp() {
-        if (this.invalidMove.showInvalidMove) {
-            const scene = this.sceneGraph.scene;
+        if (! this.invalidMove.showInvalidMove) return;
+        const scene = this.sceneGraph.scene;
 
-            scene.pushMatrix();
-            scene.gl.disable(scene.gl.DEPTH_TEST);
+        scene.gl.disable(scene.gl.DEPTH_TEST);
+        
+        scene.pushMatrix();
+        scene.loadIdentity();
+        scene.scale(1.4, 0.3, 1);
+        scene.translate(-5, 18, -50);
+        this.invalidMove.appearance.apply();
+        this.invalidMove.popup.display();
+        scene.popMatrix();
 
-            this.invalidMove.appearance.apply();
-            scene.loadIdentity();
-            scene.scale(1.4, 0.3, 1);
-            scene.translate(-5, 18, -50);
-            this.invalidMove.popup.display();
-            
-            scene.gl.enable(scene.gl.DEPTH_TEST);
-            scene.popMatrix();
-        }
+        scene.gl.enable(scene.gl.DEPTH_TEST);
     }
 
     /**
@@ -215,7 +262,7 @@ export class Checkers {
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original
         this.sceneGraph.components[piece.id].material = 0;
-        
+
         const newGameMove = new GameMove(piece, prevTile, nextTiles, this.game);
         this.sequence.addMove(newGameMove);
         this.sequence.topMove().animate(this.pieceAnimator);
@@ -246,14 +293,13 @@ export class Checkers {
      * Build the pieces for the game from the game matrix.
      * @param {Array} game An array of 64 elements, representing the game board.
      * @param {string} componentref Component that represents a piece.
-     * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
      */
-    buildPieces(game, componentrefs, piecesMaterialsIds) {
+    buildPieces(game, componentrefs) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
             if (game[i] != emptyTile) {
                 const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
-                const materialId = piecesMaterialsIds[type];
+                const materialId = this.piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
                 this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
             }
@@ -275,7 +321,15 @@ export class Checkers {
             && this.stateMachine.getState() != GameState.Pause
             && this.stateMachine.getState() != GameState.EndGame
             && this.stateMachine.getState() != GameState.Replay
-            && this.stateMachine.getState() != GameState.ReplayMoving;
+            && this.stateMachine.getState() != GameState.ReplayMoving
+            && this.stateMachine.getState() != GameState.Idle;
+    }
+
+    /**
+     * @returns {boolean} True if the game is in pause, false otherwise.
+     */
+    isGamePaused() {
+        return this.stateMachine.getState() == GameState.Pause;
     }
 
     forceGameUpdate(gameboard) {
@@ -292,16 +346,38 @@ export class Checkers {
         }
     }
 
+    /**
+     * Calculates the score of each player.
+     * @returns [p1Score, p2Score] -> Array with the score of each player.
+     */
+    getScores() {
+        let p1Count = 0;
+        let p2Count = 0;
+        for (let pieceIdx of this.game) {
+            if (this.ruler.belongsToPlayer(pieceIdx, CurrentPlayer.P1))
+                p1Count++;
+            else if (this.ruler.belongsToPlayer(pieceIdx, CurrentPlayer.P2))
+                p2Count++;
+        }
+
+        return [12 - p2Count, 12 - p1Count];
+    }
+
 
     // ****************** Button Handlers ******************
 
     goToSceneBtnHandler() {
-        this.setState(GameState.Pause);
+        this.setState(GameState.Idle);
+    }
+
+    resetBtnHandler() {
+        this.setState(GameState.Idle);
+        this.setState(GameState.WaitPiecePick);
     }
 
     initBtnHandler() {
         const currentState = this.stateMachine.getState();
-        if (currentState == GameState.Pause) {
+        if (currentState == GameState.Pause || currentState == GameState.Idle) {
             this.setState(GameState.WaitPiecePick);
         } else {
             this.setState(GameState.Pause);

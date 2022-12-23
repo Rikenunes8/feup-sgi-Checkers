@@ -2,6 +2,7 @@ import { CurrentPlayer, emptyTile } from "./GameRuler.js";
 
 export const GameState = Object.freeze({
     Menu: Symbol("Menu"),
+    Idle: Symbol("Idle"),
     Pause: Symbol("Pause"),
     Replay: Symbol("Replay"),
     ReplayMoving: Symbol("ReplayMoving"),
@@ -29,7 +30,10 @@ export class GameStateMachine {
         this.state = newState;
         if (newState == GameState.Menu) {
             // TODO: Do we want to do something here?
-        } else if (newState == GameState.Pause) {
+        } else if (newState == GameState.Idle) {
+            this.changeStateToIdle();
+        }
+        else if (newState == GameState.Pause) {
             this.changeStateToPause();
         } else if (newState == GameState.Replay) {
             this.changeStateToReplay();
@@ -44,6 +48,21 @@ export class GameStateMachine {
         } else if (newState == GameState.ReplayMoving) {
             this.changeStateToReplayMoving();
         }
+    }
+
+    /**
+     * Changes the state to Idle.
+     * This state is used when the game has not started yet.
+     * All tiles and pieces are not pickable.
+     * The selected piece is unselected.
+     * The times of each player and total time are reset.
+     */
+    changeStateToIdle() {
+        console.log("Changing state to Idle", this.checkers.mainboard);
+        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
+        this.checkers.pieces.forEach(p => p.pickable = false);
+        this.checkers.unselectPiece();
+        this.checkers.resetGame();
     }
 
     /**

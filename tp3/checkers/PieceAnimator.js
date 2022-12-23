@@ -75,7 +75,7 @@ export class PieceAnimator {
                 pieceInfo.startTime = time;
                 return false;
             }
-            
+
             // update tile information according to animation type
             pieceInfo.piece.updateTile(pieceInfo.endTile);
             if (pieceInfo.isCollected) {

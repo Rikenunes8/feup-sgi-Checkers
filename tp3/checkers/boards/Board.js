@@ -3,7 +3,7 @@ import { diff } from "../utils.js";
 
 export class Board {
 
-    constructor(sceneGraph, id, p1, p2) {
+    constructor(sceneGraph, id, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
         if (this.constructor == Board) {
             throw new Error("Abstract classes can't be instantiated.");
         }
@@ -15,6 +15,9 @@ export class Board {
         this.tranfMatrix = null;
         this.facesIds = [];
         this.tiles = [];
+        this.lightTileMaterialId = lightTileMaterialId;
+        this.darkTileMaterialId = darkTileMaterialId;
+        this.boardWallsMaterialId = boardWallsMaterialId;
     }
 
     buildFaces(primitiveId) {
@@ -56,17 +59,21 @@ export class Board {
         throw new Error("Method 'buildBoardTransfMatrix()' must be implemented.");
     }
 
+    buildBoard() {
+        throw new Error("Method 'buildBoard()' must be implemented.");
+    }
+
     /**
      * Builds the base of the board
      * @param {string} materialId 
      */
-    buildBoardBase(materialId) {
+    buildBoardBase() {
         let childs = [];
         for (let id of this.facesIds) {
             childs.push([false, id]);
         }
         this.sceneGraph.components[this.id] =
-            new MyComponent(this.sceneGraph.scene, this.id, this.transfMatrix, [materialId], ['none', 1, 1], childs, null, null);
+            new MyComponent(this.sceneGraph.scene, this.id, this.transfMatrix, [this.boardWallsMaterialId], ['none', 1, 1], childs, null, null);
     }
 
     med(coord) {
