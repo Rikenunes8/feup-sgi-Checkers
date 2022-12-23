@@ -101,8 +101,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        // TODO instead of 10 go get the player score
-        writeText(scene, 'Score:' + 10);
+        writeText(scene, 'Score:' + scene.checkers.results.p2Score);
         scene.popMatrix();
 
         // Draw player2 Time
@@ -122,8 +121,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        // TODO instead of 10 go get the player score
-        writeText(scene, 'Score:' + 10);
+        writeText(scene, 'Score:' + scene.checkers.results.p1Score);
         scene.popMatrix();
 
         // Draw player1 Time
@@ -146,20 +144,6 @@ export class AuxiliarBoard extends Board {
         writeText(scene, 'Total Game Time:' + scene.checkers.results.totalTime + 's');
         scene.popMatrix();
     }
-
-    /*
-    buildButtons() {
-        // TODO try to use text inside the button and not outside
-        this.player1Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scene.playerMaxTime + 's', [-16, -6.7, -50]);
-        
-        this.player1Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player1Time-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
-        
-        this.player2Time = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Time-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
-        
-        this.player2Score = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-player2Score-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
-        
-        this.totalTime = new MyButton(this.sceneGraph.scene, 'checkers-auxiliarBoard-initGame-button', [-0.5, -0.5], [0.5, 0.5], false);//, 'PLAYER MAX TIME:' + this.sceneGraph.scen.playerMaxTime + 's', [-16, -6.7, -50]);
-    } */
 
     /**
      * Builds the menu of the board
