@@ -178,8 +178,8 @@ export class Checkers {
     /**
      * Function to change the display state of the popup.
      */
-    changePopupState = () => {
-        this.invalidMove.showInvalidMove = !this.invalidMove.showInvalidMove;
+    changePopupState = (visible) => {
+        this.invalidMove.showInvalidMove = visible;
     }
 
     /**

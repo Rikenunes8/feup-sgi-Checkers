@@ -41,8 +41,8 @@ export class Tile extends Pickable {
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
 
         if (tilesIdxToVisit == null) {
-            checkers.changePopupState();
-            setTimeout(checkers.changePopupState, popupTime);
+            checkers.changePopupState(true);
+            setTimeout(() => { checkers.changePopupState(false) }, popupTime);
             return null;
         }
         
