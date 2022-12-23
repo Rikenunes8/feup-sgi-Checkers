@@ -1,9 +1,11 @@
 import { GameMove } from './GameMove.js';
+import { GameState } from './GameStateMachine.js';
 
 export class GameSequence {
     constructor(game) {
         this.initialGame = [...game];
         this._gameSequence = [];
+        this.replayIndex = 0;
         this.startGame();
     }
 
@@ -34,11 +36,24 @@ export class GameSequence {
     }
 
     // TODO: check this
-    sequenceReplay() {
-        if (this._gameSequence.length > 0) {
-            this._gameSequence.forEach(gameMove => {
-                gameMove.animate();
-            });
+    replay(checkers, pieceAnimator) {
+        this.replayIndex = 1;
+        checkers.game = [...this.initialGame];
+        checkers.forceGameUpdate(checkers.game);
+        this.replayNextMove(checkers, pieceAnimator);
+    }
+
+    replayNextMove(checkers, pieceAnimator) {
+        if (this.replayIndex < this._gameSequence.length) {
+            const move = this._gameSequence[this.replayIndex];
+            checkers.selectedPieceIdx = move.piece.idx;
+            move.animate(pieceAnimator);
+            this.replayIndex++;
+            checkers.setState(GameState.ReplayMoving);
         }
+        else {
+            checkers.setState(GameState.Pause);
+        }
+
     }
 }

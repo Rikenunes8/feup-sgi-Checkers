@@ -63,11 +63,7 @@ export class Checkers {
     updateTime = () => {
         // TODO Check if game already initialized using GameStateMachine probably
         // reset these times when game ends and we click init game again
-        const currentState = this.stateMachine.getState();
-        if (currentState != GameState.Menu 
-            && currentState != GameState.EndGame 
-            && currentState != GameState.Pause) {
-            
+        if (this.isGameRunning()) {
             this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
                 this.results.p1Time += 1;
@@ -84,7 +80,7 @@ export class Checkers {
      * @param {*} time 
      */
     update(time) {
-        if (this.stateMachine.getState() == GameState.Moving) {
+        if (this.stateMachine.getState() == GameState.Moving || this.stateMachine.getState() == GameState.ReplayMoving) {
             // animate piece movement (collector and collected pieces)
             if (this.pieceAnimator.update(time)) {
                 const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
@@ -100,35 +96,43 @@ export class Checkers {
 
                 this.unselectPiece();
                 this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
-                if (this.ruler.checkEndGame(this.game, this.turn))
+                if (this.ruler.checkEndGame(this.game, this.turn)) {
                     this.setState(GameState.EndGame);
-                else
+                } else if (this.stateMachine.getState() == GameState.Moving) {
                     this.setState(GameState.WaitPiecePick);
+                } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
+                    this.setState(GameState.Replay);
+                    this.sequence.replayNextMove(this, this.pieceAnimator);
+                }
             }
 
-            // check for colision with other pieces
-            for (let i = 0; i < this.pieces.length; i++) {
-                if (i != this.selectedPieceIdx-1) {
-                    const piece = this.pieces[i];
-                    if (this.getTileIdx(piece.idx) != -1 && this.pieceAnimator.checkCollision(piece)) {
-                        console.log("Collision with piece " + i);
-                        const prevTileIdx = this.getTileIdx(piece.idx);
-                        this.game[prevTileIdx] = emptyTile;
-                        const auxTile = this.auxiliarboard.tiles[piece.idx-1];
-                        const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
-                        
-                        // calculate the relative position of the auxiliar tile
-                        let auxiliarTileRelativePosition = vec3.create();
-                        let tm = mat4.create();
-                        mat4.invert(tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
-                        mat4.multiply(tm, tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
-                        mat4.translate(tm, tm, vec3.fromValues(auxTile.h, 0, -auxTile.v));
-                        vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
-                        
-                        const nextTilePoss = [auxiliarTileRelativePosition];
-                        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, true, time);
-                        break;
-                    }
+            this.checkCollisions(time);
+        }
+    }
+
+    checkCollisions(time) {
+        // check for colision with other pieces
+        for (let i = 0; i < this.pieces.length; i++) {
+            if (i != this.selectedPieceIdx-1) {
+                const piece = this.pieces[i];
+                if (this.getTileIdx(piece.idx) != -1 && this.pieceAnimator.checkCollision(piece)) {
+                    console.log("Collision with piece " + i);
+                    const prevTileIdx = this.getTileIdx(piece.idx);
+                    this.game[prevTileIdx] = emptyTile;
+                    const auxTile = this.auxiliarboard.tiles[piece.idx-1];
+                    const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
+                    
+                    // calculate the relative position of the auxiliar tile
+                    let auxiliarTileRelativePosition = vec3.create();
+                    let tm = mat4.create();
+                    mat4.invert(tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                    mat4.multiply(tm, tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                    mat4.translate(tm, tm, vec3.fromValues(auxTile.h, 0, -auxTile.v));
+                    vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
+                    
+                    const nextTilePoss = [auxiliarTileRelativePosition];
+                    this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, true, time);
+                    break;
                 }
             }
         }
@@ -166,14 +170,12 @@ export class Checkers {
     display() {
         if (this.stateMachine.getState() == GameState.Menu) {
             this.mainMenu.display();            
-        }
-        else {
+        } else {
             this.menu.display();
             this.mainboard.display();
             this.auxiliarboard.display();
             this.displayPopUp();
         }
-        
     }
 
     /**
@@ -271,11 +273,13 @@ export class Checkers {
     isGameRunning() {
         return this.stateMachine.getState() != GameState.Menu 
             && this.stateMachine.getState() != GameState.Pause
-            && this.stateMachine.getState() != GameState.EndGame;
+            && this.stateMachine.getState() != GameState.EndGame
+            && this.stateMachine.getState() != GameState.Replay
+            && this.stateMachine.getState() != GameState.ReplayMoving;
     }
 
-    forceGameUpdate() {
-        this.game = [...this.sequence.topMove().gameboard];
+    forceGameUpdate(gameboard) {
+        this.game = [...gameboard];
         for (let piece of this.pieces) {
             const tileIdx = this.getTileIdx(piece.idx);
             if (tileIdx == -1) {
@@ -307,10 +311,15 @@ export class Checkers {
     undoBtnHandler() {
         if (this.sequence.isEmpty()) return;
         this.unselectPiece();
-        this.forceGameUpdate();
+        this.forceGameUpdate(this.sequence.topMove().gameboard);
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
         this.sequence.undo();
         this.setState(GameState.WaitPiecePick);
+    }
+
+    replayBtnHandler() {
+        this.setState(GameState.Replay);
+        this.sequence.replay(this, this.pieceAnimator);
     }
 
     mainMenuBtnHandler() {
