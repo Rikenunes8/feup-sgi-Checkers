@@ -99,13 +99,23 @@ export class Checkers {
             for (let i = 0; i < this.pieces.length; i++) {
                 if (i != this.selectedPieceIdx-1) {
                     const piece = this.pieces[i];
-                    if (this.pieceAnimator.checkCollision(piece)) {
+                    if (this.getTileIdx(piece.idx) != -1 && this.pieceAnimator.checkCollision(piece)) {
                         console.log("Collision with piece " + i);
                         const prevTileIdx = this.getTileIdx(piece.idx);
                         this.game[prevTileIdx] = emptyTile;
+                        const auxTile = this.auxiliarboard.tiles[piece.idx-1];
                         const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
-                        const nextTilePoss = [[10, 0, -10]]; // TODO: get tile position
-                        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, null, true, time);
+                        
+                        // calculate the relative position of the auxiliar tile
+                        let auxiliarTileRelativePosition = vec3.create();
+                        let tm = mat4.create();
+                        mat4.invert(tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                        mat4.multiply(tm, tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                        mat4.translate(tm, tm, vec3.fromValues(auxTile.h, 0, -auxTile.v));
+                        vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
+                        
+                        const nextTilePoss = [auxiliarTileRelativePosition];
+                        this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, true, time);
                         break;
                     }
                 }
