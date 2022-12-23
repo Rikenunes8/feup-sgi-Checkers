@@ -22,7 +22,7 @@ export class Checkers {
      */
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
         this.sceneGraph = sceneGraph;
-        
+
         this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
         this.menu = new Menu(this.sceneGraph.scene);
         this.resultsMenu = new ResultsMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
@@ -66,6 +66,7 @@ export class Checkers {
             p2Time: 0,
             p2CurrTime: 0,
             totalTime: 0,
+            winner: null,
         }
     }
 
@@ -94,6 +95,7 @@ export class Checkers {
             p2Time: 0,
             p2CurrTime: 0,
             totalTime: 0,
+            winner: null,
         }
     }
 
@@ -113,8 +115,34 @@ export class Checkers {
                 this.results.p2Time += 1;
                 this.results.p2CurrTime += 1;
             }
+
+            this.checkTimeLimit();
         }
     }
+
+    /**
+     * Checks if the time limit of each player has been reached
+     * and ends the game if so.
+     */
+    checkTimeLimit() {
+        // convert to seconds
+        const playerMaxTime = this.config.playerMaxTime * 60;
+        if (this.results.p1Time > playerMaxTime) {
+            this.results.winner = CurrentPlayer.P2;
+            this.setState(GameState.EndGame);
+        } else if (this.results.p2Time > playerMaxTime) {
+            this.results.winner = CurrentPlayer.P1;
+            this.setState(GameState.EndGame);
+        } else if (this.results.p1CurrTime > this.config.turnMaxTime) {
+            this.results.winner = CurrentPlayer.P2;
+            this.setState(GameState.EndGame);
+        } else if (this.results.p2CurrTime > this.config.turnMaxTime) {
+            this.results.winner = CurrentPlayer.P1;
+            this.setState(GameState.EndGame);
+        }
+        
+    }
+    
 
     /**
      * Update the checkers game on moving state
@@ -139,11 +167,15 @@ export class Checkers {
         this.game[tileIdx] = this.game[prevTileIdx];
         this.game[prevTileIdx] = emptyTile;
 
-
         if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
             this.ruler.becomeKing(tileIdx, true);
             this.getPiece(this.selectedPieceIdx).becomeKing(true);
         }
+
+        if (this.turn == CurrentPlayer.P1)
+            this.results.p1CurrTime = 0;
+        else
+            this.results.p2CurrTime = 0;
 
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
