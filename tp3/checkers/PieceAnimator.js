@@ -77,13 +77,10 @@ export class PieceAnimator {
             }
             
             // update tile information according to animation type
+            pieceInfo.piece.updateTile(pieceInfo.endTile);
             if (pieceInfo.isCollected) {
-                const tile = pieceInfo.piece.tile;
-                tile.piece = null;
-                pieceInfo.piece.tile;
                 this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
             } else {
-                pieceInfo.piece.updateTile(pieceInfo.endTile);
                 this.pieceInfos.collector = null;
             }
             return true;
