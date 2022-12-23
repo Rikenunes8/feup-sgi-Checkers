@@ -104,15 +104,26 @@ export class AuxiliarBoard extends Board {
         writeText(scene, 'Score:' + scene.checkers.results.p2Score);
         scene.popMatrix();
 
-        // Draw player2 Time
+        // Draw player2 Curr Time
         scene.pushMatrix();
         transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -6.3));
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -6.8));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Time:' + scene.checkers.results.p2Time + 's');
+        writeText(scene, 'Curr Time:' + scene.checkers.results.p2CurrTime + 's');
         scene.popMatrix();
+
+        // Draw player2 Total Time
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1.8, -6.9));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
+        writeText(scene, 'Total Time:' + scene.checkers.results.p2Time + 's');
+        scene.popMatrix();
+
 
         // Draw player1 Score
         scene.pushMatrix();
@@ -127,17 +138,27 @@ export class AuxiliarBoard extends Board {
         // Draw player1 Time
         scene.pushMatrix();
         transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -2.7));
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -3.1));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Time:' + scene.checkers.results.p1Time + 's');
+        writeText(scene, 'Curr Time:' + scene.checkers.results.p1CurrTime + 's');
+        scene.popMatrix();
+
+        // Draw player1 Time
+        scene.pushMatrix();
+        transfMatrix = mat4.create();
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1.8, -3.2));
+        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
+        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
+        scene.multMatrix(transfMatrix);
+        writeText(scene, 'Total Time:' + scene.checkers.results.p1Time + 's');
         scene.popMatrix();
 
         // Draw Total Time
         scene.pushMatrix();
         transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1, -5.7));
+        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 0.8, -5.7));
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);

@@ -47,8 +47,8 @@ export class Checkers {
 
         this.config = {
             selectedTheme: 1,
-            playerMaxTime: 20,
-            gameMaxTime: 2,
+            turnMaxTime: 20,
+            playerMaxTime: 2,
         }
 
         this.invalidMove = {
@@ -60,7 +60,11 @@ export class Checkers {
 
         this.results = {
             p1Time: 0,
+            p1Score: 0,
+            p1CurrTime: 0,
             p2Time: 0,
+            p2Score: 0,
+            p2CurrTime: 0,
             totalTime: 0,
         }
     }
@@ -87,8 +91,10 @@ export class Checkers {
         this.results = {
             p1Time: 0,
             p1Score: 0,
+            p1CurrTime: 0,
             p2Time: 0,
             p2Score: 0,
+            p2CurrTime: 0,
             totalTime: 0,
         }
     }
@@ -104,8 +110,10 @@ export class Checkers {
             this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
                 this.results.p1Time += 1;
-            } else {   
+                this.results.p1CurrTime += 1;
+            } else {
                 this.results.p2Time += 1;
+                this.results.p2CurrTime += 1;
             }
         }
     }
