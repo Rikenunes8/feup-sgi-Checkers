@@ -10,6 +10,7 @@ import { Menu } from './menu/Menu.js';
 import { MyButton } from "../components/MyButton.js";
 import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
+import { ResultsMenu } from "./menu/ResultsMenu.js";
 
 export class Checkers {
     /**
@@ -24,6 +25,7 @@ export class Checkers {
         
         this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
         this.menu = new Menu(this.sceneGraph.scene);
+        this.resultsMenu = new ResultsMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
 
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
@@ -216,14 +218,18 @@ export class Checkers {
      * Displays the checkers game.
      */
     display() {
+
         if (this.stateMachine.getState() == GameState.Menu) {
-            this.mainMenu.display();            
+            this.mainMenu.display();
         } else {
             this.mainboard.display();
             this.auxiliarboard.display();
             this.menu.display();
             this.displayPopUp();
         }
+
+        if (this.stateMachine.getState() == GameState.EndGame)
+            this.resultsMenu.display();
     }
 
     /**
@@ -400,5 +406,9 @@ export class Checkers {
 
     mainMenuBtnHandler() {
         this.setState(GameState.Menu);
+    }
+
+    endGameBtnHandler() {
+        this.setState(GameState.Idle);
     }
 }

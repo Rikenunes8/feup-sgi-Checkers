@@ -1,5 +1,6 @@
 import { CGFappearance } from "../../../lib/CGF.js";
 import { MyButton } from "../../components/MyButton.js";
+import { btnAmbient } from "../constants.js";
 
 export class Menu {
     /**
@@ -12,7 +13,7 @@ export class Menu {
 		this.scene = scene;
 
 		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+		this.buttonAppearance.setAmbient(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
     }
 
 	/**
