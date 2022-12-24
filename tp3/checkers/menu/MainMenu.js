@@ -1,6 +1,7 @@
 import { CGFappearance } from "../../../lib/CGF.js";
 import { MyButton } from "../../components/MyButton.js";
 import { MyRectangle } from "../../components/MyRectangle.js";
+import { btnAmbient, mainMenuAmbient, selectedBtnAmbient } from "../constants.js";
 
 export class MainMenu {
     /**
@@ -20,28 +21,20 @@ export class MainMenu {
 		this.theme2Button = new MyButton(scene, 'checkers-mainMenu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2), 'THEME 2', [-1.8, 0, -50]);
 		this.theme3Button = new MyButton(scene, 'checkers-mainMenu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3), 'THEME 3', [10, 0, -50]);
 		this.backgroundAppearance = new CGFappearance(scene);
-		this.backgroundAppearance.setAmbient(0.937, 0.905, 0.86, 1);
+		this.backgroundAppearance.setAmbient(mainMenuAmbient[0], mainMenuAmbient[1], mainMenuAmbient[2], mainMenuAmbient[3]);
 
 		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(0.776, 0.71, 0.655, 1);
+		this.buttonAppearance.setAmbient(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
 
 		this.selectedBtnAppearance = new CGFappearance(scene);
-		this.selectedBtnAppearance.setAmbient(0.608, 0.404, 0.236, 1);
+		this.selectedBtnAppearance.setAmbient(selectedBtnAmbient[0], selectedBtnAmbient[1], selectedBtnAmbient[2], selectedBtnAmbient[3]);
     }
 
 	/**
 	 * Displays all the menu
 	 */
 	display() {
-		// Optional: disable depth test so that it is always in front (need to reenable in the end)
-		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
-		
-		this.scene.pushMatrix();
 		this.displayButtons();
-		this.scene.popMatrix();
-        
-        // re-enable depth test 
-		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
 	}
 
 	/**
@@ -53,6 +46,9 @@ export class MainMenu {
 		this.playerTimeBtn = new MyButton(this.scene, 'checkers-mainMenu-playerTime-button', this.p1, this.p2, true,
 			1002, this.playerTimeBtnOnPick, 'PLAYER MAX TIME:' + this.scene.checkers.config.playerMaxTime + 'm', [4, -6.7, -50]);
 
+		// Optional: disable depth test so that it is always in front (need to reenable in the end)
+		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
+		
 		// draw background
 		this.scene.pushMatrix();
 		this.scene.loadIdentity();
@@ -115,6 +111,9 @@ export class MainMenu {
 		this.scene.translate(2, -27, -50);
 		this.playerTimeBtn.display();
 		this.scene.popMatrix();
+
+		// re-enable depth test 
+		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
 	}
 
 	goToScenePick = () => {

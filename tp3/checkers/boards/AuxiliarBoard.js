@@ -173,7 +173,6 @@ export class AuxiliarBoard extends Board {
      */
     buildMenu(primitiveId) {
         this.buildMenuFaces(primitiveId);
-        // this.buildButtons();
     }
 
     /**
