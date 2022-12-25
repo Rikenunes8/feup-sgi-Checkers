@@ -39,8 +39,8 @@ export class Checkers {
         this.sequence = new GameSequence(this.game);
 
         this.piecesMaterialsIds = piecesMaterialsIds;
-        const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
-        this.buildPieces(this.game, pieceComponentsIds);
+        const pieceComponentId = buildPieceComponent(this.sceneGraph);
+        this.buildPieces(this.game, pieceComponentId);
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
@@ -332,14 +332,14 @@ export class Checkers {
      * @param {Array} game An array of 64 elements, representing the game board.
      * @param {string} componentref Component that represents a piece.
      */
-    buildPieces(game, componentrefs) {
+    buildPieces(game, componentref) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
             if (game[i] != emptyTile) {
                 const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
                 const materialId = this.piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
-                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
+                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentref, pickId));
             }
         }
     }
