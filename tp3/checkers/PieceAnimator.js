@@ -1,5 +1,11 @@
 import { pawnRadius } from "./primitives.js";
 
+export const AnimationType = Object.freeze({
+    COLLECT: Symbol("collect"),
+    COLLECTED: Symbol("collected"),
+    TO_KING: Symbol("toKing")
+});
+
 export class PieceAnimator {
     constructor(sceneGraph) {
         this.sceneGraph = sceneGraph;
@@ -20,22 +26,22 @@ export class PieceAnimator {
      * @param {Array} startPosition Position where the animation starts
      * @param {Array[Array]} endPositions Sequence of positions to visit
      * @param {Tile} endTile Tile where the piece will be placed at the end of the animation
-     * @param {boolean} isCollected Type of animation (parabolic or linear)
+     * @param {AnimationType} animType Type of animation (parabolic or linear)
      * @param {int} startTime 
      */
-    addPiece(piece, startPosition, endPositions, endTile, isCollected, startTime = null) {
+    addPiece(piece, startPosition, endPositions, endTile, animType, startTime = null) {
         const info = {
-            isCollected: isCollected,
+            animType: animType,
             piece: piece,
             startPosition: startPosition,
             endPositions: endPositions,
             endTile: endTile,
             startTime: startTime,
-            duration: vec3.distance(startPosition, endPositions[0]) * (isCollected ? 300 : 500)
+            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECTED ? 300 : 500)
         };
-        if (isCollected) {
+        if (animType == AnimationType.COLLECTED) {
             this.pieceInfos.collected.push(info);
-        } else {
+        } else if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
         }
     }
@@ -78,9 +84,9 @@ export class PieceAnimator {
 
             // update tile information according to animation type
             pieceInfo.piece.updateTile(pieceInfo.endTile);
-            if (pieceInfo.isCollected) {
+            if (pieceInfo.animType == AnimationType.COLLECTED) {
                 this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
-            } else {
+            } else if (pieceInfo.animType == AnimationType.COLLECT) {
                 this.pieceInfos.collector = null;
             }
             return true;

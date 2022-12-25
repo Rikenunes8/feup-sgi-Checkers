@@ -2,7 +2,7 @@ import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
 import { GameRuler, CurrentPlayer, emptyTile } from "./GameRuler.js";
 import { GameStateMachine, GameState } from "./GameStateMachine.js";
-import { PieceAnimator } from "./PieceAnimator.js";
+import { AnimationType, PieceAnimator } from "./PieceAnimator.js";
 import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
@@ -213,7 +213,7 @@ export class Checkers {
                     vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
                     
                     const nextTilePoss = [auxiliarTileRelativePosition];
-                    this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, true, time);
+                    this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, AnimationType.COLLECTED, time);
                     break;
                 }
             }
