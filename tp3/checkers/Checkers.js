@@ -218,18 +218,34 @@ export class Checkers {
                     console.log("Collision with piece " + i);
                     const prevTileIdx = this.getTileIdx(piece.idx);
                     this.game[prevTileIdx] = emptyTile;
-                    const auxTile = this.auxiliarboard.tiles[piece.idx-1];
-                    const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
                     
                     // calculate the relative position of the auxiliar tile
-                    let auxiliarTileRelativePosition = vec3.create();
+                    let prevTilePos = vec3.create();
                     let tm = mat4.create();
-                    mat4.invert(tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
-                    mat4.multiply(tm, tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
-                    mat4.translate(tm, tm, vec3.fromValues(auxTile.h, 0, -auxTile.v));
-                    vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
+                    mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                    mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                    mat4.translate(tm, tm, vec3.fromValues(piece.tile.h, 0, -piece.tile.v));
+                    vec3.transformMat4(prevTilePos, vec3.fromValues(0, 0, 0), tm);
                     
-                    const nextTilePoss = [auxiliarTileRelativePosition];
+                    const auxTile = this.auxiliarboard.tiles[piece.idx-1];
+                    const nextTilePoss = [[auxTile.h, 0, -auxTile.v]];
+
+                    if (piece.isKing()) {
+                        // calculate the relative position of the auxiliar tile
+                        let _prevTilePos = vec3.create();
+                        tm = mat4.create();
+                        mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                        mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                        mat4.translate(tm, tm, vec3.fromValues(piece.tile.h, 0.3, -piece.tile.v));
+                        vec3.transformMat4(_prevTilePos, vec3.fromValues(0, 0, 0), tm);
+                        
+                        const pieceOnTop = piece.pieceOnTop;
+                        const _auxTile = this.auxiliarboard.tiles[pieceOnTop.idx-1];
+                        const _nextTilePoss = [[_auxTile.h, 0, -_auxTile.v]];
+                        piece.becomeKing(false);
+                        this.pieceAnimator.addPiece(pieceOnTop, _prevTilePos, _nextTilePoss, _auxTile, AnimationType.COLLECTED, time);
+                    }
+
                     this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, AnimationType.COLLECTED, time);
                     break;
                 }

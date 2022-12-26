@@ -44,6 +44,18 @@ export class PieceAnimator {
             duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 500 : 300)
         };
 
+        // update tile information according to animation type
+        if (info.linkObject instanceof Tile) {
+            info.piece.updateTile(info.linkObject);
+            this.updatePiece(info, startTime);
+        } else if (info.linkObject instanceof Piece) {
+            // TODO:
+            console.log("Should not be here either")
+        } else {
+            //TODO
+            console.log("What?");
+        }
+
         if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
         } else if (animType == AnimationType.COLLECTED) {
