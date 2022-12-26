@@ -49,8 +49,8 @@ export class Checkers {
 
         this.config = {
             selectedTheme: 1,
-            turnMaxTime: 100000,
-            playerMaxTime: 10000,
+            turnMaxTime: 20,
+            playerMaxTime: 2,
         }
 
         this.invalidMove = {
@@ -431,7 +431,6 @@ export class Checkers {
     forceGameUpdate(gameboard) {
         this.game = [...gameboard];
         this.pendingKings = [];
-        this.printGame();
         
         this.pieces.forEach(piece => piece.reset());
         const collected = this.pieces.filter(piece => this.getTileIdx(piece.idx) == -1);
