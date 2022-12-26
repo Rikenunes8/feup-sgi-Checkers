@@ -8,7 +8,7 @@ import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
 import { Menu } from './menu/Menu.js';
 import { MyButton } from "../components/MyButton.js";
-import { CGFappearance } from "../../lib/CGF.js";
+import { CGFappearance, CGFcameraAxisID } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
 import { ResultsMenu } from "./menu/ResultsMenu.js";
 
@@ -70,6 +70,18 @@ export class Checkers {
         }
 
         this.pendingKings = [];
+
+        this.animationCamera = {
+            animating: false,
+            animatingOnClick: false,
+            clickedCount: 0,
+            rotationAngle: 0.05, // rotate 5% on each update
+            currAngle: 0,
+            maxRotationAngle: Math.PI,
+            rotatePositive: 1, // 1 or -1 depending on the direction of the rotation
+            rotatePosOnClick: -1, // 1 or -1 depending on the direction of the rotation when clicking
+        }
+        
     }
 
     /**
@@ -158,6 +170,29 @@ export class Checkers {
             if (endedAnimations) this.endTurn(time);
             this.checkCollisions(time);
         }
+
+        this.updateCamera();
+    }
+
+    /**
+     * Updates the camera position when animating it
+     */
+    updateCamera() {
+
+        if (this.animationCamera.animating || this.animationCamera.animatingOnClick) {
+            const rotatePositive = this.animationCamera.animatingOnClick ? this.animationCamera.rotatePosOnClick : this.animationCamera.rotatePositive;
+            const rotateAngle = this.animationCamera.maxRotationAngle * this.animationCamera.rotationAngle * rotatePositive;
+            const maxRotationAngle = this.animationCamera.animatingOnClick ? this.animationCamera.maxRotationAngle / 2 : this.animationCamera.maxRotationAngle;
+
+            this.sceneGraph.scene.camera.orbit(CGFcameraAxisID.Y, rotateAngle);
+            this.animationCamera.currAngle += rotateAngle; 
+
+            if (this.animationCamera.currAngle * rotatePositive >= maxRotationAngle) {
+                this.animationCamera.animating = false;
+                this.animationCamera.animatingOnClick = false;
+                this.animationCamera.currAngle = 0;
+            }
+        }
     }
 
     /**
@@ -212,10 +247,13 @@ export class Checkers {
             }
         }
 
-        if (this.turn == CurrentPlayer.P1)
+        if (this.turn == CurrentPlayer.P1) {
+            this.animationCamera.rotatePositive = -1;
             this.results.p1CurrTime = 0;
-        else
+        } else {
+            this.animationCamera.rotatePositive = 1;
             this.results.p2CurrTime = 0;
+        }
 
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
@@ -227,6 +265,8 @@ export class Checkers {
             this.setState(GameState.Replay);
             this.sequence.replayNextMove(this, this.pieceAnimator);
         }
+
+        this.animationCamera.animating = true;
     }
 
     /**
@@ -514,5 +554,20 @@ export class Checkers {
 
     endGameBtnHandler() {
         this.setState(GameState.Idle);
+    }
+
+    /**
+     * Handler for the change camera button.
+     * Rotates the camera from the following states:
+     * Player 1 -> Middle Screen -> Player 2 -> Middle Screen -> Player 1...
+     */
+    changeCamBtnHandler() {
+        if (this.animationCamera.clickedCount % 2 == 0 && this.animationCamera.clickedCount != 0) {
+            this.animationCamera.rotatePosOnClick *= -1;
+            this.animationCamera.clickedCount = 0;
+        }
+
+        this.animationCamera.clickedCount += 1;
+        this.animationCamera.animatingOnClick = true;
     }
 }
