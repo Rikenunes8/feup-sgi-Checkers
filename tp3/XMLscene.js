@@ -173,7 +173,9 @@ export class XMLscene extends CGFscene {
     setCamera = (cam) => {
         // Change the cameras
         this.camera = this.graph.views[cam];
-        this.interface.setActiveCamera(this.camera);
+
+        if (cam != "boardView") 
+            this.interface.setActiveCamera(this.camera);
     }
 
     updateAllLights() {

@@ -37,6 +37,7 @@ export class AnimationCamera {
         } else {
             this.rotatePositive = 1;
         }
+        this.rotatePosOnClick *= -1;
         this.animating = true;
     }
 
