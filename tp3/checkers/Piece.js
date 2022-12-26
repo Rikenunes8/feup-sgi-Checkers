@@ -8,21 +8,22 @@ export class Piece extends Pickable {
      * 
      * @param {*} sceneGraph 
      * @param {*} tile 
-     * @param {boolean} isKing P for pawn or K for king
      * @param {*} materialId 
      * @param {*} componentref 
      * @param {*} pickId 
      */
-    constructor(sceneGraph, tile, isKing, materialId, componentref, pickId) {
+    constructor(sceneGraph, tile, materialId, componentref, pickId) {
         super(pickId);
         this.sceneGraph = sceneGraph;
         this.tile = tile;
-        this.isKing = isKing;
         this.idx = pickId-200;
         this.id = `checkers-piece-${this.idx}`;
         this.buildPieceComponent(materialId, componentref);
 
         this.tile.piece = this;
+
+        this.pieceOnTop = null;
+        this.pieceOnBottom = null;
     }
 
     display() {
@@ -60,8 +61,11 @@ export class Piece extends Pickable {
     }
 
     becomeKing(toKing) {
-        this.isKing = toKing;
-        //this.sceneGraph.components[this.id].children[0][1] = toKing ? this.componentrefs[1] : this.componentrefs[0];
+        this.pieceOnTop = toKing ? 1 : null;
+    }
+
+    isKing() {
+        return this.pieceOnTop != null;
     }
 
 }

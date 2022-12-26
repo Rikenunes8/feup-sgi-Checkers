@@ -41,7 +41,7 @@ export class GameRuler {
         const pieceTile = piece.tile;
         const validMoves = {};
 
-        if (!piece.isKing) {
+        if (!piece.isKing()) {
             this.validSimpleMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
             this.validEatMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
         }

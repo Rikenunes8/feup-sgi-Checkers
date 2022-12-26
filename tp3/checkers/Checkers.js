@@ -309,7 +309,7 @@ export class Checkers {
     /**
      * Get the entity Piece from the piece idx.
      * @param {*} idx 
-     * @returns 
+     * @returns {Piece}
      */
     getPiece(idx) {
         return this.pieces[Math.abs(idx)-1];
@@ -339,7 +339,7 @@ export class Checkers {
                 const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
                 const materialId = this.piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
-                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentref, pickId));
+                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], materialId, componentref, pickId));
             }
         }
     }
