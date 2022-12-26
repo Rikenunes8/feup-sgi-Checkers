@@ -1,9 +1,11 @@
+import { Piece } from "./Piece.js";
 import { pawnRadius } from "./primitives.js";
+import { Tile } from "./Tile.js";
 
 export const AnimationType = Object.freeze({
     COLLECT: Symbol("collect"),
     COLLECTED: Symbol("collected"),
-    TO_KING: Symbol("toKing")
+    KINGIFY: Symbol("kingify")
 });
 
 export class PieceAnimator {
@@ -13,10 +15,12 @@ export class PieceAnimator {
          * @type {Object}
          * @property {Object} collector Only one piece can be collecting at a time
          * @property {Array<Object>} collected Can be more than one piece collected at a time
+         * @property {Array<Object>} kingifying Can be more than one piece kingified at a time
          */
         this.pieceInfos = {
             collector: null,
-            collected: []
+            collected: [],
+            kingifying: [],
         };
     }
 
@@ -25,24 +29,27 @@ export class PieceAnimator {
      * @param {Piece} piece 
      * @param {Array} startPosition Position where the animation starts
      * @param {Array[Array]} endPositions Sequence of positions to visit
-     * @param {Tile} endTile Tile where the piece will be placed at the end of the animation
+     * @param {Tile} linkObject Tile or Piece where the piece will be placed at the end of the animation
      * @param {AnimationType} animType Type of animation (parabolic or linear)
      * @param {int} startTime 
      */
-    addPiece(piece, startPosition, endPositions, endTile, animType, startTime = null) {
+    addPiece(piece, startPosition, endPositions, linkObject, animType, startTime = null) {
         const info = {
             animType: animType,
             piece: piece,
             startPosition: startPosition,
             endPositions: endPositions,
-            endTile: endTile,
+            linkObject: linkObject,
             startTime: startTime,
-            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECTED ? 300 : 500)
+            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 500 : 300)
         };
-        if (animType == AnimationType.COLLECTED) {
-            this.pieceInfos.collected.push(info);
-        } else if (animType == AnimationType.COLLECT) {
+
+        if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
+        } else if (animType == AnimationType.COLLECTED) {
+            this.pieceInfos.collected.push(info);
+        } else if (animType == AnimationType.KINGIFY) {
+            this.pieceInfos.kingifying.push(info);
         }
     }
 
@@ -55,8 +62,13 @@ export class PieceAnimator {
         this.pieceInfos.collected.forEach(pieceInfo => {
             this.updatePiece(pieceInfo, time);
         });
+        this.pieceInfos.kingifying.forEach(pieceInfo => {
+            this.updatePiece(pieceInfo, time);
+        });
         this.updatePiece(this.pieceInfos.collector, time);
-        return this.pieceInfos.collector == null && this.pieceInfos.collected.length == 0;
+        return this.pieceInfos.collector == null 
+            && this.pieceInfos.collected.length == 0
+            && this.pieceInfos.kingifying.length == 0;
     }
 
     /**
@@ -83,11 +95,22 @@ export class PieceAnimator {
             }
 
             // update tile information according to animation type
-            pieceInfo.piece.updateTile(pieceInfo.endTile);
-            if (pieceInfo.animType == AnimationType.COLLECTED) {
-                this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
-            } else if (pieceInfo.animType == AnimationType.COLLECT) {
+            if (pieceInfo.linkObject instanceof Tile) {
+                pieceInfo.piece.updateTile(pieceInfo.linkObject);
+            } else if (pieceInfo.linkObject instanceof Piece) {
+                // TODO:
+                console.log("Should not be here either")
+            } else {
+                //TODO
+                console.log("What?");
+            }
+
+            if (pieceInfo.animType == AnimationType.COLLECT) {
                 this.pieceInfos.collector = null;
+            } else if (pieceInfo.animType == AnimationType.COLLECTED) {
+                this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
+            } else if (pieceInfo.animType == AnimationType.KINGIFY) {
+                this.pieceInfos.kingifying.splice(this.pieceInfos.kingifying.indexOf(pieceInfo), 1);
             }
             return true;
         }

@@ -3,6 +3,8 @@ import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
 import { GameState } from "./GameStateMachine.js";
 import { popupTime } from "./constants.js";
+import { AuxiliarBoard } from "./boards/AuxiliarBoard.js";
+import { GameBoard } from "./boards/GameBoard.js";
 
 export class Tile extends Pickable {
     constructor(sceneGraph, board, h, v, primitiveId, materialId, pickId) {
@@ -50,6 +52,14 @@ export class Tile extends Pickable {
         checkers.setState(GameState.Moving);
         const tilesToVisit = tilesIdxToVisit.map(tileIdx => checkers.mainboard.tiles[tileIdx]);
         checkers.movePiece(piece, piece.tile, tilesToVisit);
+    }
+
+    isGameTile() {
+        return this.board instanceof GameBoard;
+    }
+
+    isAuxiliarTile() {
+        return this.board instanceof AuxiliarBoard;
     }
 
 }
