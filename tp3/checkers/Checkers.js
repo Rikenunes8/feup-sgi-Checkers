@@ -155,7 +155,7 @@ export class Checkers {
     update(time) {
         if (this.stateMachine.getState() == GameState.Moving || this.stateMachine.getState() == GameState.ReplayMoving) {
             const endedAnimations = this.pieceAnimator.update(time);
-            if (endedAnimations) this.endTurn();
+            if (endedAnimations) this.endTurn(time);
             this.checkCollisions(time);
         }
     }
@@ -163,29 +163,52 @@ export class Checkers {
     /**
      * End the turn of the current player and prepare the next one
      */
-    endTurn() {
+    endTurn(time) {
         const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
         const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
         this.game[tileIdx] = this.game[prevTileIdx];
-        this.game[prevTileIdx] = emptyTile;
+        if (tileIdx != prevTileIdx)
+            this.game[prevTileIdx] = emptyTile;
 
-        this.pendingKings.forEach((elem) => {
+        for (let elem of this.pendingKings) {
             const [_tileIdx, _pieceIdx, _player] = elem;
             const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(_player);
             if (pieceToPutOnTop) {
                 this.ruler.becomeKing(_tileIdx, true);
-                this.getPiece(_pieceIdx).becomeKing(true, pieceToPutOnTop);
-                this.pendingKings.splice(this.pendingKings.indexOf(elem), 1);
-            }
-        });
 
-        if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
+                const pieceOnBottom = this.getPiece(_pieceIdx);
+                const startPosition = [pieceToPutOnTop.tile.h, 0, -pieceToPutOnTop.tile.v];
+                let endPosition = vec3.create();
+                let tm = mat4.create();
+                mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
+                vec3.transformMat4(endPosition, vec3.fromValues(0, 0, 0), tm);
+                
+                this.pieceAnimator.addPiece(pieceToPutOnTop, startPosition, [endPosition], pieceOnBottom, AnimationType.KINGIFY, time)
+                this.pendingKings.splice(this.pendingKings.indexOf(elem), 1);
+                return;
+            }
+        }
+
+        if (this.ruler.shouldBecomeKing(tileIdx, this.game)) {
             const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(this.turn);
             if (!pieceToPutOnTop) {
                 this.pendingKings.push([tileIdx, this.selectedPieceIdx, this.turn]);
             } else {
                 this.ruler.becomeKing(tileIdx, true);
-                this.getPiece(this.selectedPieceIdx).becomeKing(true, pieceToPutOnTop);
+
+                const pieceOnBottom = this.getPiece(this.selectedPieceIdx);
+                const startPosition = [pieceToPutOnTop.tile.h, 0, -pieceToPutOnTop.tile.v];
+                let endPosition = vec3.create();
+                let tm = mat4.create();
+                mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
+                vec3.transformMat4(endPosition, vec3.fromValues(0, 0, 0), tm);
+                
+                this.pieceAnimator.addPiece(pieceToPutOnTop, startPosition, [endPosition], pieceOnBottom, AnimationType.KINGIFY, time)
+                return;
             }
         }
 

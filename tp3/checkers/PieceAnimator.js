@@ -41,19 +41,13 @@ export class PieceAnimator {
             endPositions: endPositions,
             linkObject: linkObject,
             startTime: startTime,
-            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 500 : 300)
+            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 300 : 200)
         };
 
-        // update tile information according to animation type
+        // In case of a linkObject is a tile, the referenced tile is updated because the transofrmation is calculated relativelly to the tile
         if (info.linkObject instanceof Tile) {
             info.piece.updateTile(info.linkObject);
             this.updatePiece(info, startTime);
-        } else if (info.linkObject instanceof Piece) {
-            // TODO:
-            console.log("Should not be here either")
-        } else {
-            //TODO
-            console.log("What?");
         }
 
         if (animType == AnimationType.COLLECT) {
@@ -110,11 +104,9 @@ export class PieceAnimator {
             if (pieceInfo.linkObject instanceof Tile) {
                 pieceInfo.piece.updateTile(pieceInfo.linkObject);
             } else if (pieceInfo.linkObject instanceof Piece) {
-                // TODO:
-                console.log("Should not be here either")
+                pieceInfo.linkObject.becomeKing(true, pieceInfo.piece);
             } else {
-                //TODO
-                console.log("What?");
+                throw new Error("PieceAnimator: Invalid link object");
             }
 
             if (pieceInfo.animType == AnimationType.COLLECT) {

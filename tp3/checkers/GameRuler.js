@@ -155,8 +155,9 @@ export class GameRuler {
         return this.checkers.game[tileIdx] < 0;
     }
 
-    shouldBecomeKing(tileIdx, player) {
-        return player == CurrentPlayer.P1 && tileIdx >= 56 || player == CurrentPlayer.P2 && tileIdx <= 7
+    shouldBecomeKing(tileIdx, game) {
+        return (this.belongsToPlayer(game[tileIdx], CurrentPlayer.P1) && tileIdx >= 56 && !this.isKing(tileIdx)) 
+            || (this.belongsToPlayer(game[tileIdx], CurrentPlayer.P2) && tileIdx <= 7 && !this.isKing(tileIdx)); 
     }
 
     becomeKing(tileIdx, toKing) {

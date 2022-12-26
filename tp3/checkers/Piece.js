@@ -87,7 +87,6 @@ export class Piece extends Pickable {
 
     becomeKing(toKing, pieceOnTop) {
         if (toKing && !this.isKing()) {
-            console.log("Becoming king")
             this.pieceOnTop = pieceOnTop;
             this.pieceOnTop.pieceOnBottom = this;
             this.pieceOnTop.tile.piece = null;
@@ -99,15 +98,12 @@ export class Piece extends Pickable {
             mat4.translate(tm, tm, vec3.fromValues(0, 0.3, 0));
             this.sceneGraph.components[this.pieceOnTop.id].transfMatrix = tm;
         } else if (!toKing && this.isKing()) {
-            console.log("Becoming not king")
             if (this.sceneGraph.components[this.id].children.length > 1)
                 this.sceneGraph.components[this.id].children.pop();
             this.pieceOnTop.tile = this.sceneGraph.scene.checkers.auxiliarboard.tiles[this.pieceOnTop.idx-1]
             this.pieceOnTop.tile.piece = this.pieceOnTop;
             this.pieceOnTop.pieceOnBottom = null;
             this.pieceOnTop = null;
-        } else {
-            console.log("No change in king status")
         }
     }
 
