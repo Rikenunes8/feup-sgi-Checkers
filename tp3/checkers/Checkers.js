@@ -441,12 +441,16 @@ export class Checkers {
         notCollected.forEach(piece => {
             const tileIdx = this.getTileIdx(piece.idx);
             piece.updateTile(this.mainboard.tiles[tileIdx]);
+            const currPlayer = this.ruler.getPlayer(piece.idx);
             if (this.ruler.isKing(tileIdx)) {
-                const currPlayer = this.ruler.getPlayer(piece.idx);
                 const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(currPlayer);
                 if (pieceToPutOnTop != null) {
                     piece.becomeKing(true, pieceToPutOnTop);
                 } else {
+                    this.pendingKings.push([tileIdx, piece.idx, currPlayer]);
+                }
+            } else {
+                if (this.ruler.shouldBecomeKing(tileIdx, this.game)) {
                     this.pendingKings.push([tileIdx, piece.idx, currPlayer]);
                 }
             }
