@@ -11,7 +11,7 @@ export class Tile extends Pickable {
         super(pickId);
         this.sceneGraph = sceneGraph;
         this.board = board;
-        this.idx = h + v * 8;
+        this.idx = pickId % 100;
         this.id = `checkers-tile-${pickId}`;
         this.h = h;
         this.v = v;

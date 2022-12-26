@@ -163,4 +163,9 @@ export class GameRuler {
         const pieceIdx = Math.abs(this.checkers.game[tileIdx]);
         this.checkers.game[tileIdx] = toKing ? -pieceIdx : pieceIdx;
     }
+
+    getPlayer(pieceIdx) {
+        if (pieceIdx == emptyTile) return null;
+        return this.belongsToPlayer(pieceIdx, CurrentPlayer.P1) ? CurrentPlayer.P1 : CurrentPlayer.P2;
+    }
 }

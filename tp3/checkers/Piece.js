@@ -47,6 +47,22 @@ export class Piece extends Pickable {
         }
     }
 
+    reset() {
+        if (this.pieceOnTop != null) {
+            this.pieceOnTop.pieceOnBottom = null;
+            this.pieceOnTop = null;
+        }
+        if (this.pieceOnBottom != null) {
+            this.pieceOnBottom.pieceOnTop = null;
+            this.pieceOnBottom = null;
+        }
+        if (this.tile != null) {
+            this.tile.piece = null;
+            this.tile = null;
+        }
+        this.sceneGraph.components[this.id].children.splice(1);
+    }
+
     onPick() {
         console.log(`Selected piece: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
@@ -60,7 +76,8 @@ export class Piece extends Pickable {
     }
 
     updateTile(tile) {
-        this.tile.piece = null;
+        if (this.tile != null)
+            this.tile.piece = null;
         this.tile = tile;
         this.tile.piece = this;
         let transfMatrix = mat4.create();
@@ -69,24 +86,28 @@ export class Piece extends Pickable {
     }
 
     becomeKing(toKing, pieceOnTop) {
-        if (toKing) {
+        if (toKing && !this.isKing()) {
             console.log("Becoming king")
             this.pieceOnTop = pieceOnTop;
-            pieceOnTop.pieceOnBottom = this;
-            pieceOnTop.tile.piece = null;
-            pieceOnTop.tile = null;
+            this.pieceOnTop.pieceOnBottom = this;
+            this.pieceOnTop.tile.piece = null;
+            this.pieceOnTop.tile = null;
             if (this.sceneGraph.components[this.id].children.length == 1) {
-                this.sceneGraph.components[this.id].children.push([false, pieceOnTop.id]);
+                this.sceneGraph.components[this.id].children.push([false, this.pieceOnTop.id]);
             }
             let tm = mat4.create();
             mat4.translate(tm, tm, vec3.fromValues(0, 0.3, 0));
-            this.sceneGraph.components[pieceOnTop.id].transfMatrix = tm;
-        } else {
+            this.sceneGraph.components[this.pieceOnTop.id].transfMatrix = tm;
+        } else if (!toKing && this.isKing()) {
             console.log("Becoming not king")
             if (this.sceneGraph.components[this.id].children.length > 1)
                 this.sceneGraph.components[this.id].children.pop();
+            this.pieceOnTop.tile = this.sceneGraph.scene.checkers.auxiliarboard.tiles[this.pieceOnTop.idx-1]
+            this.pieceOnTop.tile.piece = this.pieceOnTop;
             this.pieceOnTop.pieceOnBottom = null;
             this.pieceOnTop = null;
+        } else {
+            console.log("No change in king status")
         }
     }
 

@@ -49,8 +49,8 @@ export class Checkers {
 
         this.config = {
             selectedTheme: 1,
-            turnMaxTime: 20,
-            playerMaxTime: 2,
+            turnMaxTime: 100000,
+            playerMaxTime: 10000,
         }
 
         this.invalidMove = {
@@ -366,8 +366,8 @@ export class Checkers {
 
     // TODO: remove this function
     printGame() {
-        for (let v = 0; v < 8; v++) {
-            console.log(this.game.slice(v*8, v*8+8).join(" "));
+        for (let v = 7; v >= 0; v--) {
+            console.log(this.game.slice(v*8, v*8+8).join("\t"));
         }
     }
 
@@ -392,16 +392,27 @@ export class Checkers {
 
     forceGameUpdate(gameboard) {
         this.game = [...gameboard];
-        for (let piece of this.pieces) {
+        this.pendingKings = [];
+        this.printGame();
+        
+        this.pieces.forEach(piece => piece.reset());
+        const collected = this.pieces.filter(piece => this.getTileIdx(piece.idx) == -1);
+        const notCollected = this.pieces.filter(piece => this.getTileIdx(piece.idx) != -1);
+
+        collected.forEach(piece => piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]));
+        notCollected.forEach(piece => {
             const tileIdx = this.getTileIdx(piece.idx);
-            if (tileIdx == -1) {
-                piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]);
+            piece.updateTile(this.mainboard.tiles[tileIdx]);
+            if (this.ruler.isKing(tileIdx)) {
+                const currPlayer = this.ruler.getPlayer(piece.idx);
+                const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(currPlayer);
+                if (pieceToPutOnTop != null) {
+                    piece.becomeKing(true, pieceToPutOnTop);
+                } else {
+                    this.pendingKings.push([tileIdx, piece.idx, currPlayer]);
+                }
             }
-            else {
-                piece.becomeKing(this.ruler.isKing(tileIdx));
-                piece.updateTile(this.mainboard.tiles[tileIdx]);
-            }
-        }
+        });
     }
 
     /**
