@@ -23,6 +23,7 @@ export class PieceAnimator {
             collected: [],
             kingifying: [],
         };
+        this.spotlight = null;
     }
 
     /**
@@ -53,6 +54,8 @@ export class PieceAnimator {
 
         if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
+            this.spotlight = this.sceneGraph.scene.lights.filter((l) => l.name != undefined && l.name == "checkersSpotlight")[0];
+            this.spotlight.enable();
         } else if (animType == AnimationType.COLLECTED) {
             this.pieceInfos.collected.push(info);
         } else if (animType == AnimationType.KINGIFY) {
@@ -72,7 +75,9 @@ export class PieceAnimator {
         this.pieceInfos.kingifying.forEach(pieceInfo => {
             this.updatePiece(pieceInfo, time);
         });
-        this.updatePiece(this.pieceInfos.collector, time, true);
+        this.updatePiece(this.pieceInfos.collector, time);
+        this.updateSpotlight(this.pieceInfos.collector);
+
         return this.pieceInfos.collector == null 
             && this.pieceInfos.collected.length == 0
             && this.pieceInfos.kingifying.length == 0;
@@ -85,7 +90,7 @@ export class PieceAnimator {
      * @param {boolean} updateLight
      * @returns True if the piece animation is finished
      */
-    updatePiece(pieceInfo, time, updateLight = false) {
+    updatePiece(pieceInfo, time) {
         if (pieceInfo == null) {
             return false;
         }
@@ -113,6 +118,7 @@ export class PieceAnimator {
 
             if (pieceInfo.animType == AnimationType.COLLECT) {
                 this.pieceInfos.collector = null;
+                this.spotlight.disable();
             } else if (pieceInfo.animType == AnimationType.COLLECTED) {
                 this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
             } else if (pieceInfo.animType == AnimationType.KINGIFY) {
@@ -138,28 +144,24 @@ export class PieceAnimator {
         mat4.translate(transfMatrix, transfMatrix, position);
         this.sceneGraph.components[pieceInfo.piece.id].transfMatrix = transfMatrix;
 
-
-        // ------------------ LIGHT ------------------
-        if (updateLight) {
-            // update light 
-            let light = this.sceneGraph.scene.lights.filter(light => light.name == "pieceSpotLight")[0];
-            // TODO: This is wrong and I need the correct transformation matrix of 
-            // the piece and board to calculate the correct position of the light
-            light.setPosition(position[0] - 3.5, 2, position[2] + 3.5, 1.0);
-            const transf = this.sceneGraph.scene.checkers.mainboard.transfMatrix;
-            //index 12 = x1, 13 = y1, 14 = z1, 0 - scale x, 10 - scale z
-
-            console.log("TRANSF:", transf[12], transf[13], transf[14]);
-
-            console.log("T:", transf);
-
-            //mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
-            //console.log("djwao: ", this.sceneGraph.scene.checkers.mainboard.p1);
-            //console.log("djwao: ", this.sceneGraph.scene.checkers.mainboard.p2);
-            //console.log("POSI: ", position);
-        }
-
         return false;
+    }
+
+    updateSpotlight(pieceInfo) {
+        if (pieceInfo == null) {
+            return;
+        }
+        const piece = pieceInfo.piece;
+        
+        let newPosition = vec3.create();
+        let tm = mat4.create();
+        mat4.multiply(tm, tm, this.sceneGraph.components[this.sceneGraph.scene.checkers.mainboard.id].transfMatrix);
+        mat4.multiply(tm, tm, this.sceneGraph.components[piece.id].transfMatrix);
+        mat4.translate(tm, tm, vec3.fromValues(0.5, 1.3, -0.5));
+        vec3.transformMat4(newPosition, vec3.fromValues(0, 0, 0), tm);
+        console.log(newPosition)
+
+        this.spotlight.setPosition(newPosition[0], newPosition[1], newPosition[2], 1.0);
     }
 
     /**

@@ -82,4 +82,8 @@ export class Board {
     diff(coord) {
         return diff(this.p1, this.p2, coord);
     }
+
+    getCenter() {
+        return [this.med(0), this.p2[1], this.med(2)];
+    }
 }
