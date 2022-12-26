@@ -72,7 +72,7 @@ export class PieceAnimator {
         this.pieceInfos.kingifying.forEach(pieceInfo => {
             this.updatePiece(pieceInfo, time);
         });
-        this.updatePiece(this.pieceInfos.collector, time);
+        this.updatePiece(this.pieceInfos.collector, time, true);
         return this.pieceInfos.collector == null 
             && this.pieceInfos.collected.length == 0
             && this.pieceInfos.kingifying.length == 0;
@@ -82,9 +82,10 @@ export class PieceAnimator {
      * Update piece animation
      * @param {Object} pieceInfo 
      * @param {int} time 
+     * @param {boolean} updateLight
      * @returns True if the piece animation is finished
      */
-    updatePiece(pieceInfo, time) {
+    updatePiece(pieceInfo, time, updateLight = false) {
         if (pieceInfo == null) {
             return false;
         }
@@ -136,6 +137,28 @@ export class PieceAnimator {
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, position);
         this.sceneGraph.components[pieceInfo.piece.id].transfMatrix = transfMatrix;
+
+
+        // ------------------ LIGHT ------------------
+        if (updateLight) {
+            // update light 
+            let light = this.sceneGraph.scene.lights.filter(light => light.name == "pieceSpotLight")[0];
+            // TODO: This is wrong and I need the correct transformation matrix of 
+            // the piece and board to calculate the correct position of the light
+            light.setPosition(position[0] - 3.5, 2, position[2] + 3.5, 1.0);
+            const transf = this.sceneGraph.scene.checkers.mainboard.transfMatrix;
+            //index 12 = x1, 13 = y1, 14 = z1, 0 - scale x, 10 - scale z
+
+            console.log("TRANSF:", transf[12], transf[13], transf[14]);
+
+            console.log("T:", transf);
+
+            //mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
+            //console.log("djwao: ", this.sceneGraph.scene.checkers.mainboard.p1);
+            //console.log("djwao: ", this.sceneGraph.scene.checkers.mainboard.p2);
+            //console.log("POSI: ", position);
+        }
+
         return false;
     }
 
