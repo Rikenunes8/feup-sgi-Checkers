@@ -39,6 +39,14 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId, 'white'], texture, [[false, componentref]], null, null);
     }
 
+    select(toSelect) {
+        const material = toSelect ? 1 : 0;
+        this.sceneGraph.components[this.id].material = material;
+        if (this.isKing()) {
+            this.sceneGraph.components[this.pieceOnTop.id].material = material;
+        }
+    }
+
     onPick() {
         console.log(`Selected piece: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;

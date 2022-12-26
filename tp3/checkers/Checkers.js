@@ -68,6 +68,8 @@ export class Checkers {
             totalTime: 0,
             winner: null,
         }
+
+        this.pendingKings = [];
     }
 
     /**
@@ -167,12 +169,27 @@ export class Checkers {
         this.game[tileIdx] = this.game[prevTileIdx];
         this.game[prevTileIdx] = emptyTile;
 
+        this.pendingKings.forEach((elem) => {
+            const [_tileIdx, _pieceIdx, _player] = elem;
+            const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(_player);
+            if (pieceToPutOnTop) {
+                this.ruler.becomeKing(_tileIdx, true);
+                this.getPiece(_pieceIdx).becomeKing(true, pieceToPutOnTop);
+                this.pendingKings.splice(this.pendingKings.indexOf(elem), 1);
+            }
+        });
+
         if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
-            this.ruler.becomeKing(tileIdx, true);
             const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(this.turn);
-            this.getPiece(this.selectedPieceIdx).becomeKing(true, pieceToPutOnTop);
+            if (!pieceToPutOnTop) {
+                this.pendingKings.push([tileIdx, this.selectedPieceIdx, this.turn]);
+            } else {
+                this.ruler.becomeKing(tileIdx, true);
+                this.getPiece(this.selectedPieceIdx).becomeKing(true, pieceToPutOnTop);
+            }
         }
 
+        console.log(this.pendingKings);
         if (this.turn == CurrentPlayer.P1)
             this.results.p1CurrTime = 0;
         else
@@ -236,10 +253,7 @@ export class Checkers {
     selectPiece(idx) {
         this.selectedPieceIdx = idx;
         const selectedPiece = this.getPiece(this.selectedPieceIdx);
-        this.sceneGraph.components[selectedPiece.id].material = 1;
-        if (selectedPiece.isKing()) {
-            this.sceneGraph.components[selectedPiece.pieceOnTop.id].material = 1;
-        }
+        selectedPiece.select(true);
     }
 
     /**
@@ -248,10 +262,7 @@ export class Checkers {
     unselectPiece() {
         if (this.selectedPieceIdx == null) return;
         const selectedPiece = this.getPiece(this.selectedPieceIdx);
-        this.sceneGraph.components[selectedPiece.id].material = 0;
-        if (selectedPiece.isKing()) {
-            this.sceneGraph.components[selectedPiece.pieceOnTop.id].material = 0;
-        }
+        selectedPiece.select(false);
         this.selectedPieceIdx = null;
     }
 
@@ -308,7 +319,7 @@ export class Checkers {
      */
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original
-        this.sceneGraph.components[piece.id].material = 0;
+        piece.select(false);
 
         const newGameMove = new GameMove(piece, prevTile, nextTiles, this.game);
         this.sequence.addMove(newGameMove);
