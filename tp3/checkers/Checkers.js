@@ -189,7 +189,6 @@ export class Checkers {
             }
         }
 
-        console.log(this.pendingKings);
         if (this.turn == CurrentPlayer.P1)
             this.results.p1CurrTime = 0;
         else
