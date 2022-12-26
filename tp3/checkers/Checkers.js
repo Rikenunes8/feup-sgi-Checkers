@@ -169,7 +169,8 @@ export class Checkers {
 
         if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
             this.ruler.becomeKing(tileIdx, true);
-            this.getPiece(this.selectedPieceIdx).becomeKing(true);
+            const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(this.turn);
+            this.getPiece(this.selectedPieceIdx).becomeKing(true, pieceToPutOnTop);
         }
 
         if (this.turn == CurrentPlayer.P1)
@@ -234,7 +235,11 @@ export class Checkers {
      */
     selectPiece(idx) {
         this.selectedPieceIdx = idx;
-        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 1;
+        const selectedPiece = this.getPiece(this.selectedPieceIdx);
+        this.sceneGraph.components[selectedPiece.id].material = 1;
+        if (selectedPiece.isKing()) {
+            this.sceneGraph.components[selectedPiece.pieceOnTop.id].material = 1;
+        }
     }
 
     /**
@@ -242,7 +247,11 @@ export class Checkers {
      */
     unselectPiece() {
         if (this.selectedPieceIdx == null) return;
-        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 0;
+        const selectedPiece = this.getPiece(this.selectedPieceIdx);
+        this.sceneGraph.components[selectedPiece.id].material = 0;
+        if (selectedPiece.isKing()) {
+            this.sceneGraph.components[selectedPiece.pieceOnTop.id].material = 0;
+        }
         this.selectedPieceIdx = null;
     }
 

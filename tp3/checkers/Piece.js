@@ -60,8 +60,26 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
     }
 
-    becomeKing(toKing) {
-        this.pieceOnTop = toKing ? 1 : null;
+    becomeKing(toKing, pieceOnTop) {
+        if (toKing) {
+            console.log("Becoming king")
+            this.pieceOnTop = pieceOnTop;
+            pieceOnTop.pieceOnBottom = this;
+            pieceOnTop.tile.piece = null;
+            pieceOnTop.tile = null;
+            if (this.sceneGraph.components[this.id].children.length == 1) {
+                this.sceneGraph.components[this.id].children.push([false, pieceOnTop.id]);
+            }
+            let tm = mat4.create();
+            mat4.translate(tm, tm, vec3.fromValues(0, 0.3, 0));
+            this.sceneGraph.components[pieceOnTop.id].transfMatrix = tm;
+        } else {
+            console.log("Becoming not king")
+            if (this.sceneGraph.components[this.id].children.length > 1)
+                this.sceneGraph.components[this.id].children.pop();
+            this.pieceOnTop.pieceOnBottom = null;
+            this.pieceOnTop = null;
+        }
     }
 
     isKing() {
