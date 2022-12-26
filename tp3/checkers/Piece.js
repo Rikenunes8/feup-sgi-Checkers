@@ -8,22 +8,22 @@ export class Piece extends Pickable {
      * 
      * @param {*} sceneGraph 
      * @param {*} tile 
-     * @param {boolean} isKing P for pawn or K for king
      * @param {*} materialId 
-     * @param {*} componentrefs 
+     * @param {*} componentref 
      * @param {*} pickId 
      */
-    constructor(sceneGraph, tile, isKing, materialId, componentrefs, pickId) {
+    constructor(sceneGraph, tile, materialId, componentref, pickId) {
         super(pickId);
         this.sceneGraph = sceneGraph;
-        this.componentrefs = componentrefs;
         this.tile = tile;
-        this.isKing = isKing;
         this.idx = pickId-200;
         this.id = `checkers-piece-${this.idx}`;
-        this.buildPieceComponent(materialId, componentrefs[0]);
+        this.buildPieceComponent(materialId, componentref);
 
         this.tile.piece = this;
+
+        this.pieceOnTop = null;
+        this.pieceOnBottom = null;
     }
 
     display() {
@@ -39,6 +39,30 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId, 'white'], texture, [[false, componentref]], null, null);
     }
 
+    select(toSelect) {
+        const material = toSelect ? 1 : 0;
+        this.sceneGraph.components[this.id].material = material;
+        if (this.isKing()) {
+            this.sceneGraph.components[this.pieceOnTop.id].material = material;
+        }
+    }
+
+    reset() {
+        if (this.pieceOnTop != null) {
+            this.pieceOnTop.pieceOnBottom = null;
+            this.pieceOnTop = null;
+        }
+        if (this.pieceOnBottom != null) {
+            this.pieceOnBottom.pieceOnTop = null;
+            this.pieceOnBottom = null;
+        }
+        if (this.tile != null) {
+            this.tile.piece = null;
+            this.tile = null;
+        }
+        this.sceneGraph.components[this.id].children.splice(1);
+    }
+
     onPick() {
         console.log(`Selected piece: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
@@ -52,7 +76,8 @@ export class Piece extends Pickable {
     }
 
     updateTile(tile) {
-        this.tile.piece = null;
+        if (this.tile != null)
+            this.tile.piece = null;
         this.tile = tile;
         this.tile.piece = this;
         let transfMatrix = mat4.create();
@@ -60,9 +85,30 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
     }
 
-    becomeKing(toKing) {
-        this.isKing = toKing;
-        this.sceneGraph.components[this.id].children[0][1] = toKing ? this.componentrefs[1] : this.componentrefs[0];
+    becomeKing(toKing, pieceOnTop) {
+        if (toKing && !this.isKing()) {
+            this.pieceOnTop = pieceOnTop;
+            this.pieceOnTop.pieceOnBottom = this;
+            this.pieceOnTop.tile.piece = null;
+            this.pieceOnTop.tile = null;
+            if (this.sceneGraph.components[this.id].children.length == 1) {
+                this.sceneGraph.components[this.id].children.push([false, this.pieceOnTop.id]);
+            }
+            let tm = mat4.create();
+            mat4.translate(tm, tm, vec3.fromValues(0, 0.3, 0));
+            this.sceneGraph.components[this.pieceOnTop.id].transfMatrix = tm;
+        } else if (!toKing && this.isKing()) {
+            if (this.sceneGraph.components[this.id].children.length > 1)
+                this.sceneGraph.components[this.id].children.pop();
+            this.pieceOnTop.tile = this.sceneGraph.scene.checkers.auxiliarboard.tiles[this.pieceOnTop.idx-1]
+            this.pieceOnTop.tile.piece = this.pieceOnTop;
+            this.pieceOnTop.pieceOnBottom = null;
+            this.pieceOnTop = null;
+        }
+    }
+
+    isKing() {
+        return this.pieceOnTop != null;
     }
 
 }

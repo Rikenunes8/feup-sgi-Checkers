@@ -41,7 +41,7 @@ export class GameRuler {
         const pieceTile = piece.tile;
         const validMoves = {};
 
-        if (!piece.isKing) {
+        if (!piece.isKing()) {
             this.validSimpleMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
             this.validEatMoves(this.checkers.turn, pieceTile.idx, validMoves, false);
         }
@@ -155,12 +155,18 @@ export class GameRuler {
         return this.checkers.game[tileIdx] < 0;
     }
 
-    shouldBecomeKing(tileIdx, player) {
-        return player == CurrentPlayer.P1 && tileIdx >= 56 || player == CurrentPlayer.P2 && tileIdx <= 7
+    shouldBecomeKing(tileIdx, game) {
+        return (this.belongsToPlayer(game[tileIdx], CurrentPlayer.P1) && tileIdx >= 56 && !this.isKing(tileIdx)) 
+            || (this.belongsToPlayer(game[tileIdx], CurrentPlayer.P2) && tileIdx <= 7 && !this.isKing(tileIdx)); 
     }
 
     becomeKing(tileIdx, toKing) {
         const pieceIdx = Math.abs(this.checkers.game[tileIdx]);
         this.checkers.game[tileIdx] = toKing ? -pieceIdx : pieceIdx;
+    }
+
+    getPlayer(pieceIdx) {
+        if (pieceIdx == emptyTile) return null;
+        return this.belongsToPlayer(pieceIdx, CurrentPlayer.P1) ? CurrentPlayer.P1 : CurrentPlayer.P2;
     }
 }

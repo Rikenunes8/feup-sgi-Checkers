@@ -58,7 +58,6 @@ export class GameStateMachine {
      * The times of each player and total time are reset.
      */
     changeStateToIdle() {
-        console.log("Changing state to Idle", this.checkers.mainboard);
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
         this.checkers.unselectPiece();

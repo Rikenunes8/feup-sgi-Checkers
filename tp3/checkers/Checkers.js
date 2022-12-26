@@ -2,7 +2,7 @@ import { Piece } from "./Piece.js";
 import { buildPieceComponent } from "./primitives.js";
 import { GameRuler, CurrentPlayer, emptyTile } from "./GameRuler.js";
 import { GameStateMachine, GameState } from "./GameStateMachine.js";
-import { PieceAnimator } from "./PieceAnimator.js";
+import { AnimationType, PieceAnimator } from "./PieceAnimator.js";
 import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
@@ -39,8 +39,8 @@ export class Checkers {
         this.sequence = new GameSequence(this.game);
 
         this.piecesMaterialsIds = piecesMaterialsIds;
-        const pieceComponentsIds = buildPieceComponent(this.sceneGraph);
-        this.buildPieces(this.game, pieceComponentsIds);
+        const pieceComponentId = buildPieceComponent(this.sceneGraph);
+        this.buildPieces(this.game, pieceComponentId);
 
         this.turn = CurrentPlayer.P1;
         this.selectedPieceIdx = null;
@@ -68,6 +68,8 @@ export class Checkers {
             totalTime: 0,
             winner: null,
         }
+
+        this.pendingKings = [];
     }
 
     /**
@@ -153,7 +155,7 @@ export class Checkers {
     update(time) {
         if (this.stateMachine.getState() == GameState.Moving || this.stateMachine.getState() == GameState.ReplayMoving) {
             const endedAnimations = this.pieceAnimator.update(time);
-            if (endedAnimations) this.endTurn();
+            if (endedAnimations) this.endTurn(time);
             this.checkCollisions(time);
         }
     }
@@ -161,15 +163,53 @@ export class Checkers {
     /**
      * End the turn of the current player and prepare the next one
      */
-    endTurn() {
+    endTurn(time) {
         const prevTileIdx = this.getTileIdx(this.selectedPieceIdx);
         const tileIdx = this.getPiece(this.selectedPieceIdx).tile.idx;
         this.game[tileIdx] = this.game[prevTileIdx];
-        this.game[prevTileIdx] = emptyTile;
+        if (tileIdx != prevTileIdx)
+            this.game[prevTileIdx] = emptyTile;
 
-        if (this.ruler.shouldBecomeKing(tileIdx, this.turn)) {
-            this.ruler.becomeKing(tileIdx, true);
-            this.getPiece(this.selectedPieceIdx).becomeKing(true);
+        for (let elem of this.pendingKings) {
+            const [_tileIdx, _pieceIdx, _player] = elem;
+            const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(_player);
+            if (pieceToPutOnTop) {
+                this.ruler.becomeKing(_tileIdx, true);
+
+                const pieceOnBottom = this.getPiece(_pieceIdx);
+                const startPosition = [pieceToPutOnTop.tile.h, 0, -pieceToPutOnTop.tile.v];
+                let endPosition = vec3.create();
+                let tm = mat4.create();
+                mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
+                vec3.transformMat4(endPosition, vec3.fromValues(0, 0, 0), tm);
+                
+                this.pieceAnimator.addPiece(pieceToPutOnTop, startPosition, [endPosition], pieceOnBottom, AnimationType.KINGIFY, time)
+                this.pendingKings.splice(this.pendingKings.indexOf(elem), 1);
+                return;
+            }
+        }
+
+        if (this.ruler.shouldBecomeKing(tileIdx, this.game)) {
+            const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(this.turn);
+            if (!pieceToPutOnTop) {
+                this.pendingKings.push([tileIdx, this.selectedPieceIdx, this.turn]);
+            } else {
+                this.ruler.becomeKing(tileIdx, true);
+
+                const pieceOnBottom = this.getPiece(this.selectedPieceIdx);
+                const startPosition = [pieceToPutOnTop.tile.h, 0, -pieceToPutOnTop.tile.v];
+                let endPosition = vec3.create();
+                let tm = mat4.create();
+                mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                mat4.translate(tm, tm, vec3.fromValues(pieceOnBottom.tile.h, 0.3, -pieceOnBottom.tile.v));
+                vec3.transformMat4(endPosition, vec3.fromValues(0, 0, 0), tm);
+                
+                this.pieceAnimator.addPiece(pieceToPutOnTop, startPosition, [endPosition], pieceOnBottom, AnimationType.KINGIFY, time)
+                return;
+            }
         }
 
         if (this.turn == CurrentPlayer.P1)
@@ -201,19 +241,35 @@ export class Checkers {
                     console.log("Collision with piece " + i);
                     const prevTileIdx = this.getTileIdx(piece.idx);
                     this.game[prevTileIdx] = emptyTile;
-                    const auxTile = this.auxiliarboard.tiles[piece.idx-1];
-                    const prevTilePos = [piece.tile.h, 0, -piece.tile.v];
                     
                     // calculate the relative position of the auxiliar tile
-                    let auxiliarTileRelativePosition = vec3.create();
+                    let prevTilePos = vec3.create();
                     let tm = mat4.create();
-                    mat4.invert(tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
-                    mat4.multiply(tm, tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
-                    mat4.translate(tm, tm, vec3.fromValues(auxTile.h, 0, -auxTile.v));
-                    vec3.transformMat4(auxiliarTileRelativePosition, vec3.fromValues(0, 0, 0), tm);
+                    mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                    mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                    mat4.translate(tm, tm, vec3.fromValues(piece.tile.h, 0, -piece.tile.v));
+                    vec3.transformMat4(prevTilePos, vec3.fromValues(0, 0, 0), tm);
                     
-                    const nextTilePoss = [auxiliarTileRelativePosition];
-                    this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, true, time);
+                    const auxTile = this.auxiliarboard.tiles[piece.idx-1];
+                    const nextTilePoss = [[auxTile.h, 0, -auxTile.v]];
+
+                    if (piece.isKing()) {
+                        // calculate the relative position of the auxiliar tile
+                        let _prevTilePos = vec3.create();
+                        tm = mat4.create();
+                        mat4.invert(tm, this.sceneGraph.components[this.auxiliarboard.id].transfMatrix);
+                        mat4.multiply(tm, tm, this.sceneGraph.components[this.mainboard.id].transfMatrix);
+                        mat4.translate(tm, tm, vec3.fromValues(piece.tile.h, 0.3, -piece.tile.v));
+                        vec3.transformMat4(_prevTilePos, vec3.fromValues(0, 0, 0), tm);
+                        
+                        const pieceOnTop = piece.pieceOnTop;
+                        const _auxTile = this.auxiliarboard.tiles[pieceOnTop.idx-1];
+                        const _nextTilePoss = [[_auxTile.h, 0, -_auxTile.v]];
+                        piece.becomeKing(false);
+                        this.pieceAnimator.addPiece(pieceOnTop, _prevTilePos, _nextTilePoss, _auxTile, AnimationType.COLLECTED, time);
+                    }
+
+                    this.pieceAnimator.addPiece(piece, prevTilePos, nextTilePoss, auxTile, AnimationType.COLLECTED, time);
                     break;
                 }
             }
@@ -234,7 +290,8 @@ export class Checkers {
      */
     selectPiece(idx) {
         this.selectedPieceIdx = idx;
-        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 1;
+        const selectedPiece = this.getPiece(this.selectedPieceIdx);
+        selectedPiece.select(true);
     }
 
     /**
@@ -242,7 +299,8 @@ export class Checkers {
      */
     unselectPiece() {
         if (this.selectedPieceIdx == null) return;
-        this.sceneGraph.components[this.getPiece(this.selectedPieceIdx).id].material = 0;
+        const selectedPiece = this.getPiece(this.selectedPieceIdx);
+        selectedPiece.select(false);
         this.selectedPieceIdx = null;
     }
 
@@ -299,7 +357,7 @@ export class Checkers {
      */
     movePiece(piece, prevTile, nextTiles) {
         // Put piece color to original
-        this.sceneGraph.components[piece.id].material = 0;
+        piece.select(false);
 
         const newGameMove = new GameMove(piece, prevTile, nextTiles, this.game);
         this.sequence.addMove(newGameMove);
@@ -309,7 +367,7 @@ export class Checkers {
     /**
      * Get the entity Piece from the piece idx.
      * @param {*} idx 
-     * @returns 
+     * @returns {Piece}
      */
     getPiece(idx) {
         return this.pieces[Math.abs(idx)-1];
@@ -332,22 +390,22 @@ export class Checkers {
      * @param {Array} game An array of 64 elements, representing the game board.
      * @param {string} componentref Component that represents a piece.
      */
-    buildPieces(game, componentrefs) {
+    buildPieces(game, componentref) {
         this.pieces = [];
         for (let i = 0; i < game.length; i++) {
             if (game[i] != emptyTile) {
                 const type = this.ruler.belongsToPlayer(game[i], CurrentPlayer.P1) ? 0:1;
                 const materialId = this.piecesMaterialsIds[type];
                 const pickId = game[i] + 200;
-                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], false, materialId, componentrefs, pickId));
+                this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], materialId, componentref, pickId));
             }
         }
     }
 
     // TODO: remove this function
     printGame() {
-        for (let v = 0; v < 8; v++) {
-            console.log(this.game.slice(v*8, v*8+8).join(" "));
+        for (let v = 7; v >= 0; v--) {
+            console.log(this.game.slice(v*8, v*8+8).join("\t"));
         }
     }
 
@@ -372,16 +430,30 @@ export class Checkers {
 
     forceGameUpdate(gameboard) {
         this.game = [...gameboard];
-        for (let piece of this.pieces) {
+        this.pendingKings = [];
+        
+        this.pieces.forEach(piece => piece.reset());
+        const collected = this.pieces.filter(piece => this.getTileIdx(piece.idx) == -1);
+        const notCollected = this.pieces.filter(piece => this.getTileIdx(piece.idx) != -1);
+
+        collected.forEach(piece => piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]));
+        notCollected.forEach(piece => {
             const tileIdx = this.getTileIdx(piece.idx);
-            if (tileIdx == -1) {
-                piece.updateTile(this.auxiliarboard.tiles[piece.idx-1]);
+            piece.updateTile(this.mainboard.tiles[tileIdx]);
+            const currPlayer = this.ruler.getPlayer(piece.idx);
+            if (this.ruler.isKing(tileIdx)) {
+                const pieceToPutOnTop = this.auxiliarboard.getFirstPieceOfPlayer(currPlayer);
+                if (pieceToPutOnTop != null) {
+                    piece.becomeKing(true, pieceToPutOnTop);
+                } else {
+                    this.pendingKings.push([tileIdx, piece.idx, currPlayer]);
+                }
+            } else {
+                if (this.ruler.shouldBecomeKing(tileIdx, this.game)) {
+                    this.pendingKings.push([tileIdx, piece.idx, currPlayer]);
+                }
             }
-            else {
-                piece.becomeKing(this.ruler.isKing(tileIdx));
-                piece.updateTile(this.mainboard.tiles[tileIdx]);
-            }
-        }
+        });
     }
 
     /**

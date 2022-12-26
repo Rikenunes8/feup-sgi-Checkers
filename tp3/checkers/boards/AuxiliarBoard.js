@@ -11,6 +11,15 @@ export class AuxiliarBoard extends Board {
         this.buildBoard();
     }
 
+    getFirstPieceOfPlayer(player) {
+        for (const tile of this.tiles) {
+            if (tile.piece != null && this.sceneGraph.scene.checkers.ruler.belongsToPlayer(tile.piece.idx, player)) {
+                return tile.piece;
+            }
+        }
+        return null;
+    }
+
     buildBoard() {
         this.transfMatrix = this.buildBoardTransfMatrix();
         this.facesIds = [];
@@ -33,7 +42,7 @@ export class AuxiliarBoard extends Board {
         for (let v = 0; v < 8; v++) {
             for (let h = 0; h < 3; h++) {
                 const tileMaterial = (v + h) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
-                const pickId = (v * 8) + h + 300;
+                const pickId = (v * 3) + h + 300;
                 this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
             }
         }

@@ -1,4 +1,5 @@
 import { GameMove } from './GameMove.js';
+import { CurrentPlayer } from './GameRuler.js';
 import { GameState } from './GameStateMachine.js';
 
 export class GameSequence {
@@ -39,6 +40,7 @@ export class GameSequence {
     replay(checkers, pieceAnimator) {
         this.replayIndex = 1;
         checkers.game = [...this.initialGame];
+        checkers.turn = CurrentPlayer.P1;
         checkers.forceGameUpdate(checkers.game);
         this.replayNextMove(checkers, pieceAnimator);
     }
