@@ -162,6 +162,9 @@ export class XMLscene extends CGFscene {
         this.setCamera(this.currCam);
 
         this.initLights();
+
+        if (this.checkers)
+            this.interface.addHighlightValidMoves();
         
         this.interface.addCameras();
         this.interface.addLights();

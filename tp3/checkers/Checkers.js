@@ -23,6 +23,7 @@ export class Checkers {
      */
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds, spotlightHeight) {
         this.sceneGraph = sceneGraph;
+        this.showValidMoves = true;
 
         this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
         this.menu = new Menu(this.sceneGraph.scene);
@@ -93,6 +94,7 @@ export class Checkers {
         this.buildPieces(this.game, pieceComponentsIds);
 
         this.turn = CurrentPlayer.P1;
+        this.ruler.setValidMoves(this.turn);
         this.selectedPieceIdx = null;
         this.results = {
             p1Time: 0,
@@ -227,6 +229,7 @@ export class Checkers {
 
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        this.ruler.setValidMoves(this.turn);
         if (this.ruler.checkEndGame(this.game, this.turn)) {
             this.setState(GameState.EndGame);
         } else if (this.stateMachine.getState() == GameState.Moving) {

@@ -24,6 +24,8 @@ export class Piece extends Pickable {
 
         this.pieceOnTop = null;
         this.pieceOnBottom = null;
+
+        this.validTiles = [];
     }
 
     display() {
@@ -44,6 +46,23 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id].material = material;
         if (this.isKing()) {
             this.sceneGraph.components[this.pieceOnTop.id].material = material;
+        }
+
+        // Highlight valid moves
+        if (toSelect) {
+            if (!this.sceneGraph.scene.checkers.showValidMoves) return;
+            const validMoves = this.sceneGraph.scene.checkers.ruler.turnValidMoves[this.idx];
+            for (const move in validMoves) {
+                const tileToHighlightIdx = validMoves[move][validMoves[move].length-1];
+                const tileToHighlight = this.sceneGraph.scene.checkers.mainboard.tiles[tileToHighlightIdx];
+                tileToHighlight.highlight(true);
+                this.validTiles.push(tileToHighlight);
+            }
+        } else {
+            for (const tile of this.validTiles) {
+                tile.highlight(false);
+            }
+            this.validTiles = [];
         }
     }
 

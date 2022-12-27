@@ -83,4 +83,8 @@ export class MyInterface extends CGFinterface {
             folder.add(this.scene.graph.highlightedComponents[c], 'isHighlighted').name(this.scene.graph.highlightedComponents[c].id).onChange();
         }
     }
+
+    addHighlightValidMoves() {
+        this.gui.add(this.scene.checkers, 'showValidMoves').name("Valid Moves");
+    }
 }
