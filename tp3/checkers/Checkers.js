@@ -11,6 +11,7 @@ import { MyButton } from "../components/MyButton.js";
 import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
 import { ResultsMenu } from "./menu/ResultsMenu.js";
+import { AnimationCamera } from "./AnimationCamera.js";
 
 export class Checkers {
     /**
@@ -70,6 +71,8 @@ export class Checkers {
         }
 
         this.pendingKings = [];
+
+        this.animationCamera = new AnimationCamera();
     }
 
     /**
@@ -158,6 +161,8 @@ export class Checkers {
             if (endedAnimations) this.endTurn(time);
             this.checkCollisions(time);
         }
+
+        this.animationCamera.update(this.sceneGraph.scene.camera);
     }
 
     /**
@@ -212,10 +217,13 @@ export class Checkers {
             }
         }
 
-        if (this.turn == CurrentPlayer.P1)
+        if (this.turn == CurrentPlayer.P1) {
             this.results.p1CurrTime = 0;
-        else
+        } else {
             this.results.p2CurrTime = 0;
+        }
+
+        this.animationCamera.rotate(this.turn, this.sceneGraph.scene.camera);
 
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
@@ -514,5 +522,9 @@ export class Checkers {
 
     endGameBtnHandler() {
         this.setState(GameState.Idle);
+    }
+
+    changeCamBtnHandler() {
+        this.animationCamera.handle(this.sceneGraph.scene.camera);
     }
 }

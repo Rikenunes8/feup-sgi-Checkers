@@ -28,7 +28,9 @@ export class Menu {
 		this.undoButton = new MyButton(this.scene, 'checkers-menu-undo-button', [-25.3, 32], [-17, 40], true, 3001, this.undoBtnOnPick, 'UNDO', [-37.5, 16.2, -50]);
 		this.replayButton = new MyButton(this.scene, 'checkers-menu-replay-button', [-25.3, 22], [-17, 30], true, 3002, this.replayBtnOnPick, 'REPLAY', [-38, 13.2, -50]);
 		this.restartBtn = new MyButton(this.scene, 'checkers-menu-restart-button', [-25.3, 12], [-17, 20], true, 3003, this.restartBtnOnPick, 'RESTART GAME', [-40.3, 10.2, -50]);
-		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, 2], [-17, 10], true, 3004, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 7.2, -50]);
+		this.changeCamBtn = new MyButton(this.scene, 'checkers-menu-changeCam-button', [-25.3, 2], [-17, 10], true, 3004, this.changeCamBtnOnPick, 'CHANGE CAMERA', [-40.5, 7.2, -50]);
+		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, -8], [-17, 0], true, 3005, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 4.2, -50]);
+		
 
 		this.displayButtons();        
 	}
@@ -55,6 +57,8 @@ export class Menu {
 		this.mainMenuBtn.display();
 		this.buttonAppearance.apply();
 		this.restartBtn.display();
+		this.buttonAppearance.apply();
+		this.changeCamBtn.display();
 		this.buttonAppearance.apply();
 
 		// re-enable depth test 
@@ -87,5 +91,10 @@ export class Menu {
 	restartBtnOnPick = () => {
 		console.log("Restart button picked");
 		this.scene.checkers.resetBtnHandler();
+	}
+
+	changeCamBtnOnPick = () => {
+		console.log("Change camera button picked");
+		this.scene.checkers.changeCamBtnHandler();
 	}
 }
