@@ -1,6 +1,7 @@
 import { CurrentPlayer } from "./GameRuler.js";
 import { CGFcameraAxisID } from "../../lib/CGF.js";
 
+export const checkersViewName = "Checkers";
 
 export class AnimationCamera {
     constructor() {
@@ -31,7 +32,8 @@ export class AnimationCamera {
         }
     }
 
-    rotate(player) {
+    rotate(player, camera) {
+        if (camera.name != checkersViewName) return;
         if (player == CurrentPlayer.P1) {
             this.rotatePositive = -1;
         } else {
@@ -46,7 +48,8 @@ export class AnimationCamera {
      * Rotates the camera from the following states:
      * Player 1 -> Middle Screen -> Player 2 -> Middle Screen -> Player 1...
      */
-    handle() {
+    handle(camera) {
+        if (camera.name != checkersViewName) return;
         if (this.clickedCount % 2 == 0 && this.clickedCount != 0) {
             this.rotatePosOnClick *= -1;
             this.clickedCount = 0;

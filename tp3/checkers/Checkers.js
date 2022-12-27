@@ -223,7 +223,7 @@ export class Checkers {
             this.results.p2CurrTime = 0;
         }
 
-        this.animationCamera.rotate(this.turn);
+        this.animationCamera.rotate(this.turn, this.sceneGraph.scene.camera);
 
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
@@ -525,6 +525,6 @@ export class Checkers {
     }
 
     changeCamBtnHandler() {
-        this.animationCamera.handle();
+        this.animationCamera.handle(this.sceneGraph.scene.camera);
     }
 }
