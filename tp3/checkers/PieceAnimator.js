@@ -23,6 +23,7 @@ export class PieceAnimator {
             collected: [],
             kingifying: [],
         };
+        this.spotlight = null;
     }
 
     /**
@@ -53,6 +54,9 @@ export class PieceAnimator {
 
         if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
+            this.spotlight = this.sceneGraph.scene.lights.filter((l) => l.name != undefined && l.name == "checkersSpotlight")[0];
+            this.updateSpotlight(info);
+            this.spotlight.enable();
         } else if (animType == AnimationType.COLLECTED) {
             this.pieceInfos.collected.push(info);
         } else if (animType == AnimationType.KINGIFY) {
@@ -73,6 +77,8 @@ export class PieceAnimator {
             this.updatePiece(pieceInfo, time);
         });
         this.updatePiece(this.pieceInfos.collector, time);
+        this.updateSpotlight(this.pieceInfos.collector);
+
         return this.pieceInfos.collector == null 
             && this.pieceInfos.collected.length == 0
             && this.pieceInfos.kingifying.length == 0;
@@ -82,6 +88,7 @@ export class PieceAnimator {
      * Update piece animation
      * @param {Object} pieceInfo 
      * @param {int} time 
+     * @param {boolean} updateLight
      * @returns True if the piece animation is finished
      */
     updatePiece(pieceInfo, time) {
@@ -112,6 +119,7 @@ export class PieceAnimator {
 
             if (pieceInfo.animType == AnimationType.COLLECT) {
                 this.pieceInfos.collector = null;
+                this.spotlight.disable();
             } else if (pieceInfo.animType == AnimationType.COLLECTED) {
                 this.pieceInfos.collected.splice(this.pieceInfos.collected.indexOf(pieceInfo), 1);
             } else if (pieceInfo.animType == AnimationType.KINGIFY) {
@@ -136,7 +144,24 @@ export class PieceAnimator {
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, position);
         this.sceneGraph.components[pieceInfo.piece.id].transfMatrix = transfMatrix;
+
         return false;
+    }
+
+    updateSpotlight(pieceInfo) {
+        if (pieceInfo == null) {
+            return;
+        }
+        const piece = pieceInfo.piece;
+        
+        let newPosition = vec3.create();
+        let tm = mat4.create();
+        mat4.multiply(tm, tm, this.sceneGraph.components[this.sceneGraph.scene.checkers.mainboard.id].transfMatrix);
+        mat4.multiply(tm, tm, this.sceneGraph.components[piece.id].transfMatrix);
+        mat4.translate(tm, tm, vec3.fromValues(0.5, 1.3, -0.5));
+        vec3.transformMat4(newPosition, vec3.fromValues(0, 0, 0), tm);
+
+        this.spotlight.setPosition(newPosition[0], newPosition[1], newPosition[2], 1.0);
     }
 
     /**

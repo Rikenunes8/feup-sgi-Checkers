@@ -1,6 +1,6 @@
 import { MyComponent } from "../../components/MyComponent.js";
 import { Tile } from '../Tile.js';
-import { buildCheckersRectangle } from "../primitives.js";
+import { buildCheckersTile } from "../primitives.js";
 import { displayGraph } from "../utils.js";
 import { Board } from "./Board.js";
 
@@ -17,7 +17,7 @@ export class GameBoard extends Board {
         this.facesIds = [];
         this.tiles = [];
 
-        const rectangleId = buildCheckersRectangle(this.sceneGraph);
+        const rectangleId = buildCheckersTile(this.sceneGraph);
         this.buildFaces(rectangleId);
         this.buildBoardBase();
         this.buildTiles(rectangleId);

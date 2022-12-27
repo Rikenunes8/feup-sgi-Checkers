@@ -9,7 +9,7 @@ export class XMLParserLights extends XMLParser {
      * Parses the <light> node.
      * @param {lights block element} node
      */
-    parse(node) {
+    parse(node, checkers=false) {
         var children = node.children;
 
         // object with lightId associated with its properties
@@ -134,8 +134,8 @@ export class XMLParserLights extends XMLParser {
 
         if (numLights == 0)
             return "at least one light must be defined";
-        else if (numLights > 8)
-            this.onXMLMinorError("too many lights defined; WebGL imposes a limit of 8 lights");
+        else if (numLights > (checkers ? 7 : 8))
+            this.onXMLerror("too many lights defined; WebGL imposes a limit of 8 lights");
 
         this.log("Parsed lights");
         return null;

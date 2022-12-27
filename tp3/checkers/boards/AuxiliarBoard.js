@@ -1,6 +1,6 @@
 import { MyComponent } from "../../components/MyComponent.js";
 import { displayGraph, writeText } from "../utils.js";
-import { buildCheckersRectangle } from "../primitives.js";
+import { buildCheckersTile } from "../primitives.js";
 import { Board } from "./Board.js";
 import { Tile } from "../Tile.js";
 
@@ -25,7 +25,7 @@ export class AuxiliarBoard extends Board {
         this.facesIds = [];
         this.tiles = [];
 
-        const rectangleId = buildCheckersRectangle(this.sceneGraph);
+        const rectangleId = buildCheckersTile(this.sceneGraph);
         this.buildFaces(rectangleId);
         this.buildMenu(rectangleId);
         this.buildBoardBase();

@@ -1,6 +1,7 @@
 import { MyTorus } from '../components/MyTorus.js';
 import { MyRectangle } from '../components/MyRectangle.js';
 import { MyComponent } from '../components/MyComponent.js';
+import { MyPatch } from '../components/MyPatch.js';
 
 /**
  * Radius of a piece component.
@@ -26,6 +27,17 @@ function buildCheckersTorus(sceneGraph) {
 export function buildCheckersRectangle(sceneGraph) {
     const id = 'checkers-rectangle';
     sceneGraph.primitives[id] = new MyRectangle(sceneGraph.scene, id, 0.0, 1.0, 0.0, 1.0);
+    return id;
+};
+
+/**
+ * Add a rectangle patch primitive to the scene graph.
+ * @param {*} sceneGraph 
+ * @returns id of the rectangle patch primitive
+ */
+export function buildCheckersTile(sceneGraph) {
+    const id = 'checkers-tile';
+    sceneGraph.primitives[id] = new MyPatch(sceneGraph.scene, id, 1, 10, 1, 10, [[[0.0, 0.0, 0.0, 1.0], [0.0, 1.0, 0.0, 1.0]], [[1.0, 0.0, 0.0, 1.0], [1.0, 1.0, 0.0, 1.0]]]);
     return id;
 };
 

@@ -93,7 +93,7 @@ export class XMLParser {
     }
 
     onXMLerror(message) {
-        this.scene.onXMLerror( message);
+        this.scene.onXMLError( message);
         this.scene.loadedOk = false;
     }
     onXMLMinorError(message) {
