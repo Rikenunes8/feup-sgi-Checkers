@@ -48,3 +48,24 @@ export const writeText = (scene, text) => {
 export function toArrIndex(row, col) {
     return (row * 8) + col;
 }
+
+export function bezier(out, a, b, c, d, t) {
+    const [aX, bX, cX] = _bezierCoord(a, b, c, d, 0);
+    const [aY, bY, cY] = _bezierCoord(a, b, c, d, 1);
+    const [aZ, bZ, cZ] = _bezierCoord(a, b, c, d, 2);
+      
+    const x = (aX * Math.pow(t, 3)) + (bX * Math.pow(t, 2)) + (cX * t) + a[0];
+    const y = (aY * Math.pow(t, 3)) + (bY * Math.pow(t, 2)) + (cY * t) + a[1];
+    const z = (aZ * Math.pow(t, 3)) + (bZ * Math.pow(t, 2)) + (cZ * t) + a[2];
+
+    out[0] = x; out[1] = y; out[2] = z;
+
+    return [x, y, z];
+}
+
+function _bezierCoord(a, b, c, d, i) {
+    const cX = 3 * (b[i] - a[i]);
+    const bX = 3 * (c[i] - b[i]) - cX;
+    const aX = d[i] - a[i] - cX - bX;
+    return [aX, bX, cX];
+}

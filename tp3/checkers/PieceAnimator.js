@@ -1,6 +1,7 @@
 import { Piece } from "./Piece.js";
 import { pawnRadius } from "./primitives.js";
 import { Tile } from "./Tile.js";
+import { bezier } from "./utils.js";
 
 export const AnimationType = Object.freeze({
     COLLECT: Symbol("collect"),
@@ -119,10 +120,19 @@ export class PieceAnimator {
             return true;
         }
 
+        const startPosition = pieceInfo.startPosition;
+        const endPosition = pieceInfo.endPositions[0];
+
         // Update piece position according to interpolation of current and next positions
         const percentage = elapsedTime / pieceInfo.duration;
-        const position = vec3.create();
-        vec3.lerp(position, pieceInfo.startPosition, pieceInfo.endPositions[0], percentage);
+        let position = vec3.create();
+        if (pieceInfo.animType == AnimationType.COLLECT) {
+            vec3.lerp(position, startPosition, endPosition, percentage);
+        } else {
+            const p1 = [...startPosition];  p1[1] = p1[1] + 3;
+            const p2 = [...endPosition];    p2[1] = p2[1] + 3;
+            position = bezier(position, startPosition, p1, p2, endPosition, percentage)
+        }
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, position);
         this.sceneGraph.components[pieceInfo.piece.id].transfMatrix = transfMatrix;
