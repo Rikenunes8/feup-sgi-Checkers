@@ -2442,7 +2442,7 @@
             <type1 id="lightWood" />
             <type2 id="darkWood" />
         </pieces>
-        <spot id="checkersSpotlight" angle="20" exponent="0">
+        <spot id="checkersSpotlight" angle="20" exponent="5" height="1.5">
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
