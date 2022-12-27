@@ -21,7 +21,7 @@ export class Checkers {
      * @param {*} auxiliarboard 
      * @param {Array} piecesMaterialsIds Array of materials ids for the pieces. The first element is the material for player 1 pieces, and the second is for player 2 pieces.
      */
-    constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds) {
+    constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds, spotlightHeight) {
         this.sceneGraph = sceneGraph;
 
         this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
@@ -33,7 +33,7 @@ export class Checkers {
 
         this.ruler = new GameRuler(this);
         this.stateMachine = new GameStateMachine(this);
-        this.pieceAnimator = new PieceAnimator(this.sceneGraph);
+        this.pieceAnimator = new PieceAnimator(this.sceneGraph, spotlightHeight);
         this.pieces = [];
 
         this.game = this.ruler.buildInitialGame();

@@ -10,7 +10,7 @@ export const AnimationType = Object.freeze({
 });
 
 export class PieceAnimator {
-    constructor(sceneGraph) {
+    constructor(sceneGraph, spotlightHeight) {
         this.sceneGraph = sceneGraph;
         /**
          * @type {Object}
@@ -24,6 +24,7 @@ export class PieceAnimator {
             kingifying: [],
         };
         this.spotlight = null;
+        this.spotlightHeight = spotlightHeight;
     }
 
     /**
@@ -158,7 +159,7 @@ export class PieceAnimator {
         let tm = mat4.create();
         mat4.multiply(tm, tm, this.sceneGraph.components[this.sceneGraph.scene.checkers.mainboard.id].transfMatrix);
         mat4.multiply(tm, tm, this.sceneGraph.components[piece.id].transfMatrix);
-        mat4.translate(tm, tm, vec3.fromValues(0.5, 1.3, -0.5));
+        mat4.translate(tm, tm, vec3.fromValues(0.5, this.spotlightHeight, -0.5));
         vec3.transformMat4(newPosition, vec3.fromValues(0, 0, 0), tm);
 
         this.spotlight.setPosition(newPosition[0], newPosition[1], newPosition[2], 1.0);

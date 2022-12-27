@@ -34,10 +34,10 @@ export class XMLParserCheckers extends XMLParser {
         let pieces = this.parsePieces(children[piecesIndex]);
         if (!Array.isArray(pieces)) return pieces;
 
-        let spotlight = this.parseSpotlight(children[spotlightIndex], mainboard.getCenter());
-        if (spotlight != null) return spotlight;
+        let spotlightHeight = this.parseSpotlight(children[spotlightIndex], mainboard.getCenter());
+        if (typeof spotlightHeight == "string") return spotlightHeight;
 
-        this.scene.scene.checkers = new Checkers(this.scene, mainboard, auxiliarboard, pieces);
+        this.scene.scene.checkers = new Checkers(this.scene, mainboard, auxiliarboard, pieces, spotlightHeight);
     }
 
     /**
@@ -219,8 +219,12 @@ export class XMLParserCheckers extends XMLParser {
 
         global.push(...[angle, exponent, targetLight])
 
+        var heigth = this.reader.getFloat(spotlight, 'height');
+        if (!(heigth != null && !isNaN(heigth)))
+            return "unable to parse height of the light for ID = " + lightId;
+
         this.scene.lights[lightId] = global;
-        return null;
+        return heigth;
     }
 
 }
