@@ -23,70 +23,36 @@ export class GameStateMachine {
     }
 
     /**
-     * Call the handler of the new state.
+     * Changes the state and act accordingly.
      * @param {GameState} newState New state to be set.
      */
     changeState(newState) {
         this.state = newState;
-        if (newState == GameState.Menu) {
-            // TODO: Do we want to do something here?
-        } else if (newState == GameState.Idle) {
-            this.changeStateToIdle();
-        }
-        else if (newState == GameState.Pause) {
-            this.changeStateToPause();
-        } else if (newState == GameState.Replay) {
-            this.changeStateToReplay();
-        } else if (newState == GameState.WaitPiecePick) {
-            this.changeStateToWaitPiecePick();
-        } else if (newState == GameState.WaitTilePick) {
-            this.changeStateToWaitTilePick();
-        } else if (newState == GameState.Moving) {
-            this.changeStateToMoving();
-        } else if (newState == GameState.EndGame) {
-            this.changeStateToEndGame();
-        } else if (newState == GameState.ReplayMoving) {
-            this.changeStateToReplayMoving();
+        switch (newState) {
+            case GameState.Idle:
+                this.checkers.resetGame();
+            case GameState.Pause:
+            case GameState.Replay:
+                this.checkers.unselectPiece();
+            case GameState.Moving:
+            case GameState.EndGame:
+                this.clear();
+                break;
+            case GameState.WaitPiecePick:
+                this.changeStateToWaitPiecePick();
+                break;
+            case GameState.WaitTilePick:
+                this.changeStateToWaitTilePick();
+                break;
         }
     }
 
     /**
-     * Changes the state to Idle.
-     * This state is used when the game has not started yet.
-     * All tiles and pieces are not pickable.
-     * The selected piece is unselected.
-     * The times of each player and total time are reset.
+     * Clears pickables.
      */
-    changeStateToIdle() {
+    clear() {
         this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
         this.checkers.pieces.forEach(p => p.pickable = false);
-        this.checkers.unselectPiece();
-        this.checkers.resetGame();
-    }
-
-    /**
-     * Changes the state to Pause.
-     * This state is used when the game is paused.
-     * All tiles and pieces are not pickable.
-     * The selected piece is unselected.
-     */
-    changeStateToPause() {
-        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
-        this.checkers.pieces.forEach(p => p.pickable = false);
-        this.checkers.unselectPiece();
-    }
-
-    changeStateToReplay() {
-        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
-        this.checkers.pieces.forEach(p => p.pickable = false);
-        this.checkers.unselectPiece();
-    }
-
-    /**
-     * Changes the state to ReplayMoving.
-     */
-    changeStateToReplayMoving() {
-
     }
 
     /**
@@ -121,22 +87,5 @@ export class GameStateMachine {
                 this.checkers.mainboard.tiles[v*8+h].pickable = true;
             }
         }
-    }
-
-    /**
-     * Changes the state to Moving.
-     */
-    changeStateToMoving() {
-        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
-        this.checkers.pieces.forEach(p => p.pickable = false);
-    }
-
-    /**
-     * Changes the state to EndGame.
-     */
-    changeStateToEndGame() {
-        this.checkers.mainboard.tiles.forEach(t => t.pickable = false);
-        this.checkers.pieces.forEach(p => p.pickable = false);
-        console.log("Game Over!");
     }
 }
