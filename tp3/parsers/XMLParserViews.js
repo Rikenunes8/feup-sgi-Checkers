@@ -1,5 +1,6 @@
 import { CGFcamera, CGFcameraOrtho} from '/lib/CGF.js';
 import { XMLParser, DEGREE_TO_RAD } from './XMLParser.js';
+import { checkersViewName } from '../checkers/AnimationCamera.js';
 
 export class XMLParserViews extends XMLParser {
     constructor(scene) {
@@ -9,7 +10,7 @@ export class XMLParserViews extends XMLParser {
      * Parses the <views> block.
      * @param {view block element} node
      */
-    parse(node) {
+    parse(node, checkers=false) {
         // object with all the viewsId associated with its properties
         this.scene.views = {};
 
@@ -108,7 +109,11 @@ export class XMLParserViews extends XMLParser {
         // check if the defaultCamera is defined
         if (!Object.keys(this.scene.views).includes(this.scene.defaultCam)) 
             return 'The default View specified it is not defined';
-
+        
+        // check if the checkers view is defined
+        if (checkers && !Object.keys(this.scene.views).includes(checkersViewName))
+            return 'The checkers view with id "Checkers" is not defined';
+        
         return null;
     }
 }

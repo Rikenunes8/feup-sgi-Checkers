@@ -81,7 +81,7 @@ export class XMLParserFile extends XMLParser {
                 this.onXMLMinorError("tag <" + name + "> out of order " + index);
 
             //Parse element block
-            let error = data[name]['parser'].parse(nodes[index])
+            let error = data[name]['parser'].parse(nodes[index], nodeNames.indexOf("checkers") != -1);
             if (error != null)
                 return error;
         }

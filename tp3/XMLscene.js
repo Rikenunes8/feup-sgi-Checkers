@@ -1,5 +1,6 @@
 import { CGFappearance, CGFscene, CGFtexture } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
+import { checkersViewName } from './checkers/AnimationCamera.js';
 import { MyQuad } from './components/MyQuad.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
@@ -173,8 +174,9 @@ export class XMLscene extends CGFscene {
     setCamera = (cam) => {
         // Change the cameras
         this.camera = this.graph.views[cam];
+        this.camera.name = cam;
 
-        if (cam != "boardView") 
+        if (this.checkers == null || cam != checkersViewName) 
             this.interface.setActiveCamera(this.camera);
     }
 
