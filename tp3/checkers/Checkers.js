@@ -24,6 +24,7 @@ export class Checkers {
     constructor (sceneGraph, mainboard, auxiliarboard, piecesMaterialsIds, spotlightHeight) {
         this.sceneGraph = sceneGraph;
         this.showValidMoves = true;
+        this.forceEat = true;
 
         this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
         this.menu = new Menu(this.sceneGraph.scene);
@@ -510,6 +511,7 @@ export class Checkers {
         this.unselectPiece();
         this.forceGameUpdate(this.sequence.topMove().gameboard);
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
+        this.ruler.setValidMoves(this.turn);
         this.sequence.undo();
         this.setState(GameState.WaitPiecePick);
     }

@@ -164,7 +164,7 @@ export class XMLscene extends CGFscene {
         this.initLights();
 
         if (this.checkers)
-            this.interface.addHighlightValidMoves();
+            this.interface.addCheckersInterface();
         
         this.interface.addCameras();
         this.interface.addLights();

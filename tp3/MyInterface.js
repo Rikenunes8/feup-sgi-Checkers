@@ -84,7 +84,8 @@ export class MyInterface extends CGFinterface {
         }
     }
 
-    addHighlightValidMoves() {
+    addCheckersInterface() {
         this.gui.add(this.scene.checkers, 'showValidMoves').name("Valid Moves");
+        this.gui.add(this.scene.checkers, 'forceEat').name("Force eat");
     }
 }
