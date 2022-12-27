@@ -220,7 +220,6 @@ export class XMLParserCheckers extends XMLParser {
         global.push(...[angle, exponent, targetLight])
 
         this.scene.lights[lightId] = global;
-        console.log(this.scene.lights)
         return null;
     }
 

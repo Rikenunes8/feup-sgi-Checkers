@@ -55,6 +55,7 @@ export class PieceAnimator {
         if (animType == AnimationType.COLLECT) {
             this.pieceInfos.collector = info;
             this.spotlight = this.sceneGraph.scene.lights.filter((l) => l.name != undefined && l.name == "checkersSpotlight")[0];
+            this.updateSpotlight(info);
             this.spotlight.enable();
         } else if (animType == AnimationType.COLLECTED) {
             this.pieceInfos.collected.push(info);
@@ -159,7 +160,6 @@ export class PieceAnimator {
         mat4.multiply(tm, tm, this.sceneGraph.components[piece.id].transfMatrix);
         mat4.translate(tm, tm, vec3.fromValues(0.5, 1.3, -0.5));
         vec3.transformMat4(newPosition, vec3.fromValues(0, 0, 0), tm);
-        console.log(newPosition)
 
         this.spotlight.setPosition(newPosition[0], newPosition[1], newPosition[2], 1.0);
     }
