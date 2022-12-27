@@ -223,13 +223,13 @@ export class Checkers {
             this.results.p2CurrTime = 0;
         }
 
-        this.animationCamera.rotate(this.turn, this.sceneGraph.scene.camera);
-
+        const turnBefore = this.turn;
         this.unselectPiece();
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
         if (this.ruler.checkEndGame(this.game, this.turn)) {
             this.setState(GameState.EndGame);
         } else if (this.stateMachine.getState() == GameState.Moving) {
+            this.animationCamera.rotate(turnBefore, this.sceneGraph.scene.camera);
             this.setState(GameState.WaitPiecePick);
         } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
             this.setState(GameState.Replay);
