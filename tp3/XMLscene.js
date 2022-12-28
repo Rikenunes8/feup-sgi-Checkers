@@ -1,7 +1,7 @@
 import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
 import { checkersViewName } from './checkers/AnimationCamera.js';
-import { initText } from './text/text.js';
+import { Texter } from './text/Texter.js';
 
 var DEGREE_TO_RAD = Math.PI / 180;
 
@@ -52,7 +52,7 @@ export class XMLscene extends CGFscene {
         this.highlightedShader = new CGFshader(this.gl, "shaders/pulse.vert", "shaders/pulse.frag");
         this.highlightedShader.setUniformsValues({ timeFactor: 0 });
 
-        initText(this);
+        this.texter = new Texter(this);
 
         this.startTime = null;
 		this.setUpdatePeriod(10);
