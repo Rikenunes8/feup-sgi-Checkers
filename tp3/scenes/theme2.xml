@@ -3,11 +3,15 @@
 
     <views default="view1">
         <perspective id="Checkers" near="0.1" far="500" angle="45">
-            <from x="0" y="1.5" z="0.9" />
-            <to x="0" y="1.15" z="0" />
+            <from x="0.8" y="2.5" z="1.5" />
+            <to x="0.8" y="1.5" z="0" />
         </perspective>
         <perspective id="view1" near="0.1" far="500" angle="45">
-            <from x="5" y="5" z="5" />
+            <from x="15" y="10" z="12" />
+            <to x="-4" y="0" z="0" />
+        </perspective>
+        <perspective id="roomView" near="0.1" far="500" angle="45">
+            <from x="0.5" y="9" z="20" />
             <to x="0" y="0" z="0" />
         </perspective>
     </views>
@@ -18,11 +22,32 @@
     </ambient>
 
     <lights>
-        <omni id="light" enabled="1">
-            <location x="0" y="4" z="0" w="1.0"/>
+        <omni id="flameLight1" enabled="0">
+            <location x="0" y="4" z="-1.8" w="1.0"/>
             <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <attenuation constant="0" linear="1" quadratic="0" />
+        </omni>
+        <omni id="flameLigh2" enabled="0">
+            <location x="1" y="4" z="-1.8" w="1.0"/>
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <attenuation constant="0" linear="1" quadratic="0" />
+        </omni>
+        <omni id="flameLigh3" enabled="0">
+            <location x="2" y="4" z="-1.8" w="1.0"/>
+            <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <attenuation constant="0" linear="1" quadratic="0" />
+        </omni>
+        <omni id="centerRoomLight" enabled="1">
+            <location x="0.5" y="7.3" z="6" w="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
     </lights>
@@ -35,6 +60,9 @@
         <texture id="snooker" file="scenes/images/snooker.jpg" />
         <texture id="carpet" file="scenes/images/carpet.jpg" />
         <texture id="wood" file="scenes/images/lightWood.jpg" />
+        <texture id="room" file="scenes/images/fullRoom.png" />
+        <texture id="roomRotated" file="scenes/images/fullRoomRotated.png" />
+
     </textures>
 
     <materials>
@@ -91,6 +119,12 @@
             <ambient r="0.199" g="0.243" b="0.226" a="1" />
             <diffuse r="0.199" g="0.243" b="0.226" a="1.0" />
             <specular r="0.199" g="0.243" b="0.226" a="1.0" />
+        </material>
+        <material id="light" shininess="500">
+            <emission r="0.5" g="0.5" b="0.5" a="1.0" />
+            <ambient r="0.20" g="0.21" b="0.21" a="1" />
+            <diffuse r="0.46" g="0.54" b="0.59" a="1.0" />
+            <specular r="0.23" g="0.27" b="0.30" a="1.0" />
         </material>
     </materials>
 
@@ -204,6 +238,13 @@
             <texture id="none"/>
             <children>
                 <componentref id="roomBox"/>
+                <componentref id="table"/>
+                <componentref id="teacherChair"/>
+                <componentref id="allChairs"/>
+                <componentref id="teacherTable"/>
+                <componentref id="television"/>
+                <componentref id="ceilingLamp"/>
+                <componentref id="frameLight"/>
             </children>
         </component>
 
@@ -222,11 +263,6 @@
                 <componentref id="stairs"/>
                 <componentref id="ceiling"/>
                 <componentref id="floor"/>
-                <componentref id="table"/>
-                <componentref id="chair"/>
-                <componentref id="allChairs"/>
-                <componentref id="teacherTable"/>
-                <componentref id="television"/>
             </children>
         </component>
 
@@ -604,7 +640,19 @@
                 <componentref id="chairsChain"/>
             </children>
         </component>
-        
+
+        <component id="teacherChair">
+            <transformation>
+                <translate x="0" y="0" z="-0.5"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="chair"/>
+            </children>
+        </component> 
 
         <component id="chairsChain">
             <transformation>
@@ -708,7 +756,6 @@
             </children>
         </component>
 
-
         <component id="floor">
             <transformation>
             </transformation>
@@ -758,7 +805,7 @@
             <materials>
                 <material id="dirtyWhite"/>
             </materials>
-            <texture id="none"/>
+            <texture id="room" length_s="1" length_t="1" />
             <children>
                 <componentref id="frame"/>
                 <componentref id="picture"/>
@@ -772,7 +819,7 @@
             <materials>
                 <material id="dirtyWhite"/>
             </materials>
-            <texture id="none"/>
+            <texture id="none" />
             <children>
                 <componentref id="frame"/>
                 <componentref id="picture"/>
@@ -784,7 +831,7 @@
             <materials>
                 <material id="white"/>
             </materials>
-            <texture id="none"/>
+            <texture id="inherit"/>
             <children>
                 <primitiveref id="rectangleNurb"/>
             </children>
@@ -796,7 +843,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit"/>
+            <texture id="none"/>
             <children>
                 <componentref id="frameLeft"/>
                 <componentref id="frameRight"/>
@@ -1120,7 +1167,7 @@
             <materials>
                 <material id="white"/>
             </materials>
-            <texture id="snooker" length_s="1" length_t="1"/>
+            <texture id="roomRotated" length_s="1" length_t="1" />
             <children>
                 <primitiveref id="tentNurb"/>
             </children>
@@ -1163,7 +1210,62 @@
                 <componentref id="cube"/>
             </children>
         </component>
-        
+
+        <component id="ceilingLamp">
+            <transformation>
+                <translate x="0.5" y="7" z="6" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="lampPanel"/>
+                <componentref id="lampFrame"/>
+            </children>
+        </component>
+        <component id="lampFrame">
+            <transformation>
+                <scale x="0.5" y="0.5" z="0.5" />
+                <rotate axis="x" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="cylinder"/>
+            </children>
+        </component>
+        <component id="lampPanel">
+            <transformation>
+                <translate x="0" y="0.5" z="0" />
+                <scale x="0.5" y="0.5" z="0.5" />
+                <rotate axis="x" angle="180" />
+            </transformation>
+            <materials>
+                <material id="white" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="circleNurb"/>
+            </children>
+        </component>
+
+        <component id="frameLight">
+            <transformation>
+                <translate x="-1" y="4" z="-2" />
+                <scale x="4" y="0.08" z="0.08" />
+                <rotate axis="y" angle="90" />
+            </transformation>
+            <materials>
+                <material id="light"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+               <primitiveref id="cylinder"/> 
+            </children>
+        </component>
 
         <component id="cube">
             <transformation>
@@ -1275,7 +1377,7 @@
         </auxiliarboard>
         <pieces>
             <type1 id="black" />
-            <type2 id="dirtyWhite" />
+            <type2 id="darkGray" />
         </pieces>
         <spot id="checkersSpotlight" angle="10" exponent="80" height="10">
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
