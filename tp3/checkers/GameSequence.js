@@ -36,7 +36,6 @@ export class GameSequence {
         return this._gameSequence.length == 1;
     }
 
-    // TODO: check this
     replay(checkers, pieceAnimator) {
         this.replayIndex = 1;
         checkers.game = [...this.initialGame];

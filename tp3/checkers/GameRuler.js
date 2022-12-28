@@ -33,10 +33,25 @@ export class GameRuler {
 
     setValidMoves(player) {
         this.turnValidMoves = {};
+        let mustEat = 0;
         for (let i = 0; i < this.checkers.game.length; i++) {
             if (this.belongsToPlayer(this.checkers.game[i], player)) {
                 const pieceMoves = this.pieceValidMoves(this.checkers.game[i]);
                 this.turnValidMoves[Math.abs(this.checkers.game[i])] = {...pieceMoves};
+                for (const move in pieceMoves) {
+                    if (pieceMoves[move].eat > mustEat) {
+                        mustEat = pieceMoves[move].eat;
+                    }
+                }
+            }
+        }
+
+        if (!this.checkers.forceEat) return;
+        for (const piece in this.turnValidMoves) {
+            for (const move in this.turnValidMoves[piece]) {
+                if (this.turnValidMoves[piece][move].eat < mustEat) {
+                    delete this.turnValidMoves[piece][move];
+                }
             }
         }
     }
@@ -76,7 +91,7 @@ export class GameRuler {
             if (!isKing && i == 2) break;
             let tile = toArrIndex(pieceRow + rowInc*Math.pow(-1, Math.floor(i / 2)), pieceCol - Math.pow(-1, i));
             if (this.checkers.game[tile] == emptyTile && !this.overflowBoard(tile, pieceCol)) {
-                validMoves[tile] = [tile];
+                validMoves[tile] = {"eat": 0, "toVisit": [tile]};
             }
         }
     }
@@ -90,7 +105,7 @@ export class GameRuler {
      * @param {boolean} isKing true if the piece is a king or false if it is a pawn
      * @param {*} visited 
      */
-    validEatMoves(player, tileIdx, validMoves, isKing, visited = []) {
+    validEatMoves(player, tileIdx, validMoves, isKing, visited = [], eat = 0) {
         const pieceRow = Math.floor(tileIdx / 8);
         const pieceCol = tileIdx % 8;
         const lastPosition = visited.length > 1 ? visited[visited.length - 2] : null;
@@ -103,9 +118,9 @@ export class GameRuler {
             if (!this.belongsToPlayer(pieceId, player) && pieceId != emptyTile && !this.overflowBoard(tile, pieceCol)
                     && (lastPosition == null || nextTile != lastPosition)) {
                 if (this.checkers.game[nextTile] == emptyTile && !this.overflowBoard(nextTile, pieceCol)) {
-                    this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile]);
+                    this.validEatMoves(player, nextTile, validMoves, isKing, [...visited, nextTile], eat + 1);
                     if (!validMoves[nextTile] || validMoves[nextTile].length <= visited.length) 
-                        validMoves[nextTile] = [...visited, nextTile];
+                        validMoves[nextTile] = {"eat": eat+1, "toVisit": [...visited, nextTile]};
                 }
             }
         }
@@ -118,7 +133,9 @@ export class GameRuler {
      */
     validateMove(tileIdx) {
         const pieceValidMoves = this.turnValidMoves[this.checkers.selectedPieceIdx];
-        return pieceValidMoves != null ? pieceValidMoves[tileIdx] : null;
+        if (pieceValidMoves == null) return null;
+        if (pieceValidMoves[tileIdx] == null) return null;
+        return pieceValidMoves[tileIdx].toVisit;
     }
 
     /**

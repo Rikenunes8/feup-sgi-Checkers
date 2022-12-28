@@ -53,7 +53,7 @@ export class Piece extends Pickable {
             if (!this.sceneGraph.scene.checkers.showValidMoves) return;
             const validMoves = this.sceneGraph.scene.checkers.ruler.turnValidMoves[this.idx];
             for (const move in validMoves) {
-                const tileToHighlightIdx = validMoves[move][validMoves[move].length-1];
+                const tileToHighlightIdx = validMoves[move].toVisit[validMoves[move].toVisit.length-1];
                 const tileToHighlight = this.sceneGraph.scene.checkers.mainboard.tiles[tileToHighlightIdx];
                 tileToHighlight.highlight(true);
                 this.validTiles.push(tileToHighlight);
