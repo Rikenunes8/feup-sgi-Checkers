@@ -73,6 +73,12 @@
             <diffuse r="0.7" g="0.65" b="0.62" a="1.0" />
             <specular r="0.0" g="0.0" b="0.0" a="1.0" />
         </material>
+        <material id="red" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.7" g="0.0" b="0.0" a="1.0" />
+            <diffuse r="0.8" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -860,6 +866,7 @@
             <lightTile id="lightWood" />
             <darkTile id="darkWood" />
             <boardWalls id="gold" />
+            <highlightTile id="red" />
         </mainboard>
         <auxiliarboard x1="0.6" y1="0.95" z1="0.4" x2="0.9" y2="1.05" z2="-0.4" >
             <boardWalls id="white" />

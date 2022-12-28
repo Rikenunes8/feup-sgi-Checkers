@@ -13,10 +13,11 @@ export class XMLscene extends CGFscene {
      * @constructor
      * @param {MyInterface} myinterface 
      */
-    constructor(myinterface) {
+    constructor(myinterface, theme) {
         super();
 
         this.interface = myinterface;
+        this.theme = theme;
     }
 
     /**
@@ -163,8 +164,10 @@ export class XMLscene extends CGFscene {
 
         this.initLights();
 
-        if (this.checkers)
+        if (this.checkers) {
+            this.checkers.config.selectedTheme = this.theme ?? 1;
             this.interface.addCheckersInterface();
+        }
         
         this.interface.addCameras();
         this.interface.addLights();
