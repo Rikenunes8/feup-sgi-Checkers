@@ -1,5 +1,5 @@
 import { MyComponent } from "../../components/MyComponent.js";
-import { displayGraph, writeText } from "../utils.js";
+import { displayGraph } from "../utils.js";
 import { buildCheckersTile } from "../primitives.js";
 import { Board } from "./Board.js";
 import { Tile } from "../Tile.js";
@@ -89,7 +89,7 @@ export class AuxiliarBoard extends Board {
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
         scene.multMatrix(transfMatrix);
 
-        writeText(scene, 'PLAYER 2');
+        scene.texter.writeText('PLAYER 2');
         scene.popMatrix();
 
         // Display Player1
@@ -100,7 +100,7 @@ export class AuxiliarBoard extends Board {
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
         scene.multMatrix(transfMatrix);
 
-        writeText(scene, 'PLAYER 1');
+        scene.texter.writeText('PLAYER 1');
         scene.popMatrix();
 
         
@@ -111,7 +111,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Score:' + p2Score);
+        scene.texter.writeText('Score:' + p2Score);
         scene.popMatrix();
 
         // Draw player2 Curr Time
@@ -121,7 +121,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Curr Time:' + scene.checkers.results.p2CurrTime + 's');
+        scene.texter.writeText('Curr Time:' + scene.checkers.results.p2CurrTime + 's');
         scene.popMatrix();
 
         // Draw player2 Total Time
@@ -131,7 +131,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Total Time:' + scene.checkers.results.p2Time + 's');
+        scene.texter.writeText('Total Time:' + scene.checkers.results.p2Time + 's');
         scene.popMatrix();
 
 
@@ -142,7 +142,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Score:' + p1Score);
+        scene.texter.writeText('Score:' + p1Score);
         scene.popMatrix();
 
         // Draw player1 Time
@@ -152,7 +152,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Curr Time:' + scene.checkers.results.p1CurrTime + 's');
+        scene.texter.writeText('Curr Time:' + scene.checkers.results.p1CurrTime + 's');
         scene.popMatrix();
 
         // Draw player1 Time
@@ -162,7 +162,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Total Time:' + scene.checkers.results.p1Time + 's');
+        scene.texter.writeText('Total Time:' + scene.checkers.results.p1Time + 's');
         scene.popMatrix();
 
         // Draw Total Time
@@ -172,7 +172,7 @@ export class AuxiliarBoard extends Board {
         mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
         mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
         scene.multMatrix(transfMatrix);
-        writeText(scene, 'Total Game Time:' + scene.checkers.results.totalTime + 's');
+        scene.texter.writeText('Total Game Time:' + scene.checkers.results.totalTime + 's');
         scene.popMatrix();
     }
 

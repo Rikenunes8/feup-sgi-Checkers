@@ -1,8 +1,7 @@
 import { CGFappearance } from "../../../lib/CGF.js";
-import { MyButton } from "../../components/MyButton.js";
+import { MyButton } from "../../text/MyButton.js";
 import { MyRectangle } from "../../components/MyRectangle.js";
 import { btnAmbient, resultsMenuAmbient } from "../constants.js";
-import { writeText } from "../utils.js";
 import { CurrentPlayer } from "../GameRuler.js";
 
 export class ResultsMenu {
@@ -59,23 +58,23 @@ export class ResultsMenu {
 
         this.scene.scale(1, 1.2, 1);
         this.scene.translate(-11.5, 15, 0);
-        writeText(this.scene, 'CONGRATULATIONS! You ended the game!');
+        this.scene.texter.writeText('CONGRATULATIONS! You ended the game!');
 
         this.scene.translate(-24, -2, 0);
-        writeText(this.scene, 'The winner is.....');
+        this.scene.texter.writeText('The winner is.....');
 
         let wasDraw = false;
         if (this.scene.checkers.results.winner == CurrentPlayer.P2) {
-            writeText(this.scene, 'Player 2!');
+            this.scene.texter.writeText('Player 2!');
         } else if (this.scene.checkers.results.winner == CurrentPlayer.P1) {
-            writeText(this.scene, 'Player 1!');
+            this.scene.texter.writeText('Player 1!');
         } else if (p1Score > p2Score) {
-            writeText(this.scene, 'Player 1!');
+            this.scene.texter.writeText('Player 1!');
         } else if (p1Score < p2Score) {
-            writeText(this.scene, 'Player 2!');
+            this.scene.texter.writeText('Player 2!');
         } else {
             wasDraw = true;
-            writeText(this.scene, "Oh. It's a draw!");
+            this.scene.texter.writeText("Oh. It's a draw!");
         }
 
         const infoTranslate = wasDraw ? -30 : -25;
@@ -84,29 +83,29 @@ export class ResultsMenu {
         const p1timeXtranslate = this.scene.checkers.results.p1CurrTime > 10 ? -11.9 : -11.2;
 
         this.scene.translate(infoTranslate, -2.5, 0);
-        writeText(this.scene, 'Player 1 Information');
+        this.scene.texter.writeText('Player 1 Information');
         this.scene.translate(-14.1, -1.5, 0);
-        writeText(this.scene, 'Score: ' + p1Score + ' points');
+        this.scene.texter.writeText('Score: ' + p1Score + ' points');
         this.scene.translate(p1Xtranslate, -1.5, 0);
-        writeText(this.scene, 'Current Time: ' + this.scene.checkers.results.p1CurrTime + 's');
+        this.scene.texter.writeText('Current Time: ' + this.scene.checkers.results.p1CurrTime + 's');
         this.scene.translate(p1timeXtranslate, -1.5, 0);
-        writeText(this.scene, 'Total Time: ' + this.scene.checkers.results.p1Time + 's');
+        this.scene.texter.writeText('Total Time: ' + this.scene.checkers.results.p1Time + 's');
 
         // show player 2 information
         const p2Xtranslate = p2Score > 10 ? -11.2 : -10.5;
         const p2timeXtranslate = this.scene.checkers.results.p2CurrTime > 10 ? -11.9 : -11.2;
         this.scene.translate(10, 4.5, 0);
-        writeText(this.scene, 'Player 2 Information');
+        this.scene.texter.writeText('Player 2 Information');
         this.scene.translate(-14.1, -1.5, 0);
-        writeText(this.scene, 'Score: ' + p2Score + ' points');
+        this.scene.texter.writeText('Score: ' + p2Score + ' points');
         this.scene.translate(p2Xtranslate, -1.5, 0);
-        writeText(this.scene, 'Current Time: ' + this.scene.checkers.results.p2CurrTime + 's');
+        this.scene.texter.writeText('Current Time: ' + this.scene.checkers.results.p2CurrTime + 's');
         this.scene.translate(p2timeXtranslate, -1.5, 0);
-        writeText(this.scene, 'Total Time: ' + this.scene.checkers.results.p2Time + 's');
+        this.scene.texter.writeText('Total Time: ' + this.scene.checkers.results.p2Time + 's');
 
         // show game information (total time)
         this.scene.translate(-20, -2, 0);
-        writeText(this.scene, 'TOTAL GAME TIME: ' + this.scene.checkers.results.totalTime + 's');
+        this.scene.texter.writeText('TOTAL GAME TIME: ' + this.scene.checkers.results.totalTime + 's');
 
         this.scene.popMatrix();
 

@@ -1,6 +1,5 @@
 import { Pickable } from "../checkers/Pickable.js";
-import { writeText } from "../checkers/utils.js";
-import { MyRectangle } from "./MyRectangle.js";
+import { MyRectangle } from "../components/MyRectangle.js";
 
 export class MyButton extends Pickable {
     constructor(scene, id, p1, p2, pickable, pickId, onPick, text, translate, rotate, scale) {
@@ -31,7 +30,7 @@ export class MyButton extends Pickable {
             this.scene.loadIdentity();
             // transform as needed to place on screen
             this.scene.translate(this.translate[0], this.translate[1], this.translate[2]);
-            writeText(this.scene, this.text);
+            this.scene.texter.writeText(this.text);
             this.scene.popMatrix();
         }
     }

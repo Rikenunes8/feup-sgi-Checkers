@@ -7,7 +7,7 @@ import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
 import { Menu } from './menu/Menu.js';
-import { MyButton } from "../components/MyButton.js";
+import { MyButton } from "../text/MyButton.js";
 import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
 import { ResultsMenu } from "./menu/ResultsMenu.js";
