@@ -42,6 +42,7 @@ export class Texter {
 
         for (let i = 0; i < text.length; i++) {
             this.scene.activeShader.setUniformsValues({'charCoords': [text.charCodeAt(i) % 16, Math.floor(text.charCodeAt(i) / 16)]});
+            this.scene.activeShader.setUniformsValues({'textColor': vec4.fromValues(0.3, 0.3, 0.3, 1.0)});
             this.quad.display();
             this.scene.translate(0.7, 0, 0);
         }
