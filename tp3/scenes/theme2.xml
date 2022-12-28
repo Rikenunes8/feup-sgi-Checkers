@@ -1136,9 +1136,9 @@
                 <scale x="0.5" y="0.5" z="0.5"/>
             </transformation>
             <materials>
-                <material id="gold" />
+                <material id="black" />
             </materials>
-            <texture id="gold" length_s="1" length_t="1"/>
+            <texture id="none"/>
             <children>
                 <componentref id="televisionTop"/>
                 <componentref id="televisionBase"/>
@@ -1392,23 +1392,23 @@
     </components>
 
     <checkers>
-        <mainboard x1="0.4" y1="1.5" z1="0.4" x2="1.2" y2="1.6" z2="-0.4" >
+        <mainboard x1="0.4" y1="1.5" z1="0.4" x2="1.2" y2="1.56" z2="-0.4" >
             <lightTile id="lightWood" />
             <darkTile id="darkWood" />
-            <boardWalls id="gold" />
+            <boardWalls id="green" />
             <highlightTile id="red" />
         </mainboard>
-        <auxiliarboard x1="1.3" y1="1.5" z1="0.4" x2="1.6" y2="1.6" z2="-0.4" >
-            <boardWalls id="white" />
-            <lightTile id="lightWood" />
-            <darkTile id="darkWood" />
+        <auxiliarboard x1="1.3" y1="1.5" z1="0.4" x2="1.6" y2="1.56" z2="-0.4" >
+            <boardWalls id="green" />
+            <lightTile id="dirtyWhite" />
+            <darkTile id="black" />
             <buttonsMaterial id="lightWood" />
         </auxiliarboard>
         <pieces>
             <type1 id="black" />
             <type2 id="darkGray" />
         </pieces>
-        <spot id="checkersSpotlight" angle="10" exponent="80" height="10">
+        <spot id="checkersSpotlight" angle="10" exponent="50" height="5">
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />
             <diffuse r="0.1" g="0.1" b="0.1" a="1.0" />
             <specular r="0.1" g="0.1" b="0.1" a="1.0" />
