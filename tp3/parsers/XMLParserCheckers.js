@@ -26,10 +26,10 @@ export class XMLParserCheckers extends XMLParser {
         if (spotlightIndex == -1) return "missing spot definition in checkers";
 
         let mainboard = this.parseMainboard(children[mainboardIndex]);
-        if (! mainboard instanceof GameBoard) return mainboard;
+        if (! (mainboard instanceof GameBoard)) return mainboard;
 
         let auxiliarboard = this.parseAuxiliarBoard(children[auxiliarboardIndex]);
-        if (! auxiliarboard instanceof AuxiliarBoard) return auxiliarboard;
+        if (! (auxiliarboard instanceof AuxiliarBoard)) return auxiliarboard;
         
         let pieces = this.parsePieces(children[piecesIndex]);
         if (!Array.isArray(pieces)) return pieces;
@@ -60,20 +60,24 @@ export class XMLParserCheckers extends XMLParser {
         const lightTileIndex = nodeNames.indexOf("lightTile");
         const darkTileIndex = nodeNames.indexOf("darkTile");
         const boardWallsIndex = nodeNames.indexOf("boardWalls");
+        const highlightTileIndex = nodeNames.indexOf("highlightTile");
 
         if (lightTileIndex == -1) return "missing light tile definition in mainboard";
         if (darkTileIndex == -1) return "missing dark tile definition in mainboard";
         if (boardWallsIndex == -1) return "missing board walls definition in mainboard";
+        if (highlightTileIndex == -1) return "missing highlight tile definition in mainboard";
 
         const lightTileMaterialId = this.reader.getString(materials[lightTileIndex], 'id', false);
         const darkTileMaterialId = this.reader.getString(materials[darkTileIndex], 'id', false);
         const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
+        const highlightTileMaterialId = this.reader.getString(materials[highlightTileIndex], 'id', false);
 
         if (this.scene.materials[lightTileMaterialId] == null) return "no material defined with ID " + lightTileMaterialId;
         if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
+        if (this.scene.materials[highlightTileMaterialId] == null) return "no material defined with ID " + highlightTileMaterialId;
 
-        return new GameBoard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
+        return new GameBoard(this.scene, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId, highlightTileMaterialId);
     }
 
     /**

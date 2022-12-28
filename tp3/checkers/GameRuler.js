@@ -10,6 +10,7 @@ export const emptyTile = 0;
 export class GameRuler {
     constructor(checkers) {
         this.checkers = checkers;
+        this.turnValidMoves = {};
     }
 
     /**
@@ -21,7 +22,7 @@ export class GameRuler {
     checkEndGame(game, player) {
         for (let i = 0; i < game.length; i++) {
             if (this.belongsToPlayer(game[i], player)) {
-                const validMoves = this.validMoves(game[i]);
+                const validMoves = this.pieceValidMoves(game[i]);
                 if (Object.keys(validMoves).length > 0) {
                     return false;
                 }
@@ -30,13 +31,22 @@ export class GameRuler {
         return true;
     }
 
+    setValidMoves(player) {
+        this.turnValidMoves = {};
+        for (let i = 0; i < this.checkers.game.length; i++) {
+            if (this.belongsToPlayer(this.checkers.game[i], player)) {
+                const pieceMoves = this.pieceValidMoves(this.checkers.game[i]);
+                this.turnValidMoves[Math.abs(this.checkers.game[i])] = {...pieceMoves};
+            }
+        }
+    }
 
     /**
      * Search valid moves for the piece correspondent to pieceIdx
      * @param {*} pieceIdx Index of the piece in the GameBoard pieces array
      * @returns {Array} Array of valid moves for the piece with id pieceIdx
      */
-    validMoves(pieceIdx) {
+    pieceValidMoves(pieceIdx) {
         const piece = this.checkers.getPiece(pieceIdx);
         const pieceTile = piece.tile;
         const validMoves = {};
@@ -107,8 +117,8 @@ export class GameRuler {
      * @returns Array with the path to the tileIdx tile if it is a valid move, null otherwise
      */
     validateMove(tileIdx) {
-        const validMoves = this.validMoves(this.checkers.selectedPieceIdx);
-        return validMoves[tileIdx];
+        const pieceValidMoves = this.turnValidMoves[this.checkers.selectedPieceIdx];
+        return pieceValidMoves != null ? pieceValidMoves[tileIdx] : null;
     }
 
     /**
