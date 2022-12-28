@@ -15,7 +15,7 @@ export const pawnRadius = 0.4;
  */
 function buildCheckersTorus(sceneGraph) {
     const id = 'checkers-torus';
-    sceneGraph.primitives[id] = new MyTorus(sceneGraph.scene, id, 0.2, 0.2, 10, 10);
+    sceneGraph.primitives[id] = new MyTorus(sceneGraph.scene, id, 0.2, 0.2, 16, 32);
     return id;
 };
 

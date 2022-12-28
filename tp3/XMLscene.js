@@ -254,7 +254,8 @@ export class XMLscene extends CGFscene {
         this.applyViewMatrix();
 
         this.pushMatrix();
-        this.axis.display();
+        if (this.referenceLength > 0)
+            this.axis.display();
 
         if (this.sceneInited) {
 
@@ -272,10 +273,12 @@ export class XMLscene extends CGFscene {
             this.graph.displayNormals = this.displayNormals;
             
             this.graph.displayScene();
+
+            if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
+            
             if (this.checkers != null)
                 this.checkers.display();
 
-            if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);
         }
 
         this.popMatrix();

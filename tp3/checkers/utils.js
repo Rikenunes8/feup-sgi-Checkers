@@ -14,6 +14,7 @@ export function displayGraph(sceneGraph, node, prevMaterial = null) {
         sceneGraph.scene.multMatrix(component.transfMatrix);
 
         for (let child of component.children) {
+            material.setTexture(null);
             material.apply();
             displayGraph(sceneGraph, child, materialId);
         }
