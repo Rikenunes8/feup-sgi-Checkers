@@ -1,5 +1,5 @@
 import { CGFappearance } from "../../../lib/CGF.js";
-import { MyButton } from "../../components/MyButton.js";
+import { MyButton } from "../../text/MyButton.js";
 import { MyRectangle } from "../../components/MyRectangle.js";
 import { btnAmbient, mainMenuAmbient, selectedBtnAmbient } from "../constants.js";
 

@@ -1,8 +1,8 @@
 import { CGFappearance } from "../../../lib/CGF.js";
-import { MyButton } from "../../components/MyButton.js";
+import { MyButton } from "../../text/MyButton.js";
 import { MyRectangle } from "../../components/MyRectangle.js";
 import { btnAmbient, resultsMenuAmbient } from "../constants.js";
-import { writeText } from "../utils.js";
+import { writeText } from "../../text/text.js";
 import { CurrentPlayer } from "../GameRuler.js";
 
 export class ResultsMenu {

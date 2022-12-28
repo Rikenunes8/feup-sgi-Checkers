@@ -1,5 +1,6 @@
 import { MyComponent } from "../../components/MyComponent.js";
-import { displayGraph, writeText } from "../utils.js";
+import { displayGraph } from "../utils.js";
+import { writeText } from "../../text/text.js";
 import { buildCheckersTile } from "../primitives.js";
 import { Board } from "./Board.js";
 import { Tile } from "../Tile.js";
