@@ -218,6 +218,7 @@
                 <componentref id="roomLeftWall"/>
                 <componentref id="roomRightWall"/>
                 <componentref id="roomFrontWall"/>
+                <componentref id="leftStairs"/>
                 <componentref id="ceiling"/>
                 <componentref id="floor"/>
             </children>
@@ -394,6 +395,45 @@
                 <componentref id="floor"/>
             </children>
         </component>
+
+        <component id="leftStairs">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="dirtyWhite" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stair1"/>
+            </children>
+        </component>
+        <component id="stair1">
+            <transformation>
+                <translate x="1" y="1" z="0"/>
+                <scale x="12" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="stair"/>
+            </children>
+        </component>
+
+        <component id="stair">
+            <transformation>
+                <scale x="1" y="1" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="cube"/>
+            </children>
+        </component>
+
 
         <component id="floor">
             <transformation>
@@ -706,7 +746,7 @@
             <boardWalls id="gold" />
             <highlightTile id="red" />
         </mainboard>
-        <auxiliarboard x1="0.6" y1="0.95" z1="0.4" x2="0.9" y2="1.05" z2="-0.4" >
+        <auxiliarboard x1="0.6" y1="1.05" z1="0.4" x2="0.9" y2="1.15" z2="-0.4" >
             <boardWalls id="white" />
             <lightTile id="lightWood" />
             <darkTile id="darkWood" />
