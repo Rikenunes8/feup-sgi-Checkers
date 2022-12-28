@@ -121,7 +121,10 @@ export class MainMenu {
 	}
 
 	selectTheme = (num) => {
-		this.scene.checkers.config.selectedTheme = num;
+		var url = window.location.href;
+		url = url.replace(/\?.*/g, '');
+		url += '?theme=' + num;
+		window.location.href = url;
 	}
 
 	turnTimeBtnOnPick = () => {
