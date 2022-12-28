@@ -535,14 +535,13 @@
 
         <component id="stair">
             <transformation>
-                <scale x="1" y="1" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
             </materials>
             <texture id="none"/>
             <children>
-                <componentref id="cube"/>
+                <componentref id="stairCube"/>
             </children>
         </component>
 
@@ -1264,6 +1263,36 @@
             <texture id="none"/>
             <children>
                <primitiveref id="cylinder"/> 
+            </children>
+        </component>
+
+        <component id="stairCube">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="leftFace"/>
+                <componentref id="rightFace"/>
+                <componentref id="frontFace"/>
+                <componentref id="backStairFace"/>
+                <componentref id="downFace"/>
+                <componentref id="upFace"/>
+            </children>
+        </component>
+        <component id="backStairFace">
+            <transformation>
+                <translate x="0" y="0" z="-0.5" />
+                <rotate axis="y" angle="180" />
+            </transformation>
+            <materials>
+                <material id="lightWood" />
+            </materials>
+            <texture id="wood" length_s="1" length_t="1"/>
+            <children>
+                <primitiveref id="rectangle" />
             </children>
         </component>
 
