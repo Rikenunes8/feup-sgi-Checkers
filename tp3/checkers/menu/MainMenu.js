@@ -21,13 +21,13 @@ export class MainMenu {
 		this.theme2Button = new MyButton(scene, 'checkers-mainMenu-theme2-button', p1, p2, true, 1004, () => this.selectTheme(2), 'THEME 2', [-1.8, 0, -50]);
 		this.theme3Button = new MyButton(scene, 'checkers-mainMenu-theme3-button', p1, p2, true, 1005, () => this.selectTheme(3), 'THEME 3', [10, 0, -50]);
 		this.backgroundAppearance = new CGFappearance(scene);
-		this.backgroundAppearance.setAmbient(mainMenuAmbient[0], mainMenuAmbient[1], mainMenuAmbient[2], mainMenuAmbient[3]);
+		this.backgroundAppearance.setEmission(mainMenuAmbient[0], mainMenuAmbient[1], mainMenuAmbient[2], mainMenuAmbient[3]);
 
 		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
+		this.buttonAppearance.setEmission(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
 
 		this.selectedBtnAppearance = new CGFappearance(scene);
-		this.selectedBtnAppearance.setAmbient(selectedBtnAmbient[0], selectedBtnAmbient[1], selectedBtnAmbient[2], selectedBtnAmbient[3]);
+		this.selectedBtnAppearance.setEmission(selectedBtnAmbient[0], selectedBtnAmbient[1], selectedBtnAmbient[2], selectedBtnAmbient[3]);
     }
 
 	/**

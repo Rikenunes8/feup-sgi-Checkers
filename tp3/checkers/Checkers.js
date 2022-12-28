@@ -58,7 +58,7 @@ export class Checkers {
 
         this.invalidMove = {
             showInvalidMove: false,
-            popup: new MyButton(this.sceneGraph.scene, 'checkers-invalid-popup', [20, -80], [35, -70], true, 3000, this.initBtnOnPick, 'Inválid Move', [28, -17, -50]),
+            popup: new MyButton(this.sceneGraph.scene, 'checkers-invalid-popup', [20, -80], [35, -70], true, 3000, this.initBtnOnPick, 'Invalid Move', [28, -17, -50]),
             appearance: new CGFappearance(this.sceneGraph.scene),
         }
 		this.invalidMove.appearance.setAmbient(popupAmbient[0], popupAmbient[1], popupAmbient[2], popupAmbient[3]);

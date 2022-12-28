@@ -24,6 +24,7 @@ export class AuxiliarBoard extends Board {
         this.transfMatrix = this.buildBoardTransfMatrix();
         this.facesIds = [];
         this.tiles = [];
+        this.textBlocks = [];
 
         const rectangleId = buildCheckersTile(this.sceneGraph);
         this.buildFaces(rectangleId);

@@ -33,7 +33,7 @@ export class Texter {
      * Writes a text on the scene
      * @param {*} text text to be written
      */
-    writeText(text) {
+    writeText(text, spacing = 0.7) {
         const prevShader = this.scene.activeShader;
         // activate shader for rendering text characters
         this.scene.setActiveShaderSimple(this.textShader);
@@ -44,7 +44,7 @@ export class Texter {
             this.scene.activeShader.setUniformsValues({'charCoords': [text.charCodeAt(i) % 16, Math.floor(text.charCodeAt(i) / 16)]});
             this.scene.activeShader.setUniformsValues({'textColor': vec4.fromValues(0.3, 0.3, 0.3, 1.0)});
             this.quad.display();
-            this.scene.translate(0.7, 0, 0);
+            this.scene.translate(spacing, 0, 0);
         }
         this.scene.setActiveShader(prevShader);
     }
