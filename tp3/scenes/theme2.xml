@@ -81,9 +81,15 @@
         </material>
         <material id="green" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
-            <ambient r="0.0" g="0.439" b="0.235" a="1.0" />
-            <diffuse r="0.0" g="0.439" b="0.235" a="1.0" />
-            <specular r="0.0" g="0.439" b="0.235" a="1.0" />
+            <ambient r="0.227" g="0.298" b="0.251" a="1.0" />
+            <diffuse r="0.227" g="0.298" b="0.251" a="1.0" />
+            <specular r="0.227" g="0.298" b="0.251" a="1.0" />
+        </material>
+        <material id="darkGray" shininess="2">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.199" g="0.243" b="0.226" a="1" />
+            <diffuse r="0.199" g="0.243" b="0.226" a="1.0" />
+            <specular r="0.199" g="0.243" b="0.226" a="1.0" />
         </material>
     </materials>
 
@@ -203,6 +209,10 @@
             <texture id="none"/>
             <children>
                 <componentref id="roomBackWall"/>
+                <componentref id="roomLeftWall"/>
+                <componentref id="roomRightWall"/>
+                <componentref id="roomFrontWall"/>
+                <componentref id="ceiling"/>
             </children>
         </component>
 
@@ -215,36 +225,20 @@
             <texture id="none"/>
             <children>
                 <componentref id="backFrontWall"/>
-                <componentref id="backLeftWallBack"/>
                 <componentref id="backLeftWallFront"/>
                 <componentref id="backLeftDoor"/>
                 <componentref id="leftDoor"/>
-                <componentref id="backRightWallBack"/>
                 <componentref id="backRightWallFront"/>
                 <componentref id="backRightDoor"/>
                 <componentref id="rightDoor"/>
-                <componentref id="wallFrame"/>
+                <componentref id="wallFrame1"/>
+                <componentref id="wallFrame2"/>
             </children>
         </component>
-
         <component id="backFrontWall">
             <transformation>
-                <translate x="1" y="3" z="-2"/>
-                <scale x="7" y="5" z="1"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="rectangle"/>
-            </children>
-        </component>
-        <component id="backLeftWallBack">
-            <transformation>
-                <translate x="-2.5" y="3" z="-1"/>
-                <scale x="1" y="5" z="2"/>
-                <rotate axis="y" angle="-90"/>
+                <translate x="1" y="4" z="-2"/>
+                <scale x="7" y="7" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -256,8 +250,8 @@
         </component>
         <component id="backLeftWallFront">
             <transformation>
-                <translate x="-2.5" y="3" z="-1"/>
-                <scale x="1" y="5" z="2"/>
+                <translate x="-2.5" y="4" z="-1"/>
+                <scale x="1" y="7" z="2"/>
                 <rotate axis="y" angle="90"/>
             </transformation>
             <materials>
@@ -270,8 +264,8 @@
         </component>
         <component id="backLeftDoor">
             <transformation>
-                <translate x="-3.5" y="3" z="0"/>
-                <scale x="2" y="5" z="1"/>
+                <translate x="-3.5" y="4" z="0"/>
+                <scale x="2" y="7" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -294,24 +288,10 @@
                 <primitiveref id="rectangle"/>
             </children>
         </component>
-        <component id="backRightWallBack">
-            <transformation>
-                <translate x="4.5" y="3" z="-1"/>
-                <scale x="1" y="5" z="2"/>
-                <rotate axis="y" angle="90"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="rectangle"/>
-            </children>
-        </component>
         <component id="backRightWallFront">
             <transformation>
-                <translate x="4.5" y="3" z="-1"/>
-                <scale x="1" y="5" z="2"/>
+                <translate x="4.5" y="4" z="-1"/>
+                <scale x="1" y="7" z="2"/>
                 <rotate axis="y" angle="-90"/>
             </transformation>
             <materials>
@@ -324,8 +304,8 @@
         </component>
         <component id="backRightDoor">
             <transformation>
-                <translate x="5.5" y="3" z="0"/>
-                <scale x="2" y="5" z="1"/>
+                <translate x="5.5" y="4" z="0"/>
+                <scale x="2" y="7" z="1"/>
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -349,7 +329,108 @@
             </children>
         </component>
 
-        <component id="wallFrame">
+        <component id="roomLeftWall">
+            <transformation>
+                <translate x="-4.5" y="4" z="6"/>
+                <rotate axis="y" angle="90"/>
+                <scale x="12" y="7" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="roomRightWall">
+            <transformation>
+                <translate x="6.5" y="4" z="6"/>
+                <rotate axis="y" angle="-90"/>
+                <scale x="12" y="7" z="1"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="roomFrontWall">
+            <transformation>
+                <translate x="1" y="5.5" z="12"/>
+                <scale x="11" y="4" z="1"/>
+                <rotate axis="y" angle="180"/>
+            </transformation>
+            <materials>
+                <material id="darkGray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+
+        <component id="ceiling">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="darkGray" />
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="roomCeiling"/>
+            </children>
+        </component>
+        <component id="roomCeiling">
+            <transformation>
+                <translate x="1" y="7.5" z="5"/>
+                <scale x="11" y="1" z="14"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>
+        <!-- Estava a usar 2 cealings para não termos um maior que a room toda, mas estava
+        se a notar que eram 2 e ficava mal, por isso aumentei o tamanho do roomCeiling
+        <component id="boardCeiling">
+            <transformation>
+                <translate x="1" y="7.5" z="-1"/>
+                <scale x="7" y="1" z="2"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <primitiveref id="rectangle"/>
+            </children>
+        </component>-->
+
+        <component id="wallFrame1">
+            <transformation>
+                <translate x="1" y="5.5" z="-1.99"/>
+                <scale x="5" y="2" z="1" />
+            </transformation>
+            <materials>
+                <material id="dirtyWhite"/>
+            </materials>
+            <texture id="none"/>
+            <children>
+                <componentref id="frame"/>
+                <componentref id="picture"/>
+            </children>
+        </component>
+        <component id="wallFrame2">
             <transformation>
                 <translate x="1" y="3" z="-1.99"/>
                 <scale x="5" y="2" z="1" />
@@ -374,23 +455,6 @@
                 <primitiveref id="rectangleNurb"/>
             </children>
         </component>
-
-
-        <component id="roomLeftWall">
-            <transformation>
-                <translate x="-3" y="3" z="2"/>
-                <rotate axis="y" angle="90"/>
-                <scale x="7" y="5" z="5"/>
-            </transformation>
-            <materials>
-                <material id="inherit" />
-            </materials>
-            <texture id="none"/>
-            <children>
-                <primitiveref id="rectangle"/>
-            </children>
-        </component>
-
 
         <component id="frame">
             <transformation>
