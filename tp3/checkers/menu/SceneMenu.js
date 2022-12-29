@@ -17,7 +17,7 @@ export class SceneMenu {
 		const bgX = -30;
 		const allign = "center";
 
-		this.startOrPause = new TextBlock(this.scene, 'START', allign, [bgX, 15], bgWidth, bgHeight, this.startOrPauseOnPick, bgPrimaryColor);
+		this.startOrPause = new TextBlock(this.scene, '', allign, [bgX, 15], bgWidth, bgHeight, this.startOrPauseOnPick, bgPrimaryColor);
 		this.undo = new TextBlock(this.scene, 'UNDO', allign, [bgX, 13], bgWidth, bgHeight, this.undoOnPick, bgPrimaryColor);
 		this.replay = new TextBlock(this.scene, 'REPLAY', allign, [bgX, 11], bgWidth, bgHeight, this.replayOnPick, bgPrimaryColor);
 		this.restart = new TextBlock(this.scene, 'RESTART', allign, [bgX, 9], bgWidth, bgHeight, this.restartOnPick, bgPrimaryColor);

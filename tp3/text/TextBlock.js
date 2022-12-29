@@ -4,7 +4,7 @@ import { Pickable } from "../checkers/Pickable.js";
 
 export class TextBlock extends Pickable{
     constructor(scene, text, allign, p1, width, height, action = null, backgroundColor1 = null, backgroundColor2 = null) {
-        super(null, true);
+        super(null, action != null);
         this.scene = scene;
         this.text = text;
         this.allign = allign;

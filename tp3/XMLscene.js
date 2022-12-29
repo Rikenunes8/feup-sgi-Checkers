@@ -2,9 +2,6 @@ import { CGFscene } from '../lib/CGF.js';
 import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
 import { checkersViewName } from './checkers/AnimationCamera.js';
 import { Texter } from './text/Texter.js';
-import { TestMenu } from './checkers/menu/TestMenu.js';
-
-var DEGREE_TO_RAD = Math.PI / 180;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -59,8 +56,6 @@ export class XMLscene extends CGFscene {
         this.startTime = null;
 		this.setUpdatePeriod(10);
         this.setPickEnabled(true);
-
-        this.testMenu = new TestMenu(this);
     }
 
     /**
@@ -260,7 +255,6 @@ export class XMLscene extends CGFscene {
             this.graph.displayNormals = this.displayNormals;
             
 
-            //this.testMenu.display();
             this.graph.displayScene();
 
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);

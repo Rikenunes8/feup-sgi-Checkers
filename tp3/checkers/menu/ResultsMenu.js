@@ -1,4 +1,4 @@
-import { bgPrimaryColor, resultsMenuAmbient, bgMainMenuColor } from "../constants.js";
+import { bgPrimaryColor, bgMainMenuColor } from "../constants.js";
 import { CurrentPlayer } from "../GameRuler.js";
 import { TextBlock } from "../../text/TextBlock.js";
 
@@ -20,13 +20,12 @@ export class ResultsMenu {
         this.announce = new TextBlock(this.scene, 'The winner is.... ', 'center', [0, 6], 1, textHeight);
 
         this.player1Name = new TextBlock(this.scene, 'Player 1', 'center', [-8, 3], 12, textHeight);
-        this.player1Score = new TextBlock(this.scene, '', 'left', [-8, 1], 12, textHeight);
-        this.player1CurrTime = new TextBlock(this.scene, '', 'left', [-8, -0.5], 12, textHeight);
-        this.player1TotalTime = new TextBlock(this.scene, '', 'left', [-8, -2], 12, textHeight);
-
         this.player2Name = new TextBlock(this.scene, 'Player 2', 'center', [8.5, 3], 12, textHeight);
+        this.player1Score = new TextBlock(this.scene, '', 'left', [-8, 1], 12, textHeight);
         this.player2Score = new TextBlock(this.scene, '', 'left', [8.5, 1], 12, textHeight);
+        this.player1CurrTime = new TextBlock(this.scene, '', 'left', [-8, -0.5], 12, textHeight);
         this.player2CurrTime = new TextBlock(this.scene, '', 'left', [8.5, -0.5], 12, textHeight);
+        this.player1TotalTime = new TextBlock(this.scene, '', 'left', [-8, -2], 12, textHeight);
         this.player2TotalTime = new TextBlock(this.scene, '', 'left', [8.5, -2], 12, textHeight);
 
         this.totalGameTime = new TextBlock(this.scene, '', 'center', [0, -5], 14, textHeight);
