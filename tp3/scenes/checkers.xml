@@ -201,6 +201,7 @@
             <boardWalls id="white" />
             <lightTile id="white" />
             <darkTile id="black" />
+            <fontColor r="1.0" g="1.0" b="1.0" a="1.0" />
         </auxiliarboard>
         <pieces>
             <type1 id="darkWood" />
