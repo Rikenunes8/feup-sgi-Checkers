@@ -65,8 +65,10 @@ export class ResultsMenu {
 
         let winnerAnnounce = 'The winner is.... ';
         const winner = this.scene.checkers.results.winner;
-        if (winner == CurrentPlayer.P1 || p1Score > p2Score) winnerAnnounce += 'Player 1';
-        else if (winner == CurrentPlayer.P2 || p1Score < p2Score) winnerAnnounce += 'Player 2';
+        if (winner == CurrentPlayer.P1) winnerAnnounce += 'Player 1';
+        else if (winner == CurrentPlayer.P2) winnerAnnounce += 'Player 2';
+        else if(p1Score > p2Score) winnerAnnounce += 'Player 1';
+        else if (p1Score < p2Score) winnerAnnounce += 'Player 2';
         else winnerAnnounce += "Oh. It's a draw!";
         this.announce.setText(winnerAnnounce);
 
