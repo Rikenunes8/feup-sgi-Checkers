@@ -5,8 +5,6 @@ export class MainMenu {
     /**
      *
      * @param {*} scene 
-     * @param {[x1, y1]} p1 
-     * @param {[x2, y2]} p2 
      */
     constructor(scene) {
         this.scene = scene;

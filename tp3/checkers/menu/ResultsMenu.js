@@ -1,116 +1,88 @@
-import { CGFappearance } from "../../../lib/CGF.js";
-import { MyButton } from "../../text/MyButton.js";
-import { MyRectangle } from "../../components/MyRectangle.js";
-import { bgPrimaryColor, resultsMenuAmbient } from "../constants.js";
+import { bgPrimaryColor, resultsMenuAmbient, bgMainMenuColor } from "../constants.js";
 import { CurrentPlayer } from "../GameRuler.js";
+import { TextBlock } from "../../text/TextBlock.js";
 
 export class ResultsMenu {
     /**
      *
      * @param {*} scene 
-     * @param {[x1, y1]} p1 
-     * @param {[x2, y2]} p2 
      */
-    constructor(scene, p1, p2) {
+    constructor(scene) {
         this.scene = scene;
-        this.p1 = p1;
-		this.p2 = p2;
 
-		this.background = new MyRectangle(scene, 'checkers-winnerMenu-background', this.p1[0], this.p2[0], this.p1[1], this.p2[1]);
-		this.thankYouBtn = new MyButton(scene, 'checkers-winnerMenu-button', [-8, 0], [8, 3], true, 4000, this.thankYouBtnPick, 'Thank You!', [-3, -8.5, -50]);
-		this.backgroundAppearance = new CGFappearance(scene);
-		this.backgroundAppearance.setAmbient(resultsMenuAmbient[0], resultsMenuAmbient[1], resultsMenuAmbient[2], resultsMenuAmbient[3]);
+        const btnHeight = 2.5;
+        const textHeight = 1.5;
 
-		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(bgPrimaryColor[0], bgPrimaryColor[1], bgPrimaryColor[2], bgPrimaryColor[3]);
+        this.background = new TextBlock(this.scene, '', null, [0, 0], 34, 20, null, bgMainMenuColor);
+        this.thankYou = new TextBlock(this.scene, 'Thank You!', 'center', [0, -7.5], 11.5, btnHeight, this.thankYouBtnPick, bgPrimaryColor);
+
+        this.congrats = new TextBlock(this.scene, 'CONGRATULATIONS! You ended the game!', 'center', [0, 7.5], 1, textHeight);
+        this.announce = new TextBlock(this.scene, 'The winner is.... ', 'center', [0, 6], 1, textHeight);
+
+        this.player1Name = new TextBlock(this.scene, 'Player 1', 'center', [-8, 3], 12, textHeight);
+        this.player1Score = new TextBlock(this.scene, '', 'left', [-8, 1], 12, textHeight);
+        this.player1CurrTime = new TextBlock(this.scene, '', 'left', [-8, -0.5], 12, textHeight);
+        this.player1TotalTime = new TextBlock(this.scene, '', 'left', [-8, -2], 12, textHeight);
+
+        this.player2Name = new TextBlock(this.scene, 'Player 2', 'center', [8.5, 3], 12, textHeight);
+        this.player2Score = new TextBlock(this.scene, '', 'left', [8.5, 1], 12, textHeight);
+        this.player2CurrTime = new TextBlock(this.scene, '', 'left', [8.5, -0.5], 12, textHeight);
+        this.player2TotalTime = new TextBlock(this.scene, '', 'left', [8.5, -2], 12, textHeight);
+
+        this.totalGameTime = new TextBlock(this.scene, '', 'center', [0, -5], 14, textHeight);
+
+        this.textsP1 = [this.player1Name, this.player1Score, this.player1CurrTime, this.player1TotalTime];
+        this.textsP2 = [this.player2Name, this.player2Score, this.player2CurrTime, this.player2TotalTime];
+        this.texts = [this.congrats, this.announce, ...this.textsP1, ...this.textsP2, this.totalGameTime,];
     }
 
 	/**
 	 * Displays all the menu
 	 */
-    display() {
-        this.displayMenu();
-	}
+	display() {
+        this._setUpDisplay();
 
-	/**
-	 * Display the buttons of the menu
-	 */
-    displayMenu() {
-        const [p1Score, p2Score] = this.scene.checkers.getScores();
+		// disable depth test so that it is always in front (need to reenable in the end)
+		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
 
-        this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
-
-		// draw background
 		this.scene.pushMatrix();
 		this.scene.loadIdentity();
-		this.backgroundAppearance.apply();
-		this.scene.scale(4, 2.5, 1);
-		this.scene.translate(-5, -5, -50);
-        this.background.display();
-        this.scene.popMatrix();
+		this.scene.translate(0, 0, -50); // move to the front of the camera
+		this.scene.scale(0.6, 0.6, 1) // scale to choose font size
 
-        // Draw Menu information and btns
-        this.scene.pushMatrix();
-        this.scene.loadIdentity();
-        this.buttonAppearance.apply();
-        this.scene.translate(0, -10, -50);
-        this.thankYouBtn.display();
+		this.background.display();
+		this.thankYou.display();
 
-        this.scene.scale(1, 1.2, 1);
-        this.scene.translate(-11.5, 15, 0);
-        this.scene.texter.writeText('CONGRATULATIONS! You ended the game!');
+        this.texts.forEach(text => text.display());
 
-        this.scene.translate(-24, -2, 0);
-        this.scene.texter.writeText('The winner is.....');
-
-        let wasDraw = false;
-        if (this.scene.checkers.results.winner == CurrentPlayer.P2) {
-            this.scene.texter.writeText('Player 2!');
-        } else if (this.scene.checkers.results.winner == CurrentPlayer.P1) {
-            this.scene.texter.writeText('Player 1!');
-        } else if (p1Score > p2Score) {
-            this.scene.texter.writeText('Player 1!');
-        } else if (p1Score < p2Score) {
-            this.scene.texter.writeText('Player 2!');
-        } else {
-            wasDraw = true;
-            this.scene.texter.writeText("Oh. It's a draw!");
-        }
-
-        const infoTranslate = wasDraw ? -30 : -25;
-        // show player 1 information
-        const p1Xtranslate = p1Score > 10 ? -11.2 : -10.5;
-        const p1timeXtranslate = this.scene.checkers.results.p1CurrTime > 10 ? -11.9 : -11.2;
-
-        this.scene.translate(infoTranslate, -2.5, 0);
-        this.scene.texter.writeText('Player 1 Information');
-        this.scene.translate(-14.1, -1.5, 0);
-        this.scene.texter.writeText('Score: ' + p1Score + ' points');
-        this.scene.translate(p1Xtranslate, -1.5, 0);
-        this.scene.texter.writeText('Current Time: ' + this.scene.checkers.results.p1CurrTime + 's');
-        this.scene.translate(p1timeXtranslate, -1.5, 0);
-        this.scene.texter.writeText('Total Time: ' + this.scene.checkers.results.p1Time + 's');
-
-        // show player 2 information
-        const p2Xtranslate = p2Score > 10 ? -11.2 : -10.5;
-        const p2timeXtranslate = this.scene.checkers.results.p2CurrTime > 10 ? -11.9 : -11.2;
-        this.scene.translate(10, 4.5, 0);
-        this.scene.texter.writeText('Player 2 Information');
-        this.scene.translate(-14.1, -1.5, 0);
-        this.scene.texter.writeText('Score: ' + p2Score + ' points');
-        this.scene.translate(p2Xtranslate, -1.5, 0);
-        this.scene.texter.writeText('Current Time: ' + this.scene.checkers.results.p2CurrTime + 's');
-        this.scene.translate(p2timeXtranslate, -1.5, 0);
-        this.scene.texter.writeText('Total Time: ' + this.scene.checkers.results.p2Time + 's');
-
-        // show game information (total time)
-        this.scene.translate(-20, -2, 0);
-        this.scene.texter.writeText('TOTAL GAME TIME: ' + this.scene.checkers.results.totalTime + 's');
-
-        this.scene.popMatrix();
-
-        this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
+		this.scene.popMatrix();
+		
+		// re-enable depth test 
+		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
 	}
+
+    _setUpDisplay() {
+        const [p1Score, p2Score] = this.scene.checkers.getScores();
+
+        let winnerAnnounce = 'The winner is.... ';
+        const winner = this.scene.checkers.results.winner;
+        if (winner == CurrentPlayer.P1 || p1Score > p2Score) winnerAnnounce += 'Player 1';
+        else if (winner == CurrentPlayer.P2 || p1Score < p2Score) winnerAnnounce += 'Player 2';
+        else winnerAnnounce += "Oh. It's a draw!";
+        this.announce.setText(winnerAnnounce);
+
+        this.player1Name.setText('Player 1');
+        this.player1Score.setText('Score: ' + p1Score + ' points');
+        this.player1CurrTime.setText('Current Time: ' + this.scene.checkers.results.p1CurrTime + 's');
+        this.player1TotalTime.setText('Total Time: ' + this.scene.checkers.results.p1Time + 's');
+
+        this.player2Name.setText('Player 2');
+        this.player2Score.setText('Score: ' + p2Score + ' points');
+        this.player2CurrTime.setText('Current Time: ' + this.scene.checkers.results.p2CurrTime + 's');
+        this.player2TotalTime.setText('Total Time: ' + this.scene.checkers.results.p2Time + 's');
+
+        this.totalGameTime.setText('Total Game Time: ' + this.scene.checkers.results.totalTime + 's');
+    }
 
 	thankYouBtnPick = () => {
 		this.scene.checkers.endGameBtnHandler();

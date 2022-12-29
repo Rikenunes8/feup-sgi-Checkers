@@ -28,7 +28,7 @@ export class Checkers {
 
         this.mainMenu = new MainMenu(this.sceneGraph.scene);
         this.menu = new SceneMenu(this.sceneGraph.scene);
-        this.resultsMenu = new ResultsMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
+        this.resultsMenu = new ResultsMenu(this.sceneGraph.scene);
 
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
