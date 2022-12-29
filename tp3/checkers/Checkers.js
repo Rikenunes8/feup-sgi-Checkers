@@ -156,6 +156,7 @@ export class Checkers {
             if (endedAnimations) this.endTurn(time);
             this.checkCollisions(time);
         }
+        this.auxiliarboard.update(time);
 
         this.animationCamera.update(this.sceneGraph.scene.camera);
     }
