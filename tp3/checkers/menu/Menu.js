@@ -1,6 +1,6 @@
-import { CGFappearance } from "../../../lib/CGF.js";
-import { MyButton } from "../../text/MyButton.js";
-import { btnAmbient } from "../constants.js";
+import { TextBlock } from "../../text/TextBlock.js";
+import { sceneButtonBackgroundColor } from "../constants.js";
+
 
 export class Menu {
     /**
@@ -12,8 +12,20 @@ export class Menu {
     constructor(scene) {
 		this.scene = scene;
 
-		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
+		const backgroundColor = sceneButtonBackgroundColor;
+		const bgHeight = 1.5;
+		const bgWidth = 8;
+		const bgX = -34;
+		const allign = "center";
+
+		this.startOrPause = new TextBlock(this.scene, 'START', [bgX, 14.5], bgWidth, bgHeight, allign, backgroundColor, this.startOrPauseOnPick);
+		this.undo = new TextBlock(this.scene, 'UNDO', [bgX, 12.5], bgWidth, bgHeight, allign, backgroundColor, this.undoOnPick);
+		this.replay = new TextBlock(this.scene, 'REPLAY', [bgX, 10.5], bgWidth, bgHeight, allign, backgroundColor, this.replayOnPick);
+		this.restart = new TextBlock(this.scene, 'RESTART', [bgX, 8.5], bgWidth, bgHeight, allign, backgroundColor, this.restartOnPick);
+		this.changeCam = new TextBlock(this.scene, 'CAMERA', [bgX, 6.5], bgWidth, bgHeight, allign, backgroundColor, this.changeCamOnPick);
+		this.goToMenu = new TextBlock(this.scene, 'MENU', [bgX, 4.5], bgWidth, bgHeight, allign, backgroundColor, this.goToMenuOnPick);
+
+		this.buttons = [this.startOrPause, this.undo, this.replay, this.restart, this.changeCam, this.goToMenu];
     }
 
 	/**
@@ -22,79 +34,33 @@ export class Menu {
 	display() {
 		const isGameRunning = this.scene.checkers.isGameRunning();
 		const isGamePaused = this.scene.checkers.isGamePaused();
-		const initText = isGameRunning ? 'PAUSE GAME' : (isGamePaused ? 'CONTINUE GAME' : 'START GAME');
-		const initXCoords = isGamePaused ? -40.5 : -39.5;
-		this.initButton = new MyButton(this.scene, 'checkers-menu-init-button', [-25.3, 42], [-17, 50], true, 3000, this.initBtnOnPick, initText, [initXCoords, 19.2, -50]);
-		this.undoButton = new MyButton(this.scene, 'checkers-menu-undo-button', [-25.3, 32], [-17, 40], true, 3001, this.undoBtnOnPick, 'UNDO', [-37.5, 16.2, -50]);
-		this.replayButton = new MyButton(this.scene, 'checkers-menu-replay-button', [-25.3, 22], [-17, 30], true, 3002, this.replayBtnOnPick, 'REPLAY', [-38, 13.2, -50]);
-		this.restartBtn = new MyButton(this.scene, 'checkers-menu-restart-button', [-25.3, 12], [-17, 20], true, 3003, this.restartBtnOnPick, 'RESTART GAME', [-40.3, 10.2, -50]);
-		this.changeCamBtn = new MyButton(this.scene, 'checkers-menu-changeCam-button', [-25.3, 2], [-17, 10], true, 3004, this.changeCamBtnOnPick, 'CHANGE CAMERA', [-40.5, 7.2, -50]);
-		this.mainMenuBtn = new MyButton(this.scene, 'checkers-menu-mainMenu-button', [-25.3, -8], [-17, 0], true, 3005, this.mainMenuOnPick, 'MAIN MENU', [-39.5, 4.2, -50]);
-		
+		const initText = isGameRunning ? 'PAUSE' : (isGamePaused ? 'RESUME' : 'START');
 
-		this.displayButtons();        
-	}
+		this.startOrPause.setText(initText);
 
-	/**
-	 * Display the buttons of the menu
-	 */
-	displayButtons() {
-		// Draw init game button
-		this.scene.pushMatrix();
-		// Optional: disable depth test so that it is always in front (need to reenable in the end)
+		// disable depth test so that it is always in front (need to reenable in the end)
 		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
 
-		this.buttonAppearance.apply();
+		this.scene.pushMatrix();
 		this.scene.loadIdentity();
-		this.scene.scale(1.4, 0.3, 1);
-		this.scene.translate(-5, 18, -50);
-		this.initButton.display();
-		this.buttonAppearance.apply();
-		this.undoButton.display();
-		this.buttonAppearance.apply();
-		this.replayButton.display();
-		this.buttonAppearance.apply();
-		this.mainMenuBtn.display();
-		this.buttonAppearance.apply();
-		this.restartBtn.display();
-		this.buttonAppearance.apply();
-		this.changeCamBtn.display();
-		this.buttonAppearance.apply();
+		this.scene.translate(0, 0, -50); // move to the front of the camera
+		this.scene.scale(0.6, 0.6, 1) // scale to choose font size
 
+		this.buttons.forEach(button => {
+			button.display();
+		});
+
+		this.scene.popMatrix();
+		
 		// re-enable depth test 
 		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
-		this.scene.popMatrix();
 	}
 
 	/******************* BUTTONS ACTIONS  ************************/
 
-	initBtnOnPick = () => {
-		console.log("Init button picked");
-		this.scene.checkers.initBtnHandler();
-	}
-
-	undoBtnOnPick = () => {
-		console.log("Undo button picked");
-		this.scene.checkers.undoBtnHandler();
-	}
-
-	replayBtnOnPick = () => {
-		console.log("Replay button picked");
-		this.scene.checkers.replayBtnHandler();
-	}
-	
-	mainMenuOnPick = () => {
-		console.log("Main menu button picked");
-		this.scene.checkers.mainMenuBtnHandler();
-	}
-
-	restartBtnOnPick = () => {
-		console.log("Restart button picked");
-		this.scene.checkers.resetBtnHandler();
-	}
-
-	changeCamBtnOnPick = () => {
-		console.log("Change camera button picked");
-		this.scene.checkers.changeCamBtnHandler();
-	}
-}
+	startOrPauseOnPick = () => this.scene.checkers.initBtnHandler();
+	undoOnPick = () => this.scene.checkers.undoBtnHandler();
+	replayOnPick = () => this.scene.checkers.replayBtnHandler();
+	restartOnPick = () => this.scene.checkers.resetBtnHandler();
+	changeCamOnPick = () => this.scene.checkers.changeCamBtnHandler();
+	goToMenuOnPick = () => this.scene.checkers.mainMenuBtnHandler();}
