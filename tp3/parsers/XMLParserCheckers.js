@@ -91,26 +91,33 @@ export class XMLParserCheckers extends XMLParser {
         if (!Array.isArray(p1)) return p1;
         if (!Array.isArray(p2)) return p2;
 
-        var materials = mainboard.children;
+        var children = mainboard.children;
         let nodeNames = [];
-        for (var i = 0; i < materials.length; i++) {
-            nodeNames.push(materials[i].nodeName);
+        for (var i = 0; i < children.length; i++) {
+            nodeNames.push(children[i].nodeName);
         }
 
         const boardWallsIndex = nodeNames.indexOf("boardWalls");
-        if (boardWallsIndex == -1) return "missing board walls definition in auxiliarboard";
-
-        const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
-        if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
-
         const lightTileIndex = nodeNames.indexOf("lightTile");
         const darkTileIndex = nodeNames.indexOf("darkTile");
-        const lightTileMaterialId = this.reader.getString(materials[lightTileIndex], 'id', false);
-        const darkTileMaterialId = this.reader.getString(materials[darkTileIndex], 'id', false);
+        const fontColorIndex = nodeNames.indexOf("fontColor");
+
+        if (boardWallsIndex == -1) return "missing board walls definition in auxiliarboard";
+        if (lightTileIndex == -1) return "missing light tile definition in auxiliarboard";
+        if (darkTileIndex == -1) return "missing dark tile definition in auxiliarboard";
+        if (fontColorIndex == -1) return "missing font color definition in auxiliarboard";
+
+        const boardWallsMaterialId = this.reader.getString(children[boardWallsIndex], 'id', false);
+        const lightTileMaterialId = this.reader.getString(children[lightTileIndex], 'id', false);
+        const darkTileMaterialId = this.reader.getString(children[darkTileIndex], 'id', false);
+        const fontColor = this.parseColor(children[fontColorIndex], "fontColor for auxiliarboard in checkers");
+
+        if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
         if (this.scene.materials[lightTileMaterialId] == null) return "no material defined with ID " + lightTileMaterialId;
         if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
+        if (!Array.isArray(fontColor)) return fontColor;
 
-        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId);
+        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId, fontColor);
     }
 
     parsePieces(pieces) {

@@ -7,9 +7,9 @@ import { TextBlock } from "../../text/TextBlock.js";
 
 
 export class AuxiliarBoard extends Board {
-    constructor(sceneGraph, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId) {
+    constructor(sceneGraph, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId, fontColor) {
         super(sceneGraph, 'checkers-auxiliarboard', p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
-
+        this.fontColor = fontColor;
         this.buildBoard();
     }
 
@@ -69,7 +69,7 @@ export class AuxiliarBoard extends Board {
         this.sceneGraph.scene.translate(3 - 0.01, 2.75, -4);
         this.sceneGraph.scene.rotate(-Math.PI / 2, 0, 1, 0);
         this.sceneGraph.scene.scale(0.16, 0.2, 1);
-        this.texts.forEach((text) => text.display());
+        this.texts.forEach((text) => text.display(this.fontColor));
     }
 
     /**

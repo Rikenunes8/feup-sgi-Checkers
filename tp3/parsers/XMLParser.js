@@ -63,6 +63,7 @@ export class XMLParser {
      * Parse the color components from a node
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
+     * @returns {Array} Array with the color components
      */
     parseColor(node, messageError) {
         var color = [];

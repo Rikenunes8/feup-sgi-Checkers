@@ -3,7 +3,7 @@ import { diff } from "../utils.js";
 
 export class Board {
 
-    constructor(sceneGraph, id, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId, highlightMaterialId) {
+    constructor(sceneGraph, id, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId) {
         if (this.constructor == Board) {
             throw new Error("Abstract classes can't be instantiated.");
         }
@@ -18,7 +18,6 @@ export class Board {
         this.lightTileMaterialId = lightTileMaterialId;
         this.darkTileMaterialId = darkTileMaterialId;
         this.boardWallsMaterialId = boardWallsMaterialId;
-        this.highlightMaterialId = highlightMaterialId;
     }
 
     buildFaces(primitiveId) {

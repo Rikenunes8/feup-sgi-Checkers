@@ -7,7 +7,8 @@ import { Board } from "./Board.js";
 export class GameBoard extends Board {
     constructor(sceneGraph, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId, highlightMaterialId) {
         const id = 'checkers-mainboard';
-        super(sceneGraph, id, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId, highlightMaterialId);
+        super(sceneGraph, id, p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
+        this.highlightMaterialId = highlightMaterialId;
 
         this.buildBoard();
     }
