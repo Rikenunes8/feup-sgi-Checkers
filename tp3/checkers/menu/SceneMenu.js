@@ -1,8 +1,8 @@
 import { TextBlock } from "../../text/TextBlock.js";
-import { sceneButtonBackgroundColor } from "../constants.js";
+import { bgPrimaryColor } from "../constants.js";
 
 
-export class Menu {
+export class SceneMenu {
     /**
      *
      * @param {*} scene 
@@ -12,18 +12,17 @@ export class Menu {
     constructor(scene) {
 		this.scene = scene;
 
-		const backgroundColor = sceneButtonBackgroundColor;
 		const bgHeight = 1.5;
 		const bgWidth = 8;
-		const bgX = -34;
+		const bgX = -30;
 		const allign = "center";
 
-		this.startOrPause = new TextBlock(this.scene, 'START', [bgX, 14.5], bgWidth, bgHeight, allign, backgroundColor, this.startOrPauseOnPick);
-		this.undo = new TextBlock(this.scene, 'UNDO', [bgX, 12.5], bgWidth, bgHeight, allign, backgroundColor, this.undoOnPick);
-		this.replay = new TextBlock(this.scene, 'REPLAY', [bgX, 10.5], bgWidth, bgHeight, allign, backgroundColor, this.replayOnPick);
-		this.restart = new TextBlock(this.scene, 'RESTART', [bgX, 8.5], bgWidth, bgHeight, allign, backgroundColor, this.restartOnPick);
-		this.changeCam = new TextBlock(this.scene, 'CAMERA', [bgX, 6.5], bgWidth, bgHeight, allign, backgroundColor, this.changeCamOnPick);
-		this.goToMenu = new TextBlock(this.scene, 'MENU', [bgX, 4.5], bgWidth, bgHeight, allign, backgroundColor, this.goToMenuOnPick);
+		this.startOrPause = new TextBlock(this.scene, 'START', allign, [bgX, 15], bgWidth, bgHeight, this.startOrPauseOnPick, bgPrimaryColor);
+		this.undo = new TextBlock(this.scene, 'UNDO', allign, [bgX, 13], bgWidth, bgHeight, this.undoOnPick, bgPrimaryColor);
+		this.replay = new TextBlock(this.scene, 'REPLAY', allign, [bgX, 11], bgWidth, bgHeight, this.replayOnPick, bgPrimaryColor);
+		this.restart = new TextBlock(this.scene, 'RESTART', allign, [bgX, 9], bgWidth, bgHeight, this.restartOnPick, bgPrimaryColor);
+		this.changeCam = new TextBlock(this.scene, 'CAMERA', allign, [bgX, 7], bgWidth, bgHeight, this.changeCamOnPick, bgPrimaryColor);
+		this.goToMenu = new TextBlock(this.scene, 'MENU', allign, [bgX, 5], bgWidth, bgHeight, this.goToMenuOnPick, bgPrimaryColor);
 
 		this.buttons = [this.startOrPause, this.undo, this.replay, this.restart, this.changeCam, this.goToMenu];
     }

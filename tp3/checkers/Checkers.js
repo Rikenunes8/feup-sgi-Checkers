@@ -6,7 +6,7 @@ import { AnimationType, PieceAnimator } from "./PieceAnimator.js";
 import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
-import { Menu } from './menu/Menu.js';
+import { SceneMenu } from './menu/SceneMenu.js';
 import { MyButton } from "../text/MyButton.js";
 import { CGFappearance } from "../../lib/CGF.js";
 import { popupAmbient } from "./constants.js";
@@ -26,8 +26,8 @@ export class Checkers {
         this.showValidMoves = true;
         this.forceEat = true;
 
-        this.mainMenu = new MainMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
-        this.menu = new Menu(this.sceneGraph.scene);
+        this.mainMenu = new MainMenu(this.sceneGraph.scene);
+        this.menu = new SceneMenu(this.sceneGraph.scene);
         this.resultsMenu = new ResultsMenu(this.sceneGraph.scene, [0, 0], [10, 10]);
 
         this.mainboard = mainboard;

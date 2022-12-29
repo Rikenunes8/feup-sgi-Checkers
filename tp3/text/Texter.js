@@ -40,12 +40,14 @@ export class Texter {
         // activate texture containing the font
         this.textAppearance.apply();
 
+        this.scene.pushMatrix();
         for (let i = 0; i < text.length; i++) {
             this.scene.activeShader.setUniformsValues({'charCoords': [text.charCodeAt(i) % 16, Math.floor(text.charCodeAt(i) / 16)]});
             this.scene.activeShader.setUniformsValues({'textColor': vec4.fromValues(0.3, 0.3, 0.3, 1.0)});
             this.quad.display();
             this.scene.translate(spacing, 0, 0);
         }
+        this.scene.popMatrix();
         this.scene.setActiveShader(prevShader);
     }
 }

@@ -1,7 +1,7 @@
 import { CGFappearance } from "../../../lib/CGF.js";
 import { MyButton } from "../../text/MyButton.js";
 import { MyRectangle } from "../../components/MyRectangle.js";
-import { btnAmbient, resultsMenuAmbient } from "../constants.js";
+import { bgPrimaryColor, resultsMenuAmbient } from "../constants.js";
 import { CurrentPlayer } from "../GameRuler.js";
 
 export class ResultsMenu {
@@ -22,7 +22,7 @@ export class ResultsMenu {
 		this.backgroundAppearance.setAmbient(resultsMenuAmbient[0], resultsMenuAmbient[1], resultsMenuAmbient[2], resultsMenuAmbient[3]);
 
 		this.buttonAppearance = new CGFappearance(scene);
-		this.buttonAppearance.setAmbient(btnAmbient[0], btnAmbient[1], btnAmbient[2], btnAmbient[3]);
+		this.buttonAppearance.setAmbient(bgPrimaryColor[0], bgPrimaryColor[1], bgPrimaryColor[2], bgPrimaryColor[3]);
     }
 
 	/**
