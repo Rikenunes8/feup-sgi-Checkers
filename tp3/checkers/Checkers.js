@@ -7,11 +7,9 @@ import { GameSequence } from "./GameSequence.js";
 import { GameMove } from "./GameMove.js";
 import { MainMenu } from './menu/MainMenu.js';
 import { SceneMenu } from './menu/SceneMenu.js';
-import { MyButton } from "../text/MyButton.js";
-import { CGFappearance } from "../../lib/CGF.js";
-import { popupAmbient } from "./constants.js";
 import { ResultsMenu } from "./menu/ResultsMenu.js";
 import { AnimationCamera } from "./AnimationCamera.js";
+import { Popup } from "./menu/Popup.js";
 
 export class Checkers {
     /**
@@ -29,6 +27,7 @@ export class Checkers {
         this.mainMenu = new MainMenu(this.sceneGraph.scene);
         this.menu = new SceneMenu(this.sceneGraph.scene);
         this.resultsMenu = new ResultsMenu(this.sceneGraph.scene);
+        this.popup = new Popup(this.sceneGraph.scene);
 
         this.mainboard = mainboard;
         this.auxiliarboard = auxiliarboard;
@@ -55,13 +54,6 @@ export class Checkers {
             turnMaxTime: 20,
             playerMaxTime: 2,
         }
-
-        this.invalidMove = {
-            showInvalidMove: false,
-            popup: new MyButton(this.sceneGraph.scene, 'checkers-invalid-popup', [20, -80], [35, -70], true, 3000, this.initBtnOnPick, 'Invalid Move', [28, -17, -50]),
-            appearance: new CGFappearance(this.sceneGraph.scene),
-        }
-		this.invalidMove.appearance.setAmbient(popupAmbient[0], popupAmbient[1], popupAmbient[2], popupAmbient[3]);
 
         this.results = {
             p1Time: 0,
@@ -327,38 +319,12 @@ export class Checkers {
             this.mainboard.display();
             this.auxiliarboard.display();
             this.menu.display();
-            this.displayPopUp();
+            if (this.popup.isVisible())
+                this.popup.display();
         }
 
         if (this.stateMachine.getState() == GameState.EndGame)
             this.resultsMenu.display();
-    }
-
-    /**
-     * Function to change the display state of the popup.
-     */
-    changePopupState = (visible) => {
-        this.invalidMove.showInvalidMove = visible;
-    }
-
-    /**
-     * Displays Popup for invalid move.
-     */
-    displayPopUp() {
-        if (! this.invalidMove.showInvalidMove) return;
-        const scene = this.sceneGraph.scene;
-
-        scene.gl.disable(scene.gl.DEPTH_TEST);
-        
-        scene.pushMatrix();
-        scene.loadIdentity();
-        scene.scale(1.4, 0.3, 1);
-        scene.translate(-5, 18, -50);
-        this.invalidMove.appearance.apply();
-        this.invalidMove.popup.display();
-        scene.popMatrix();
-
-        scene.gl.enable(scene.gl.DEPTH_TEST);
     }
 
     /**
@@ -411,13 +377,6 @@ export class Checkers {
                 const pickId = game[i] + 200;
                 this.pieces.push(new Piece(this.sceneGraph, this.mainboard.tiles[i], materialId, componentref, pickId));
             }
-        }
-    }
-
-    // TODO: remove this function
-    printGame() {
-        for (let v = 7; v >= 0; v--) {
-            console.log(this.game.slice(v*8, v*8+8).join("\t"));
         }
     }
 
