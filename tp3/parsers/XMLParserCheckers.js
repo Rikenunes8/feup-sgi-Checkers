@@ -103,12 +103,6 @@ export class XMLParserCheckers extends XMLParser {
         const boardWallsMaterialId = this.reader.getString(materials[boardWallsIndex], 'id', false);
         if (this.scene.materials[boardWallsMaterialId] == null) return "no material defined with ID " + boardWallsMaterialId;
 
-        const buttonsMatIndex = nodeNames.indexOf("buttonsMaterial");
-        if (buttonsMatIndex == -1) return "missing buttons material definition in auxiliarboard";
-
-        const buttonsMaterialId = this.reader.getString(materials[buttonsMatIndex], 'id', false);
-        if (this.scene.materials[buttonsMaterialId] == null) return "no material defined with ID " + buttonsMaterialId;
-
         const lightTileIndex = nodeNames.indexOf("lightTile");
         const darkTileIndex = nodeNames.indexOf("darkTile");
         const lightTileMaterialId = this.reader.getString(materials[lightTileIndex], 'id', false);
@@ -116,7 +110,7 @@ export class XMLParserCheckers extends XMLParser {
         if (this.scene.materials[lightTileMaterialId] == null) return "no material defined with ID " + lightTileMaterialId;
         if (this.scene.materials[darkTileMaterialId] == null) return "no material defined with ID " + darkTileMaterialId;
 
-        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId);
+        return new AuxiliarBoard(this.scene, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId);
     }
 
     parsePieces(pieces) {

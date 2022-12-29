@@ -5,7 +5,7 @@ import { Board } from "./Board.js";
 import { Tile } from "../Tile.js";
 
 export class AuxiliarBoard extends Board {
-    constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId) {
+    constructor(sceneGraph, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId) {
         super(sceneGraph, 'checkers-auxiliarboard', p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
 
         this.buildBoard();
