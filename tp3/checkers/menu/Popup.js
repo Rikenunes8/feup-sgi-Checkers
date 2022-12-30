@@ -1,10 +1,12 @@
 import { TextBlock } from "../../text/TextBlock.js";
 import { redPopupColor } from "../constants.js";
 
+const popupTime = 2000; // time in milisseconds to discard the popup
+
 export class Popup {
     constructor(scene) {
         this.scene = scene;
-        this._popup = new TextBlock(scene, null, "center", [0, -15], 14, 2, null, redPopupColor);
+        this._popup = new TextBlock(scene, null, "center", [0, -15], 15, 2, null, redPopupColor);
         this._visible = false;
     }
 
@@ -23,6 +25,12 @@ export class Popup {
 		
 		// re-enable depth test 
 		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
+    }
+
+    activate(text) {
+        if (text) this.setText(text);
+        this.setVisible(true);
+        setTimeout(() => { this.setVisible(false) }, popupTime);
     }
 
     isVisible() {

@@ -49,7 +49,7 @@ export class AnimationCamera {
      * Player 1 -> Middle Screen -> Player 2 -> Middle Screen -> Player 1...
      */
     handle(camera) {
-        if (camera.name != checkersViewName) return;
+        if (camera.name != checkersViewName) return false;
         if (this.clickedCount % 2 == 0 && this.clickedCount != 0) {
             this.rotatePosOnClick *= -1;
             this.clickedCount = 0;
@@ -57,5 +57,6 @@ export class AnimationCamera {
 
         this.clickedCount += 1;
         this.animatingOnClick = true;
+        return true;
     }
 }

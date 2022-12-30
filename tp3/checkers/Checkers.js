@@ -453,11 +453,13 @@ export class Checkers {
     }
 
     resetBtnHandler() {
+        if (this.cancelIfReplay()) return;
         this.setState(GameState.Idle);
         this.setState(GameState.WaitPiecePick);
     }
 
     initBtnHandler() {
+        if (this.cancelIfReplay()) return;
         const currentState = this.stateMachine.getState();
         if (currentState == GameState.Pause || currentState == GameState.Idle) {
             this.setState(GameState.WaitPiecePick);
@@ -467,7 +469,12 @@ export class Checkers {
     }
 
     undoBtnHandler() {
-        if (this.sequence.isEmpty()) return;
+        if (this.cancelIfReplay()) return;
+        if (this.sequence.isEmpty()) {
+            this.popup.activate("No more plays!");
+            return;
+        }
+
         this.unselectPiece();
         this.forceGameUpdate(this.sequence.topMove().gameboard);
         this.turn = this.turn == CurrentPlayer.P1 ? CurrentPlayer.P2 : CurrentPlayer.P1;
@@ -477,6 +484,10 @@ export class Checkers {
     }
 
     replayBtnHandler() {
+        if (this.sequence.isEmpty()) {
+            this.popup.activate("No plays to replay!");
+            return;
+        }
         this.setState(GameState.Replay);
         this.sequence.replay(this, this.pieceAnimator);
     }
@@ -486,10 +497,22 @@ export class Checkers {
     }
 
     endGameBtnHandler() {
+        if (this.cancelIfReplay()) return;
         this.setState(GameState.Idle);
     }
 
     changeCamBtnHandler() {
-        this.animationCamera.handle(this.sceneGraph.scene.camera);
+        if (!this.animationCamera.handle(this.sceneGraph.scene.camera)) {
+            this.popup.activate("Use \"Checkers\" view!");
+        }
+    }
+
+    cancelIfReplay() {
+        const currentState = this.stateMachine.getState();
+        if (currentState == GameState.Replay || currentState == GameState.ReplayMoving) {
+            this.popup.activate("Wait for replay!");
+            return true;
+        }
+        return false;
     }
 }
