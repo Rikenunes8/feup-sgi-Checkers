@@ -1,4 +1,4 @@
-import { CGFappearance } from '/lib/CGF.js';
+import { CGFappearance } from '../../lib/CGF.js';
 import { XMLParser } from './XMLParser.js';
 
 export class XMLParserMaterials extends XMLParser {

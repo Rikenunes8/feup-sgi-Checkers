@@ -1,4 +1,4 @@
-import { CGFcamera, CGFcameraOrtho} from '/lib/CGF.js';
+import { CGFcamera, CGFcameraOrtho} from '../../lib/CGF.js';
 import { XMLParser, DEGREE_TO_RAD } from './XMLParser.js';
 
 export class XMLParserViews extends XMLParser {

@@ -1,4 +1,4 @@
-import { CGFtexture } from '/lib/CGF.js';
+import { CGFtexture } from '../../lib/CGF.js';
 import { XMLParser } from './XMLParser.js';
 
 export class XMLParserTextures extends XMLParser {

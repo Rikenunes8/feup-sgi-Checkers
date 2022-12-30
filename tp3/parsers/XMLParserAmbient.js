@@ -1,4 +1,4 @@
-import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '/lib/CGF.js';
+import { CGFappearance, CGFcamera, CGFcameraOrtho, CGFtexture, CGFXMLreader } from '../../lib/CGF.js';
 import { XMLParser } from './XMLParser.js';
 
 export class XMLParserAmbient extends XMLParser {
