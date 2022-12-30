@@ -490,6 +490,8 @@ export class Checkers {
     }
 
     changeCamBtnHandler() {
-        this.animationCamera.handle(this.sceneGraph.scene.camera);
+        if (!this.animationCamera.handle(this.sceneGraph.scene.camera)) {
+            this.popup.activate("Use \"Checkers\" view!");
+        }
     }
 }

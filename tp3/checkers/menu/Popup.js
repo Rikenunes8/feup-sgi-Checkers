@@ -6,7 +6,7 @@ const popupTime = 2000; // time in milisseconds to discard the popup
 export class Popup {
     constructor(scene) {
         this.scene = scene;
-        this._popup = new TextBlock(scene, null, "center", [0, -15], 14, 2, null, redPopupColor);
+        this._popup = new TextBlock(scene, null, "center", [0, -15], 15, 2, null, redPopupColor);
         this._visible = false;
     }
 
