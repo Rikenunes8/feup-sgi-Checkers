@@ -12,13 +12,13 @@ export class Piece extends Pickable {
      * @param {*} componentref 
      * @param {*} pickId 
      */
-    constructor(sceneGraph, tile, materialId, componentref, pickId) {
+    constructor(sceneGraph, tile, materialIds, componentref, pickId) {
         super(pickId);
         this.sceneGraph = sceneGraph;
         this.tile = tile;
         this.idx = pickId-200;
         this.id = `checkers-piece-${this.idx}`;
-        this.buildPieceComponent(materialId, componentref);
+        this.buildPieceComponent(materialIds, componentref);
 
         this.tile.piece = this;
 
@@ -34,13 +34,23 @@ export class Piece extends Pickable {
         this.unregisterPickable(this.sceneGraph.scene);
     }
 
-    buildPieceComponent(materialId, componentref) {
+    /**
+     * Add a piece component to the scene graph
+     * @param {Array[string]} materialIds First element is the material for the piece, second is the material for the piece when selected
+     * @param {*} componentref piece component reference
+     */
+    buildPieceComponent(materialIds, componentref) {
         const texture = ['none', 1, 1];
         let transfMatrix = mat4.create();
         mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(this.tile.h, 0, -this.tile.v));
-        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, [materialId, 'white'], texture, [[false, componentref]], null, null);
+        this.sceneGraph.components[this.id] = new MyComponent(this.sceneGraph.scene, this.id, transfMatrix, materialIds, texture, [[false, componentref]], null, null);
     }
 
+    /**
+     * Change material according to selection and highlight valid moves if it is supposed to
+     * @param {*} toSelect True to select and false to unselect
+     * @returns 
+     */
     select(toSelect) {
         const material = toSelect ? 1 : 0;
         this.sceneGraph.components[this.id].material = material;
@@ -66,6 +76,9 @@ export class Piece extends Pickable {
         }
     }
 
+    /**
+     * Reset all piece properties
+     */
     reset() {
         if (this.pieceOnTop != null) {
             this.pieceOnTop.pieceOnBottom = null;
@@ -82,6 +95,9 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id].children.splice(1);
     }
 
+    /**
+     * Handle piece pick
+     */
     onPick() {
         console.log(`Selected piece: ${this.idx}`);
         const checkers = this.sceneGraph.scene.checkers;
@@ -94,6 +110,10 @@ export class Piece extends Pickable {
         }
     }
 
+    /**
+     * Update piece linked tile and the relative transformation.
+     * @param {*} tile 
+     */
     updateTile(tile) {
         if (this.tile != null)
             this.tile.piece = null;
@@ -104,6 +124,11 @@ export class Piece extends Pickable {
         this.sceneGraph.components[this.id].transfMatrix = transfMatrix;
     }
 
+    /**
+     * Turn piece into a king piece or a pawn piece.
+     * @param {*} toKing If true, the piece will become a king. If false, the piece will become a pawn piece.
+     * @param {*} pieceOnTop Piece that will be on top of this piece. Unused if toKing is false.
+     */
     becomeKing(toKing, pieceOnTop) {
         if (toKing && !this.isKing()) {
             this.pieceOnTop = pieceOnTop;

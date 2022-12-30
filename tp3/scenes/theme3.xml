@@ -1,28 +1,39 @@
 <sxs>
     <scene root="root" axis_length="0"/>
 
-    <views default="view1">
+    <views default="Checkers">
         <perspective id="Checkers" near="0.1" far="500" angle="45">
-            <from x="0" y="1.5" z="0.9" />
+            <from x="0" y="2" z="1.2" />
             <to x="0" y="1.15" z="0" />
         </perspective>
-        <perspective id="view1" near="0.1" far="500" angle="45">
-            <from x="5" y="5" z="5" />
-            <to x="0" y="0" z="0" />
+        <perspective id="Room TV" near="0.1" far="500" angle="45">
+            <from x="4.5" y="4.5" z="4.5" />
+            <to x="0" y="1" z="0" />
+        </perspective>
+        <perspective id="Room Frame" near="0.1" far="500" angle="45">
+            <from x="-2.5" y="2" z="8" />
+            <to x="-0.5" y="2" z="0" />
         </perspective>
     </views>
 
     <ambient>
-        <ambient r="0.8" g="0.8" b="0.8" a="1.0" />
+        <ambient r="0.4" g="0.4" b="0.4" a="1.0" />
         <background r="0.0" g="0.0" b="0.1" a="1.0" />
     </ambient>
 
     <lights>
         <omni id="light" enabled="1">
             <location x="0" y="4" z="0" w="1.0"/>
+            <ambient r="0.45" g="0.45" b="0.45" a="1.0" />
+            <diffuse r="0.6" g="0.6" b="0.6" a="1.0" />
+            <specular r="0.2" g="0.2" b="0.2" a="1.0" />
+            <attenuation constant="1" linear="0" quadratic="0" />
+        </omni>
+        <omni id="door" enabled="1">
+            <location x="3" y="1.5" z="-4" w="1.0"/>
             <ambient r="0.2" g="0.2" b="0.2" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
-            <specular r="0.0" g="0.0" b="0.0" a="1.0" />
+            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
             <attenuation constant="1" linear="0" quadratic="0" />
         </omni>
     </lights>
@@ -100,26 +111,6 @@
         <primitive id="torus">
             <torus inner="0.25" outer="2" slices="16" loops="40" />
         </primitive>
-
-        <primitive id="barrelSide">
-          <patch degree_u="3" parts_u="10" degree_v="2" parts_v="10" >
-            <controlpoint x="-1" y="-1" z="0" w="1.0"/>
-            <controlpoint x="-1.5" y="0" z="0" w="1.0"/>
-            <controlpoint x="-1" y="1" z="0" w="1.0"/>
-
-            <controlpoint x="-1" y="-1" z="1.33333" w="1.0"/>
-            <controlpoint x="-1.5" y="0" z="2" w="1.0"/>
-            <controlpoint x="-1" y="1" z="1.33333" w="1.0"/>
-
-            <controlpoint x="1" y="-1" z="1.33333" w="1.0"/>
-            <controlpoint x="1.5" y="0" z="2" w="1.0"/>
-            <controlpoint x="1" y="1" z="1.33333" w="1.0"/>
-
-            <controlpoint x="1" y="-1" z="0.0" w="1.0"/>
-            <controlpoint x="1.5" y="0" z="0.0" w="1.0"/>
-            <controlpoint x="1" y="1" z="0.0" w="1.0"/>
-          </patch>
-        </primitive>
         <primitive id="rectangleNurb">
           <patch degree_u="1" parts_u="10" degree_v="1" parts_v="10" >
               <controlpoint x="-0.5" y="-0.5" z="0.0" w="1.0"/>
@@ -141,10 +132,8 @@
 
               <controlpoint x="1" y="1" z="0.00001" w="1.0"/>
               <controlpoint x="1" y="1" z="-0.00001" w="1.0"/>
-
           </patch>
         </primitive>
-
         <primitive id="torusCondensed">
             <torus inner="0.3" outer="0.4" slices="16" loops="20" />
         </primitive>
@@ -872,10 +861,12 @@
             <boardWalls id="white" />
             <lightTile id="lightWood" />
             <darkTile id="darkWood" />
+            <fontColor r="0.3" g="0.3" b="0.3" a="1.0" />
         </auxiliarboard>
         <pieces>
             <type1 id="black" />
             <type2 id="dirtyWhite" />
+            <highlight id="gold" />
         </pieces>
         <spot id="checkersSpotlight" angle="10" exponent="80" height="10">
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />

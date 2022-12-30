@@ -1,7 +1,7 @@
 <sxs>
-    <scene root="feup" axis_length="0.00001"/>
+    <scene root="feup" axis_length="0"/>
 
-    <views default="FEUP">
+    <views default="Checkers">
         <perspective id="FEUP" near="0.1" far="500" angle="45">
             <from x="40" y="40" z="40" />
             <to x="0" y="0" z="0" />
@@ -39,9 +39,9 @@
             <to x="14" y="3" z="3" />
         </ortho>
 
-        <perspective id="Checkers" near="0.1" far="500" angle="60">
-            <from x="13" y="7" z="4" />
-            <to x="13" y="4" z="-1" />
+        <perspective id="Checkers" near="0.1" far="500" angle="45">
+            <from x="14" y="7.5" z="5" />
+            <to x="14" y="4" z="-1" />
         </perspective>
     </views>
 
@@ -2443,10 +2443,12 @@
             <boardWalls id="lightWood" />
             <lightTile id="white" />
             <darkTile id="black" />
+            <fontColor r="1.0" g="1.0" b="1.0" a="1.0" />
         </auxiliarboard>
         <pieces>
-            <type1 id="lightWood" />
-            <type2 id="darkWood" />
+            <type1 id="darkWood" />
+            <type2 id="lightWood" />
+            <highlight id="white" />
         </pieces>
         <spot id="checkersSpotlight" angle="20" exponent="5" height="1.5">
             <ambient r="0.0" g="0.0" b="0.0" a="1.0" />

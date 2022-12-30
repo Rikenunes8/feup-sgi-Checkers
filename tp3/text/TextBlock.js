@@ -22,7 +22,7 @@ export class TextBlock extends Pickable{
         }
     }
 
-    display() {
+    display(fontColor) {
         const spacing = 0.7;
         this.scene.pushMatrix();
         this.scene.scale(2, 2, 1)
@@ -43,7 +43,7 @@ export class TextBlock extends Pickable{
                 this.scene.translate(this.width/2-textWidth/2, 0, 0); // center in width
             }
             this.scene.translate(0, this.height/2, 0); // center in height
-            this.scene.texter.writeText(this.text, spacing);
+            this.scene.texter.writeText(this.text, spacing, fontColor);
         }
 
         this.scene.popMatrix();
