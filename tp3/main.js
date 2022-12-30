@@ -19,7 +19,7 @@ function main() {
     const urlVars = getUrlVars();
     const themeNumber = urlVars["theme"];
     const theme = themeNumber == 1 || themeNumber == 2 || themeNumber == 3 ? `theme${themeNumber}.xml` : undefined;
-    const filename = urlVars["file"] || theme || "SGI_TP2_XML_T01_G05_v01.xml";
+    const filename = urlVars["file"] || theme || "theme1.xml";
 
 	// Standard application, scene and interface setup
     var app = new CGFapplication(document.body);

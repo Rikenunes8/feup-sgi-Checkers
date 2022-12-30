@@ -44,7 +44,7 @@ export class PieceAnimator {
             endPositions: endPositions,
             linkObject: linkObject,
             startTime: startTime,
-            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 300 : 200)
+            duration: vec3.distance(startPosition, endPositions[0]) * (animType == AnimationType.COLLECT ? 400 : 250)
         };
 
         // In case of a linkObject is a tile, the referenced tile is updated because the transofrmation is calculated relativelly to the tile
