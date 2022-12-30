@@ -18,17 +18,18 @@
   - **Auxiliar Board**: set position and dimensions, tiles materials (light and dark tile), board walls material and color of the font used to display the results during the game
   - **Pieces**: set the material of the pieces (player 1, player 2 and highlighted piece)
   - **Spotlight**: set the heght of the spotlight and all its illumination configurations, besides the position and the target that is automatically calculated based on the position of the piece that is being moved.
-- The auxiliar board has a vertical wall that show in real time the [results of the game](screenshots/theme2CheckersSel.png) (players' score, players' turn time, players' total time spent and the total time of the game)
+- The auxiliar board has a vertical wall that shows in real time the [results of the game](screenshots/theme2CheckersSel.png) (players' score, players' turn time, players' total time spent and the total time of the game)
 - The [main menu](screenshots/mainMenu.png) has a button to go te scene, 3 buttons to change the scene, and 2 more buttons to set game configurations as the maximum turn time and maximum player's time.
 - A checkers scene allow to start the game, pause it, restart it and go back to main menu with the press of some buttons.
 - About the game, it starts with all the pieces in the board and one can pick a piece and then a tile to move it. When a piece is picked [the tiles correspondent to valid moves for that piece are highlighted](screenshots/theme1CheckersSel.png).
 - All the checkers pieces are always present in the scene and do not magically appear/disappear.
-- When a piece is collected, it is moved to the auxiliar board with a smooth parabolic jump animation.
-- When a pawn piece is made king, a piece of the auxiliar board is moved a put on top of the pawn piece to make it a king. (If there is no piece in the auxiliar board, the future king waits for a piece to be collected to become a king)
+- When a piece is collected, it is moved to the auxiliar board with a [smooth parabolic jump animation](screenshots/BecomeKing.gif).
+- When a pawn piece is [made king](screenshots/BecomeKing.gif), a piece of the auxiliar board is moved a put on top of the pawn piece to make it a king. (If there is no piece in the auxiliar board, the future king waits for a piece to be collected to become a king)
 - At the end of each turn, if the specific game camera is selected, the camera will turn over the board and change the view to the other player perspective. Although, it is possible to change it manually with a button tap.
-- During the game, a player can undo as many plays as he wants.
-- During the game, one can replay the game movie until that moment, and after that resume the game from where it was before.
-- When the game is over, even by time out or no more moves, popup appears with the results of the game, the option to go back to the scene and the option to replay the game movie.
+- During the game, a player can [undo](screenshots/Undo.gif) as many plays as he wants.
+- During the game, one can [replay](screenshots/GameReplay.gif) the game movie until that moment, and after that resume the game from where it was before.
+- When the game is over, even by time out or no more moves, [popup](screenshots/resultsMenu.png) appears with the results of the game, the option to go back to the scene and the option to replay the game movie.
+- When an invalid move is chosen, or a button is pressed and does not have any effect, a [popup](screenshots/InvalidMove.gif) appears with a message informing the user that the action is invalid.
 - The 2D interface was not removed to accomodate the features implemented before tp3, although it is not used in the checkers game. Instead, it is used a 3D interface based on buttons.
 
 ## Scenes
