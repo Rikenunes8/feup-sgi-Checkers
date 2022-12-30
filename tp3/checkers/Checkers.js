@@ -104,8 +104,6 @@ export class Checkers {
      * time of the Game
      */
     updateTime = () => {
-        // TODO Check if game already initialized using GameStateMachine probably
-        // reset these times when game ends and we click init game again
         if (this.isGameRunning()) {
             this.results.totalTime += 1;
             if (this.turn == CurrentPlayer.P1) {
@@ -116,6 +114,9 @@ export class Checkers {
                 this.results.p2CurrTime += 1;
             }
 
+            this.checkTimeLimit();
+        }
+        else if (this.stateMachine.getState() == GameState.Pause) {
             this.checkTimeLimit();
         }
     }
@@ -213,11 +214,6 @@ export class Checkers {
             }
         }
 
-        if (this.turn == CurrentPlayer.P1) {
-            this.results.p1CurrTime = 0;
-        } else {
-            this.results.p2CurrTime = 0;
-        }
 
         const turnBefore = this.turn;
         this.unselectPiece();
@@ -226,6 +222,8 @@ export class Checkers {
         if (this.ruler.checkEndGame(this.game, this.turn)) {
             this.setState(GameState.EndGame);
         } else if (this.stateMachine.getState() == GameState.Moving) {
+            if (turnBefore == CurrentPlayer.P1) this.results.p1CurrTime = 0;
+            else this.results.p2CurrTime = 0;
             this.animationCamera.rotate(turnBefore, this.sceneGraph.scene.camera);
             this.setState(GameState.WaitPiecePick);
         } else if (this.stateMachine.getState() == GameState.ReplayMoving) {
