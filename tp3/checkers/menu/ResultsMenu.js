@@ -14,7 +14,8 @@ export class ResultsMenu {
         const textHeight = 1.5;
 
         this.background = new TextBlock(this.scene, '', null, [0, 0], 34, 20, null, bgMainMenuColor);
-        this.thankYou = new TextBlock(this.scene, 'Thank You!', 'center', [0, -7.5], 11.5, btnHeight, this.thankYouBtnPick, bgPrimaryColor);
+        this.thankYou = new TextBlock(this.scene, 'Thank You!', 'center', [-7, -7.5], 11.5, btnHeight, this.thankYouOnPick, bgPrimaryColor);
+        this.replay = new TextBlock(this.scene, 'Replay Game!', 'center', [7, -7.5], 11.5, btnHeight, this.replayOnPick, bgPrimaryColor);
 
         this.congrats = new TextBlock(this.scene, 'CONGRATULATIONS! You ended the game!', 'center', [0, 7.5], 1, textHeight);
         this.announce = new TextBlock(this.scene, 'The winner is.... ', 'center', [0, 6], 1, textHeight);
@@ -35,39 +36,38 @@ export class ResultsMenu {
         this.texts = [this.congrats, this.announce, ...this.textsP1, ...this.textsP2, this.totalGameTime,];
     }
 
-	/**
-	 * Displays all the menu
-	 */
-	display() {
-        this._setUpDisplay();
+    /**
+     * Displays all the menu
+     */
+    display() {
+        // disable depth test so that it is always in front (need to reenable in the end)
+        this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
 
-		// disable depth test so that it is always in front (need to reenable in the end)
-		this.scene.gl.disable(this.scene.gl.DEPTH_TEST);
+        this.scene.pushMatrix();
+        this.scene.loadIdentity();
+        this.scene.translate(0, 0, -50); // move to the front of the camera
+        this.scene.scale(0.6, 0.6, 1) // scale to choose font size
 
-		this.scene.pushMatrix();
-		this.scene.loadIdentity();
-		this.scene.translate(0, 0, -50); // move to the front of the camera
-		this.scene.scale(0.6, 0.6, 1) // scale to choose font size
-
-		this.background.display();
-		this.thankYou.display();
+        this.background.display();
+        this.thankYou.display();
+        this.replay.display();
 
         this.texts.forEach(text => text.display());
 
-		this.scene.popMatrix();
-		
-		// re-enable depth test 
-		this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
-	}
+        this.scene.popMatrix();
 
-    _setUpDisplay() {
+        // re-enable depth test 
+        this.scene.gl.enable(this.scene.gl.DEPTH_TEST);
+    }
+
+    setUpDisplay() {
         const [p1Score, p2Score] = this.scene.checkers.getScores();
 
         let winnerAnnounce = 'The winner is.... ';
         const winner = this.scene.checkers.results.winner;
         if (winner == CurrentPlayer.P1) winnerAnnounce += 'Player 1';
         else if (winner == CurrentPlayer.P2) winnerAnnounce += 'Player 2';
-        else if(p1Score > p2Score) winnerAnnounce += 'Player 1';
+        else if (p1Score > p2Score) winnerAnnounce += 'Player 1';
         else if (p1Score < p2Score) winnerAnnounce += 'Player 2';
         else winnerAnnounce += "Oh. It's a draw!";
         this.announce.setText(winnerAnnounce);
@@ -85,7 +85,7 @@ export class ResultsMenu {
         this.totalGameTime.setText('Total Game Time: ' + this.scene.checkers.results.totalTime + 's');
     }
 
-	thankYouBtnPick = () => {
-		this.scene.checkers.endGameBtnHandler();
-	}
+
+    thankYouOnPick = () => this.scene.checkers.endGameBtnHandler();
+    replayOnPick = () => this.scene.checkers.replayBtnHandler();
 }

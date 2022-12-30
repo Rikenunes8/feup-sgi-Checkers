@@ -35,8 +35,11 @@ export class GameStateMachine {
             case GameState.Replay:
                 this.checkers.unselectPiece();
             case GameState.Moving:
+                this.clear();
+                break;
             case GameState.EndGame:
                 this.clear();
+                this.checkers.resultsMenu.setUpDisplay();
                 break;
             case GameState.WaitPiecePick:
                 this.changeStateToWaitPiecePick();
