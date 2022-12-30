@@ -2,7 +2,6 @@ import { MyComponent } from "../components/MyComponent.js";
 import { Pickable } from "./Pickable.js";
 import { displayGraph } from "./utils.js";
 import { GameState } from "./GameStateMachine.js";
-import { popupTime } from "./constants.js";
 import { AuxiliarBoard } from "./boards/AuxiliarBoard.js";
 import { GameBoard } from "./boards/GameBoard.js";
 
@@ -43,9 +42,7 @@ export class Tile extends Pickable {
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
 
         if (tilesIdxToVisit == null) {
-            checkers.popup.setText('Invalid move!');
-            checkers.popup.setVisible(true);
-            setTimeout(() => { checkers.popup.setVisible(false) }, popupTime);
+            checkers.popup.activate('Invalid move!');
             return null;
         }
         
