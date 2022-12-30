@@ -32,6 +32,7 @@
 - The 2D interface was not removed to accomodate the features implemented before tp3, although it is not used in the checkers game. Instead, it is used a 3D interface based on buttons.
 
 ## Scenes
+3 main scenes were designed and can be changed by clicking the buttons in the main menu. The 3 scenes are:
 
 ### FEUP garden
 This scene is the same developed along [tp1](../tp1) and [tp2](../tp2/) but a checkers game was placed in the middle of the garden.
@@ -43,8 +44,9 @@ This scene represent the "Queijos" class room in FEUP in a very realistic way. T
 This scene is a living room of a rich and paixonate for games person. It has a wall gold frame containing a nice picture to motivate the board players. It has also a gold TV displaying a pool game and some poufs to one be able to accomodate them self. At the center of the room, there is a table and a chair in each, illuminated by ceiling lamp, that holds the checkers game.
 
 ----
+
 ## Issues/Problems
 
 - All the features required were implemented
-- There are still some doubts about the game rules, mostly when it refers to kings pieces, but the rules implemented are the ones that we understood from the [website](https://www.ultraboardgames.com/checkers/game-rules.php) given.
+- There are still some doubts about the game rules, mostly when it refers to kings pieces. Despite that, the rules implemented are the ones that we understood from the [website](https://www.ultraboardgames.com/checkers/game-rules.php) given, and from the 2 first Google searches by online checkers games ([cardgames.io](https://cardgames.io/checkers/) and [247checkers.com](https://www.247checkers.com/)).
 - No bugs were found in the final version of tp3.
