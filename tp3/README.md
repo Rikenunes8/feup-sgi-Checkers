@@ -9,6 +9,8 @@
 
 ----
 
+Try the checkers 3D game: [FINAL](https://web.fe.up.pt/~up201906852/SGI/project/)
+
 ## Project information
 
 - The new engine can handle sxs files as it did in tp2. This means that the features to be implemented in tp3 were implemented without rebuilding the full engine.

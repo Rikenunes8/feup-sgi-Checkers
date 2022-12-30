@@ -10,6 +10,8 @@
 
 ## Projects
 
+Try the awesome 3D experience: [FINAL PROJECT](https://web.fe.up.pt/~up201906852/SGI/project/)
+
 ### [TP1 - Scene Graph](tp1)
 
 - Individual and documented functions for each step of the parser, where each one of them is responsible for parsing each XML tag
