@@ -70,7 +70,5 @@
 - When the game is over, even by time out or no more moves, [popup](tp3/screenshots/resultsMenu.png) appears with the results of the game, the option to go back to the scene and the option to replay the game movie
 - When an invalid move is chosen, or a button is pressed and does not have any effect, a [popup](tp3/screenshots/InvalidMove.gif) appears with a message informing the user that the action is invalid
 - The 2D interface was not removed to accomodate the features implemented before tp3, although it is not used in the checkers game. Instead, it is used a 3D interface based on buttons
-
 - Scenes details can be found in the [README](tp3/README.md) file of tp3.
-
 ----
