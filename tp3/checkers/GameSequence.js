@@ -22,10 +22,6 @@ export class GameSequence {
         return this._gameSequence[this._gameSequence.length - 1];
     }
 
-    getSequence() {
-        return this._gameSequence;
-    }
-
     undo() {
         if (this._gameSequence.length > 1) {
             this._gameSequence.pop();
