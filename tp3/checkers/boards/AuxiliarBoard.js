@@ -3,9 +3,11 @@ import { displayGraph } from "../utils.js";
 import { buildCheckersTile } from "../primitives.js";
 import { Board } from "./Board.js";
 import { Tile } from "../Tile.js";
+import { TextBlock } from "../../text/TextBlock.js";
+
 
 export class AuxiliarBoard extends Board {
-    constructor(sceneGraph, p1, p2, boardWallsMaterialId, buttonsMaterialId, lightTileMaterialId, darkTileMaterialId) {
+    constructor(sceneGraph, p1, p2, boardWallsMaterialId, lightTileMaterialId, darkTileMaterialId) {
         super(sceneGraph, 'checkers-auxiliarboard', p1, p2, lightTileMaterialId, darkTileMaterialId, boardWallsMaterialId);
 
         this.buildBoard();
@@ -32,20 +34,42 @@ export class AuxiliarBoard extends Board {
         this.buildTiles(rectangleId);
     }
 
-    /**
-     * Builds tiles with 12 pieces for each player
-     * @param {*} primitiveId 
-     * @param {*} lightTileMaterialId 
-     * @param {*} darkTileMaterialId 
-     */
-    buildTiles(primitiveId) {
-        for (let v = 0; v < 8; v++) {
-            for (let h = 0; h < 3; h++) {
-                const tileMaterial = (v + h) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
-                const pickId = (v * 3) + h + 300;
-                this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
-            }
-        }
+    update(time) {
+        this._setUpDisplayResults();
+    }
+
+    _setUpDisplayResults() {
+        const scene = this.sceneGraph.scene;
+        const [p1Score, p2Score] = scene.checkers.getScores();
+        this.player1Score.setText('Score:' + p1Score);
+        this.player2Score.setText('Score:' + p2Score);
+
+        this.player1TurnTime.setText('Turn Time:' + scene.checkers.results.p1CurrTime + 's');
+        this.player2TurnTime.setText('Turn Time:' + scene.checkers.results.p2CurrTime + 's');
+
+        this.player1TotalTime.setText('Total Time:' + scene.checkers.results.p1Time + 's');
+        this.player2TotalTime.setText('Total Time:' + scene.checkers.results.p2Time + 's');
+
+        this.totalGameTime.setText('Total Game Time:' + scene.checkers.results.totalTime + 's');
+
+    }
+
+    display() {
+        displayGraph(this.sceneGraph, [false, this.id], null);
+        const scene = this.sceneGraph.scene;
+
+        scene.pushMatrix();
+        scene.multMatrix(this.transfMatrix);
+        this.tiles.forEach((tile) => tile.display());
+        this._displayResults();
+        scene.popMatrix();
+    }
+
+    _displayResults() {
+        this.sceneGraph.scene.translate(3 - 0.01, 2.75, -4);
+        this.sceneGraph.scene.rotate(-Math.PI / 2, 0, 1, 0);
+        this.sceneGraph.scene.scale(0.16, 0.2, 1);
+        this.texts.forEach((text) => text.display());
     }
 
     /**
@@ -60,120 +84,18 @@ export class AuxiliarBoard extends Board {
         return transfMatrix;
     }
 
-    display() {
-        displayGraph(this.sceneGraph, [false, this.id], null);
-        const scene = this.sceneGraph.scene;
-
-        scene.pushMatrix();
-        scene.multMatrix(this.transfMatrix);
-        for (const tile of this.tiles) {
-            tile.display();
+    /**
+     * Builds tiles with 12 pieces for each player
+     * @param {*} primitiveId 
+     */
+    buildTiles(primitiveId) {
+        for (let v = 0; v < 8; v++) {
+            for (let h = 0; h < 3; h++) {
+                const tileMaterial = (v + h) % 2 != 0 ? this.lightTileMaterialId : this.darkTileMaterialId;
+                const pickId = (v * 3) + h + 300;
+                this.tiles.push(new Tile(this.sceneGraph, this, h, v, primitiveId, tileMaterial, pickId));
+            }
         }
-        this.displayButtons();
-        scene.popMatrix();
-    }
-
-    displayButtons() {
-        const scene = this.sceneGraph.scene;
-        const [p1Score, p2Score] = scene.checkers.getScores();
-
-        let transfMatrix;
-        
-        this.buttonAppearance = this.sceneGraph.materials[this.buttonsMaterialId];
-
-        // Display Player2
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 4.2, -6.3));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
-        scene.multMatrix(transfMatrix);
-
-        scene.texter.writeText('PLAYER 2');
-        scene.popMatrix();
-
-        // Display Player1
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 4.2, -2.7));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.6, 1));
-        scene.multMatrix(transfMatrix);
-
-        scene.texter.writeText('PLAYER 1');
-        scene.popMatrix();
-
-        
-        // Draw player2 Score
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 3.2, -6.3));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Score:' + p2Score);
-        scene.popMatrix();
-
-        // Draw player2 Curr Time
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -6.8));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Curr Time:' + scene.checkers.results.p2CurrTime + 's');
-        scene.popMatrix();
-
-        // Draw player2 Total Time
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1.8, -6.9));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Total Time:' + scene.checkers.results.p2Time + 's');
-        scene.popMatrix();
-
-
-        // Draw player1 Score
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 3.2, -2.7));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Score:' + p1Score);
-        scene.popMatrix();
-
-        // Draw player1 Time
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 2.5, -3.1));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Curr Time:' + scene.checkers.results.p1CurrTime + 's');
-        scene.popMatrix();
-
-        // Draw player1 Time
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 1.8, -3.2));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Total Time:' + scene.checkers.results.p1Time + 's');
-        scene.popMatrix();
-
-        // Draw Total Time
-        scene.pushMatrix();
-        transfMatrix = mat4.create();
-        mat4.translate(transfMatrix, transfMatrix, vec3.fromValues(3 - 0.01, 0.8, -5.7));
-        mat4.rotateY(transfMatrix, transfMatrix, -Math.PI / 2);
-        mat4.scale(transfMatrix, transfMatrix, vec3.fromValues(0.3, 0.5, 1));
-        scene.multMatrix(transfMatrix);
-        scene.texter.writeText('Total Game Time:' + scene.checkers.results.totalTime + 's');
-        scene.popMatrix();
     }
 
     /**
@@ -182,6 +104,7 @@ export class AuxiliarBoard extends Board {
      */
     buildMenu(primitiveId) {
         this.buildMenuFaces(primitiveId);
+        this.buildMenuText();
     }
 
     /**
@@ -197,11 +120,33 @@ export class AuxiliarBoard extends Board {
         this.buildFace(primitiveId, 'top', true);
     }
 
+    /**
+     * Builds the TextBlocks of the auxiliar board
+     */
+    buildMenuText() {
+        const textHeight = 1.5;
+
+        this.player1Name = new TextBlock(this.sceneGraph.scene, 'PLAYER 1', 'center', [-6, 3], 12, textHeight);
+        this.player2Name = new TextBlock(this.sceneGraph.scene, 'PLAYER 2', 'center', [6.5, 3], 12, textHeight);
+        this.player1Score = new TextBlock(this.sceneGraph.scene, '', 'center', [-6, 0.5], 12, textHeight);
+        this.player2Score = new TextBlock(this.sceneGraph.scene, '', 'center', [6.5, 0.5], 12, textHeight);
+        this.player1TurnTime = new TextBlock(this.sceneGraph.scene, '', 'center', [-6, -1], 12, textHeight);
+        this.player2TurnTime = new TextBlock(this.sceneGraph.scene, '', 'center', [6.5, -1], 12, textHeight);
+        this.player1TotalTime = new TextBlock(this.sceneGraph.scene, '', 'center', [-6, -2.5], 12, textHeight);
+        this.player2TotalTime = new TextBlock(this.sceneGraph.scene, '', 'center', [6.5, -2.5], 12, textHeight);
+
+        this.totalGameTime = new TextBlock(this.sceneGraph.scene, '', 'center', [0, -5], 14, textHeight);
+
+        this.textsP1 = [this.player1Name, this.player1Score, this.player1TurnTime, this.player1TotalTime];
+        this.textsP2 = [this.player2Name, this.player2Score, this.player2TurnTime, this.player2TotalTime];
+        this.texts = [...this.textsP1, ...this.textsP2, this.totalGameTime];
+    }
 
     /**
      * Builds a face of the Menu
      * @param {*} primitiveId 
      * @param {*} side
+     * @param {*} isMenu Wall of the board or the acctual board
      */
     buildFace(primitiveId, side, isMenu = false) {
         const id = isMenu ? `checkers-auxiliarboard-menu-${side}-face` : `checkers-auxiliarboard-${side}-face`;
@@ -221,6 +166,4 @@ export class AuxiliarBoard extends Board {
         const sideTexture = ['none', 1, 1];
         this.sceneGraph.components[id] = new MyComponent(this.sceneGraph.scene, id, transfMatrix, ['inherit'], sideTexture, [[true, primitiveId]], null, null);
     }
-
-
 }

@@ -2433,17 +2433,16 @@
     </components>
 
     <checkers>
-        <mainboard x1="11.5" y1="3" z1="-3" x2="14.8" y2="3.5" z2="1" >
+        <mainboard x1="11.5" y1="3" z1="-3" x2="15.5" y2="3.5" z2="1" >
             <lightTile id="white" />
             <darkTile id="black" />
             <boardWalls id="lightWood" />
             <highlightTile id="red" />
         </mainboard>
-        <auxiliarboard x1="15.5" y1="3" z1="-3" x2="17" y2="3.5" z2="1" >
+        <auxiliarboard x1="16.5" y1="3" z1="-3" x2="18" y2="3.5" z2="1" >
             <boardWalls id="lightWood" />
             <lightTile id="white" />
             <darkTile id="black" />
-            <buttonsMaterial id="darkWood" />
         </auxiliarboard>
         <pieces>
             <type1 id="lightWood" />

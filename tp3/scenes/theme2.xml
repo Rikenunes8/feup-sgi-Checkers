@@ -1402,7 +1402,6 @@
             <boardWalls id="green" />
             <lightTile id="dirtyWhite" />
             <darkTile id="black" />
-            <buttonsMaterial id="lightWood" />
         </auxiliarboard>
         <pieces>
             <type1 id="black" />

@@ -3,8 +3,6 @@ import { CGFaxis,CGFcamera, CGFshader } from '../lib/CGF.js';
 import { checkersViewName } from './checkers/AnimationCamera.js';
 import { Texter } from './text/Texter.js';
 
-var DEGREE_TO_RAD = Math.PI / 180;
-
 /**
  * XMLscene class, representing the scene that is to be rendered.
  */
@@ -256,6 +254,7 @@ export class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayNormals = this.displayNormals;
             
+
             this.graph.displayScene();
 
             if (this.activeShader != this.defaultShader) this.setActiveShader(this.defaultShader);

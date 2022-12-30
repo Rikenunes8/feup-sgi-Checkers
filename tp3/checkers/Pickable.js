@@ -1,6 +1,9 @@
+let counter = 10000; // counter to generate unique pick ids
+
 export class Pickable {
     constructor(pickId, pickable = false) {
         this.pickId = pickId;
+        if (!pickId) this.pickId = counter++;
         this.pickable = pickable;
     }
 

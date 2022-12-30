@@ -43,8 +43,9 @@ export class Tile extends Pickable {
         const tilesIdxToVisit = checkers.ruler.validateMove(this.idx);
 
         if (tilesIdxToVisit == null) {
-            checkers.changePopupState(true);
-            setTimeout(() => { checkers.changePopupState(false) }, popupTime);
+            checkers.popup.setText('Invalid move!');
+            checkers.popup.setVisible(true);
+            setTimeout(() => { checkers.popup.setVisible(false) }, popupTime);
             return null;
         }
         
