@@ -10,6 +10,8 @@
 
 ## Projects
 
+Try the awesome 3D experience: [FINAL PROJECT](https://web.fe.up.pt/~up201906852/SGI/project/)
+
 ### [TP1 - Scene Graph](tp1)
 
 - Individual and documented functions for each step of the parser, where each one of them is responsible for parsing each XML tag
@@ -33,25 +35,42 @@
 ### [TP2 - Nurbs, Shaders and Animations](tp2)
 - Better files organization (organize files (parsers, components and primitives, shaders, ..) in directories; parsers extracted to classes in separated files)
 - The feature to add nurbs to the scene was implemented and some nurbs were added to the xml file
-  - Rectangle (replace previous garden rectangle by a nurb rectangle)
-    - Can visualize it by turning the garden lights on <br> ![garden](tp2/screenshots/garden_light.png)
-  - Tent (it was placed a tent in the garden next to the circular bench) <br> ![tent](tp2/screenshots/normalTent.png)
-  - Barrel and Circle (it was placed a barrel and its tops next to the poufs) <br> ![barrel](tp2/screenshots/barrelPoufs.png)
-  - Tent Inverted (to improve the tent design it was made the nerb to the inside part of the tent) <br> ![intertedTent](tp2/screenshots/invertedTent.png)
-
-- The feature to highlight the components was implemented using the original illumination, material and texture of a component combined to interpolate with the color defined in the highlighted property on xml in a pulsatile way. The scale pulse was also implemented. Since the [requisites](https://docs.google.com/document/d/e/2PACX-1vR3Kcs0m6RvpJPr3B4FW650bO7dHRbt_V0AcObRK7f3udrcLSR0KJ5hBs84DQ4ZkMALYuRisWO_3vdI/pub) to this feature were not clear, we assumed along with the teacher of practical classes that the desired behaviour was to apply an offset to the original vertices of (scale - 1.0) in the vertex normal direction. Examples:
-  - Sphere of radius 1 and scale_h=1 -> in maximum pulse sphere of radius 1;
-  - Sphere of radius 1 and scale_h=5 -> in maximum pulse sphere of radius 5;
-  - Sphere of radius 2 and scale_h=5 -> in maximum pulse sphere of radius 6;
-<br> ![lamp pulse](tp2/screenshots/Lamp.gif) 
-<br> ![pouf pulse](tp2/screenshots/Pouf.gif) 
-<br> ![barrel pulse](tp2/screenshots/BarrelPulse.gif) 
+  - [Rectangle](tp2/screenshots/garden_light.png) (replace previous garden rectangle by a nurb rectangle)
+    - Can visualize it by turning the garden lights on
+  - [Tent](tp2/screenshots/normalTent.png) (it was placed a tent in the garden next to the circular bench)
+  - [Barrel and Circle](tp2/screenshots/barrelPoufs.png) (it was placed a barrel and its tops next to the poufs)
+  - [Tent Inverted](tp2/screenshots/invertedTent.png) (to improve the tent design it was made the nerb to the inside part of the tent)
+- The feature to highlight the components was implemented using the original illumination, material and texture of a component combined to interpolate with the color defined in the highlighted property on xml in a pulsatile way. The scale pulse was also implemented.
+  - [lamp pulse](tp2/screenshots/Lamp.gif) 
+  - [pouf pulse](tp2/screenshots/Pouf.gif) 
+  - [barrel pulse](tp2/screenshots/BarrelPulse.gif) 
 - The feature to animate the components was implemented with the defined behaviour and specification. It were added to the xml scene elements to demonstrate it
-  - Barrel falling <br>![barrel fallen](tp2/screenshots/BarrelFallen.gif)
-  - Ball thrown from the window <br> ![ovni](tp2/screenshots/Ovni.gif)
+  - [Barrel falling](tp2/screenshots/BarrelFallen.gif)
+  - [Ball thrown from the window](tp2/screenshots/Ovni.gif)
 - It was added to the interface the possibility to turn on/off the highlighted property of the components and a button to reset the scene animation
 ----
 
-### [TP3 - ...](tp3)
-- (items briefly describing main strong points)
+### [TP3 - Checkers Game 3D within a Scene](tp3)
 
+- The new engine can handle sxs files as it did in tp2. This means that the features to be implemented in tp3 were implemented without rebuilding the full engine
+- 2 new very realistic scenes were designed (adding to the one developed in tp2 and tp1) in order to play the checkers game in different environments
+- The checkers game can be added to a scene by simply adding a new tag (checkers) to the scene xml file. Inside this tag, one can configure the main and auxiliar boards, the pieces, and the spotlight that will follow a moving piece
+  - **Main Board**: set position and dimensions, tiles materials (light, dark and highlighted tile) and board walls material
+  - **Auxiliar Board**: set position and dimensions, tiles materials (light and dark tile), board walls material and color of the font used to display the results during the game
+  - **Pieces**: set the material of the pieces (player 1, player 2 and highlighted piece)
+  - **Spotlight**: set the heght of the spotlight and all its illumination configurations, besides the position and the target that is automatically calculated based on the position of the piece that is being moved
+- The auxiliar board has a vertical wall that shows in real time the [results of the game](tp3/screenshots/theme2CheckersSel.png) (players' score, players' turn time, players' total time spent and the total time of the game)
+- The [main menu](tp3/screenshots/mainMenu.png) has a button to go te scene, 3 buttons to change the scene, and 2 more buttons to set game configurations as the maximum turn time and maximum player's time
+- A checkers scene allow to start the game, pause it, restart it and go back to main menu with the press of some buttons
+- About the game, it starts with all the pieces in the board and one can pick a piece and then a tile to move it. When a piece is picked [the tiles correspondent to valid moves for that piece are highlighted](tp3/screenshots/theme1CheckersSel.png)
+- All the checkers pieces are always present in the scene and do not magically appear/disappear
+- When a piece is collected, it is moved to the auxiliar board with a [smooth parabolic jump animation](tp3/screenshots/BecomeKing.gif)
+- When a pawn piece is [made king](tp3/screenshots/BecomeKing.gif), a piece of the auxiliar board is moved a put on top of the pawn piece to make it a king. (If there is no piece in the auxiliar board, the future king waits for a piece to be collected to become a king)
+- At the end of each turn, if the specific game camera is selected, the camera will turn over the board and change the view to the other player perspective. Although, it is possible to change it manually with a button tap
+- During the game, a player can [undo](tp3/screenshots/Undo.gif) as many plays as he wants
+- During the game, one can [replay](tp3/screenshots/GameReplay.gif) the game movie until that moment, and after that resume the game from where it was before
+- When the game is over, even by time out or no more moves, [popup](tp3/screenshots/resultsMenu.png) appears with the results of the game, the option to go back to the scene and the option to replay the game movie
+- When an invalid move is chosen, or a button is pressed and does not have any effect, a [popup](tp3/screenshots/InvalidMove.gif) appears with a message informing the user that the action is invalid
+- The 2D interface was not removed to accomodate the features implemented before tp3, although it is not used in the checkers game. Instead, it is used a 3D interface based on buttons
+- Scenes details can be found in the [README](tp3/README.md) file of tp3.
+----
