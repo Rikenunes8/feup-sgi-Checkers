@@ -857,7 +857,7 @@
             <boardWalls id="gold" />
             <highlightTile id="red" />
         </mainboard>
-        <auxiliarboard x1="0.6" y1="0.95" z1="0.4" x2="0.9" y2="1.05" z2="-0.4" >
+        <auxiliarboard x1="0.6" y1="1.0" z1="0.4" x2="0.9" y2="1.05" z2="-0.4" >
             <boardWalls id="white" />
             <lightTile id="lightWood" />
             <darkTile id="darkWood" />
